@@ -63,7 +63,7 @@ Point d’entrée principal :
 
 ---
 
-## Le dossier `core/`
+## Le répertoire `core/`
 
 Contient la **configuration fondamentale de Neovim**, indépendante des plugins.
 
@@ -81,17 +81,10 @@ Contient la **configuration fondamentale de Neovim**, indépendante des plugins.
 
 ### `lua/plugins/init.lua`
 
-Ce fichier est le **point d’agrégation des plugins**. Il ne contient aucune configuration directe, seulement des imports logiques :
-
-```lua
-return {
-  { import = "plugins.lsp" },
-  { import = "plugins.ui" },
-  { import = "plugins.coding" },
-  { import = "plugins.tools" },
-}
-```
-
+Ce fichier est le **point d’agrégation des plugins**. Il ne contient aucune configuration directe, ne s'occupant que des imports logiques :
+- Scanne le dossier `lua/plugins/` et récupère tous les sous-répertoires.
+- Transforme chaque sous-répertoire en une entrée `{ import = "plugins.<nom>" }`.
+- Retourne une table directement utilisable par `require("lazy").setup()`.
 Chaque sous-dossier représente un **domaine fonctionnel**.
 
 ---
@@ -181,7 +174,7 @@ Avantages :
 
 ### Prérequis
 
-- **Neovim ≥ 0.10**
+- **Neovim ≥ 0.11**
 - [Git](https://git-scm.com/)
 
 ### Étapes
@@ -227,5 +220,5 @@ Libre d’utilisation, de modification et de partage.
 
 ---
 
-✨ *Si vous cherchez une configuration Neovim modulaire, compréhensible et, ce dépôt est fait pour vous.*
+✨ *Si vous cherchez une configuration Neovim modulaire et aisément compréhensible, ce dépôt est fait pour vous.*
 
