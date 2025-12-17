@@ -1,6 +1,6 @@
-# NeoEasyVim
+# NvCrafted
 
-Une configuration de [Neovim](https://neovim.io/) qui se veut la plus modulaire possible. 
+Une configuration [Neovim](https://neovim.io/) façonnée à la main, pensée pour être comprise, étendue et maîtrisée.
 
 ## Présentation
 
@@ -202,7 +202,7 @@ Cette configuration est pensée comme une **base de travail personnelle**, mais 
 
 Mon souhait est de conserver une organisation et une configuration qui se veuille la plus simple d'utilisation, la plus modulaire possible. Une spécificité = un fichier... rien de plus basique.
 
-Les commentaires insérés dans chacun des fichiers sont intégralement en français (Sorry to English speakers), car je trouve que **Neovim** est globalement peu documenté en français (ou voire des configurations quasi ésothériques).
+Les commentaires insérés dans chacun des fichiers sont intégralement en français (Sorry to English speakers), car je trouve que **Neovim** est globalement peu documenté en français (ou voire des configurations quasi ésotériques).
 
 ---
 
