@@ -1,3 +1,9 @@
+<p align="center">
+  🇫🇷 <a href="README.fr.md">Lire le README en français</a>
+</p>
+
+---
+
 # NvCrafted
 
 A handcrafted [Neovim](https://neovim.io/) configuration, designed to be understood, extended, and truly mastered.
