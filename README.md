@@ -1,36 +1,36 @@
 # NvCrafted
 
-Une configuration [Neovim](https://neovim.io/) façonnée à la main, pensée pour être comprise, étendue et maîtrisée.
+A handcrafted [Neovim](https://neovim.io/) configuration, designed to be understood, extended, and truly mastered.
 
-## Présentation
+## Overview
 
-Ce dépôt contient une configuration **Neovim** se voulant moderne, lisible et hautement modulaire, pensée comme une base évolutive pour construire un environnement de développement proche d’un IDE.
+This repository contains a **modern, readable, and highly modular Neovim configuration**, designed as an evolving foundation for building an IDE-like development environment.
 
-Les objectifs principaux du projet sont :
+The main goals of this project are:
 
-- 🧩 **Modularité maximale** : chaque fonctionnalité est isolée dans un fichier clairement identifié.
-- 🧠 **Lisibilité et pédagogie** : la configuration doit rester compréhensible, même en y revenant plusieurs mois après.
-- 🚀 **Scalabilité** : l’ajout d’un plugin ou d’une surcouche LSP se fait via un simple fichier.
-- 🔧 **Approche déclarative** : [Lazy.nvim](https://lazy.folke.io/) est utilisé comme gestionnaire central.
+- 🧩 **Maximum modularity**: each feature is isolated in a clearly identified file.
+- 🧠 **Readability & pedagogy**: the configuration should remain understandable, even when revisited months later.
+- 🚀 **Scalability**: adding a plugin or an LSP override is done through a single file.
+- 🔧 **Declarative approach**: [Lazy.nvim](https://lazy.folke.io/) is used as the central plugin manager.
 
-Une fois la structure posée, la maintenance se résume essentiellement à **ajouter ou ajuster des modules**, sans modifier le cœur de la configuration.
+Once the structure is in place, maintenance mostly consists of **adding or adjusting modules**, without touching the core of the configuration.
 
-Ce projet demeure en construction...
-
----
-
-## Outillage de base nécessaire
-
-- **Neovim ≥ 0.10**
-- [Lua](https://www.lua.org/) comme langage de configuration
-- **lazy.nvim** : gestionnaire de plugins
-- [mason.nvim](https://github.com/mason-org/mason.nvim) / [mason-lspconfig.nvim](https://github.com/mason-org/mason-lspconfig.nvim) : installation et gestion des LSP
-- [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) (via l’API `vim.lsp`)
-- [Tree-sitter](https://github.com/nvim-treesitter/nvim-treesitter) pour l’analyse syntaxique
+This project is still a work in progress…
 
 ---
 
-## Arborescence du projet
+## Required tooling
+
+- **Neovim ≥ 0.11**
+- [Lua](https://www.lua.org/) as the configuration language
+- **lazy.nvim**: plugin manager
+- [mason.nvim](https://github.com/mason-org/mason.nvim) / [mason-lspconfig.nvim](https://github.com/mason-org/mason-lspconfig.nvim): LSP installation and management
+- [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) (via the `vim.lsp` API)
+- [Tree-sitter](https://github.com/nvim-treesitter/nvim-treesitter) for syntax analysis
+
+---
+
+## Project structure
 
 ```text
 .
@@ -52,103 +52,105 @@ Ce projet demeure en construction...
         └── ui
 ```
 
-### 1. `init.lua` (racine)
+### 1. `init.lua` (root)
 
-Point d’entrée principal :
+Main entry point:
 
-- bootstrap de **lazy.nvim**
-- définition des leaders
-- chargement des modules `core`
-- initialisation de **Lazy** avec l’import automatique des plugins
+- bootstraps **lazy.nvim**
+- defines leader keys
+- loads `core` modules
+- initializes **Lazy** with automatic plugin imports
 
 ---
 
-## Le répertoire `core/`
+## The `core/` directory
 
-Contient la **configuration fondamentale de Neovim**, indépendante des plugins.
+Contains the **fundamental Neovim configuration**, independent of any plugin.
 
-| Fichier | Rôle |
+| File | Role |
 |------|------|
-| `options.lua` | Options Neovim (`vim.opt`) |
-| `keymaps.lua` | Raccourcis clavier globaux |
-| `autocmds.lua` | Autocommandes |
+| `options.lua` | Neovim options (`vim.opt`) |
+| `keymaps.lua` | Global key mappings |
+| `autocmds.lua` | Autocommands |
 
-👉 Ces fichiers ne dépendent d’aucun plugin et peuvent être lus comme une « config Neovim pure ».
+👉 These files do not depend on any plugin and can be read as a “pure Neovim configuration”.
 
 ---
 
-## Gestion des plugins avec Lazy.nvim
+## Plugin management with Lazy.nvim
 
 ### `lua/plugins/init.lua`
 
-Ce fichier est le **point d’agrégation des plugins**. Il ne contient aucune configuration directe, ne s'occupant que des imports logiques :
-- Scanne le dossier `lua/plugins/` et récupère tous les sous-répertoires.
-- Transforme chaque sous-répertoire en une entrée `{ import = "plugins.<nom>" }`.
-- Retourne une table directement utilisable par `require("lazy").setup()`.
-Chaque sous-dossier représente un **domaine fonctionnel**.
+This file acts as the **plugin aggregation point**. It contains no direct configuration and only handles logical imports:
+
+- Scans the `lua/plugins/` directory and collects all subdirectories.
+- Turns each subdirectory into an entry `{ import = "plugins.<name>" }`.
+- Returns a table directly usable by `require("lazy").setup()`.
+
+Each subdirectory represents a **functional domain**.
 
 ---
 
-## Organisation par domaines
+## Domain-based organization
 
 ### `plugins/ui/`
 
-Plugins liés à l’interface utilisateur :
+User interface–related plugins:
 
-- barre de statut ([lualine](https://github.com/nvim-lualine/lualine.nvim))
-- explorateur de fichiers ([neo-tree](https://github.com/nvim-neo-tree/neo-tree.nvim))
-- écran d’accueil ([alpha](https://github.com/goolord/alpha-nvim))
-- thème de couleurs ([Nord](https://www.nordtheme.com/)) - Je sais, je suis un inconditionnel de ce thème.
+- status line ([lualine](https://github.com/nvim-lualine/lualine.nvim))
+- file explorer ([neo-tree](https://github.com/nvim-neo-tree/neo-tree.nvim))
+- dashboard ([alpha](https://github.com/goolord/alpha-nvim))
+- colorscheme ([Nord](https://www.nordtheme.com/)) — yes, I’m unapologetically a fan of this theme.
 
-Chaque plugin dispose de son propre fichier.
+Each plugin has its own dedicated file.
 
 ---
 
 ### `plugins/coding/`
 
-Plugins améliorant l’expérience d’édition du code :
+Plugins improving the coding experience:
 
 - [auto-pairs](https://github.com/windwp/nvim-autopairs)
 - **Tree-sitter**
 - [Telescope](https://github.com/nvim-telescope/telescope.nvim)
-- formatage ([conform](https://github.com/stevearc/conform.nvim))
+- formatting ([conform](https://github.com/stevearc/conform.nvim))
 
-👉 La philosophie adoptée est de **ne configurer que ce qui diffère des valeurs par défaut**, afin de garder des fichiers courts et explicites.
+👉 The guiding principle is to **configure only what differs from the default values**, keeping files short and explicit.
 
-Exemple : `autopairs.lua` ne redéfinit que l’intégration **Tree-sitter**.
+Example: `autopairs.lua` only customizes **Tree-sitter** integration.
 
 ---
 
 ### `plugins/tools/`
 
-Outils transverses (ex. [which-key](https://github.com/folke/which-key.nvim)) qui n’entrent pas directement dans l’UI ou le code.
+Cross-cutting tools (e.g. [which-key](https://github.com/folke/which-key.nvim)) that do not strictly belong to UI or coding categories.
 
 ---
 
-## Gestion des LSP
+## LSP management
 
-Le support LSP est volontairement **séparé en deux niveaux** :
+LSP support is deliberately **split into two levels**:
 
-### 1️⃣ Niveau global — `plugins/lsp/init.lua`
+### 1️⃣ Global level — `plugins/lsp/init.lua`
 
-Responsabilités :
+Responsibilities:
 
-- installer les serveurs via **Mason**
-- lister les serveurs actifs
-- charger dynamiquement une configuration spécifique si elle existe
+- install servers via **Mason**
+- list active servers
+- dynamically load a server-specific configuration if it exists
 
-Principe clé :
+Key principle:
 
-> **Un serveur LSP fonctionne sans configuration spécifique.**
-> Une surcouche n’est chargée que si un fichier dédié existe.
+> **An LSP server works out of the box without any specific configuration.**
+> An override is only loaded if a dedicated file exists.
 
 ---
 
-### 2️⃣ Niveau spécifique — `plugins/lsp/config/`
+### 2️⃣ Server-specific level — `plugins/lsp/config/`
 
-Chaque fichier correspond **à un serveur LSP précis**.
+Each file corresponds to **one specific LSP server**.
 
-Exemple : `pyright.lua`
+Example: `pyright.lua`
 
 ```lua
 return {
@@ -162,63 +164,63 @@ return {
 }
 ```
 
-Avantages :
+Benefits:
 
-- aucune duplication de logique
-- configuration locale et explicite
-- ajout d’un LSP = 1 fichier
+- no duplicated logic
+- local and explicit configuration
+- adding an LSP = one file
 
 ---
 
 ## Installation
 
-### Prérequis
+### Requirements
 
 - **Neovim ≥ 0.11**
 - [Git](https://git-scm.com/)
 
-### Étapes
+### Steps
 
 ```bash
-# Clonage du dépôt
+# Clone the repository
 git clone https://github.com/Krystof2so/NvCrafted.git ~/.config/nvim
 
-# Lancer Neovim
+# Launch Neovim
 nvim
 ```
 
-**Lazy.nvim** installera automatiquement les plugins au premier lancement.
+**Lazy.nvim** will automatically install the plugins on first launch.
 
 ---
 
-## Philosophie du projet
+## Project philosophy
 
-- 📦 **Un plugin = un fichier**
-- 🧠 **Lisibilité**
-- 🧪 **Aucune boîte noire**
-- 🧩 **Extension incrémentale**
+- 📦 **One plugin = one file**
+- 🧠 **Readability first**
+- 🧪 **No black boxes**
+- 🧩 **Incremental extension**
 
-Cette configuration est pensée comme une **base de travail personnelle**, mais suffisamment structurée pour servir de référence ou de point de départ.
+This configuration is intended as a **personal working base**, but is structured enough to serve as a reference or a starting point for others.
 
-Mon souhait est de conserver une organisation et une configuration qui se veuille la plus simple d'utilisation, la plus modulaire possible. Une spécificité = un fichier... rien de plus basique.
+My goal is to keep an organization and configuration that are as simple to use and as modular as possible. One feature = one file — nothing more basic than that.
 
-Les commentaires insérés dans chacun des fichiers sont intégralement en français (Sorry to English speakers), car je trouve que **Neovim** est globalement peu documenté en français (ou voire des configurations quasi ésotériques).
-
----
-
-## Évolutions prévues
-
-- Ajout progressif de plugins (UI, DAP, tests, refactoring…)
-- Amélioration des intégrations LSP (surcouches)
-- Et puis tout ce qui me passera par la tête en restant fidèle à la philosophie du projet
+Comments inside the configuration files are written entirely in French (sorry, English speakers). This choice is deliberate: **Neovim is still poorly documented in French**, and many existing configurations tend to feel opaque or esoteric.
 
 ---
 
-## Licence
+## Planned evolutions
 
-Libre d’utilisation, de modification et de partage.
+- Progressive addition of plugins (UI, DAP, testing, refactoring…)
+- Improved LSP integrations (overrides)
+- And whatever ideas come next, as long as they remain faithful to the project philosophy
 
 ---
 
-✨ *Si vous cherchez une configuration Neovim modulaire et aisément compréhensible, ce dépôt est fait pour vous.*
+## License
+
+Free to use, modify, and share.
+
+---
+
+✨ *If you are looking for a modular and easy-to-understand Neovim configuration, this repository is for you.*
 
