@@ -181,7 +181,7 @@ Avantages :
 
 ```bash
 # Clonage du dépôt
-git clone https://github.com/Krystof2so/NeoEasyVim.git ~/.config/nvim
+git clone https://github.com/Krystof2so/NvCrafted.git ~/.config/nvim
 
 # Lancer Neovim
 nvim
