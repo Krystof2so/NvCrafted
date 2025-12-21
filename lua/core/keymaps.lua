@@ -13,6 +13,22 @@ local map = vim.keymap.set
 -- Raccourcis utilitaires
 map("n", "<leader>h", ":nohlsearch<CR>", { desc = "Suppression surlignage recherche" })
 
+-- Gestion des buffers
+map("n", "<leader>b", "", { desc = " Buffers"})
+map("n", "<leader>bn", ":bnext<CR>", { desc = "Buffer suivant" })
+map("n", "<leader>bp", ":bprevious<CR>", { desc = "Buffer précédent" })
+map("n", "<leader>bd", ":bdelete<CR>", { desc = "Fermer buffer actuel" })
+map("n", "<leader>bl", ":Telescope buffers<CR>", { desc = "Liste des buffers" })
+
+-- Telescope
+map("n", "<leader>f", "", { desc = "Telescope"})
+map("n", "<leader>ff", ":Telescope find_files<CR>", { desc = "Chercher fichiers" })
+map("n", "<leader>fg", ":Telescope live_grep<CR>", { desc = "Rechercher texte au niveau du projet" })
+map("n", "<leader>fh", ":Telescope help_tags<CR>", { desc = "Aide Neovim" })
+map("n", "<leader>fk", ":Telescope keymaps<CR>", { desc = "Keymaps" })
+map("n", "<leader>fc", ":Telescope commands<CR>", { desc = "Commandes" })
+map("n", "<leader>fo", ":Telescope vim_options<CR>", { desc = "Options Neovim" })
+
 -- Lazy.nvim 
 map("n", "<leader>l", "", { desc = " Lazy" }) -- mapping “vide” juste pour le groupe
 map("n", "<leader>ll", ":Lazy<CR>", { desc = "Ouverture de Lazy" })
@@ -31,7 +47,9 @@ map("n", "<leader>eb", ":Neotree buffers<CR>", {desc = "Liste des buffers ouvert
 local ok, wk = pcall(require, "which-key")
 if ok then
   wk.register({
+    b = { name = "Buffers" },
     e = { name = "Neotree" },
+    f = { name = "Telescope"},
     l = { name = "Lazy" },
   }, { prefix = "<leader>", mode = "n" })
 end

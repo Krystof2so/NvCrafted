@@ -23,6 +23,10 @@ return {
     config = function()
       -- Configuration du popup
       require("neo-tree").setup({
+        window = {
+          position = "left",
+          width = 30,
+        },
         popup = {
           position = "center",
           size = {
