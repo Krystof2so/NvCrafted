@@ -25,3 +25,13 @@
 ## Recherche au niveau des fichiers
 - `<leader>ff` : recherche de fichier 
 - `<leader>fg` : recherche de texte au niveau du projet
+
+## Mapping de LSP:
+- `gd` (ou *Go to Definition*) : sur une variable, nom de fonction, etc., permet de se rendre à l'endroit ou cet élément est défini.
+- `gD` (ou *Go to Definition*) : se rendre sur la définition d'un symbole.
+- `gr` (ou *Go to Reference*) : affiche tous les endroits où il est fait référence à l'élément (ouverture d'un menu de navigation avec la liste des lignes où se situe la référence.
+- `K` : affiche une documentation propre à l'élément (*docstring*, signature, type, commentaire associé).
+- ̀̀`<leader>ca` (ou *Code Action*) : affiche un menu contextuel offrant diverses actions réalisables (*quick fixes*, *refactoring*, *imports automatiques*, corrections **LSP**).
+- `<leader>cr` (ou *Code Rename*) : Renomme (de façon intelligente) un élément sur l'ensemble du projet.
+- `<leader>cw` (ou *Code Warning*) : Affiche le *warning* de la ligne courante
+

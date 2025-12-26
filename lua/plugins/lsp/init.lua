@@ -19,14 +19,14 @@ return {
       "williamboman/mason-lspconfig.nvim",
     },
     config = function()
-      -- Import de la liste déclarative des serveurs LSP
       local servers = require("core.lsp.servers")
+      local on_attach = require("core.lsp.on_attach").on_attach
 
       -- Parcours de chaque serveur déclaré
       for _, server in pairs(servers) do
-        -- Table d'options finale passée à lspconfig
-        -- (vide par défaut, enrichie via les surcouches)
-        local opts_overlay = {}
+        local opts_overlay = {
+                    on_attach = on_attach,
+        }
 
         -- Tentative de chargement d'une configuration spécifique
         -- située dans : lua/plugins/lsp/config/<server_name>.lua
