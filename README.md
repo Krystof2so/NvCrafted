@@ -53,6 +53,7 @@ This project is still under construction...
     │   ├── options.lua
     │   ├── spell.lua
     │   └── lsp
+    │       ├── on_attach.lua
     │       └── servers.lua
     └── plugins
         ├── init.lua
