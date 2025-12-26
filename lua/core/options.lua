@@ -84,7 +84,7 @@ opt.laststatus = 3             -- bool : Afficher une ligne de statut unique
 opt.lazyredraw = true          -- bool : Accélère les macros et recherche
 
 -- [[ Correction orthographique ]]
-opt.spell = true               -- bool : Activation 
+opt.spell = false              -- bool : Activation uniquement selon contexte via auto-commandes
 
 
 -- ************************
