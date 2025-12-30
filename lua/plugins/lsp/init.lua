@@ -20,12 +20,15 @@ return {
     },
     config = function()
       local servers = require("core.lsp.servers")
+      -- Récupération des capabilities propres à NvCrafted 
+      local capabilities = require("core.lsp.capabilities").capabilities
       local on_attach = require("core.lsp.on_attach").on_attach
 
-      -- Parcours de chaque serveur déclaré
+      -- Parcours de chaque serveur déclaré pour qu'il reconnaisse les mappings (on_attach) et les capabilities
       for _, server in pairs(servers) do
-        local opts_overlay = {
-                    on_attach = on_attach,
+        local opts = {
+            on_attach = on_attach,
+            capabilities = capabilities,
         }
 
         -- Tentative de chargement d'une configuration spécifique
@@ -36,11 +39,11 @@ return {
         -- Si une surcouche existe, on fusionne ses options
         -- avec les options par défaut
         if ok and type(server_opts_overlay) == "table" then
-          opts_overlay = vim.tbl_deep_extend("force", opts_overlay, server_opts_overlay)
+          opts = vim.tbl_deep_extend("force", opts, server_opts_overlay)
         end
 
         -- Initialisation du serveur LSP
-        vim.lsp.config(server, opts_overlay)
+        vim.lsp.config(server, opts)
       end
     end,
   },
