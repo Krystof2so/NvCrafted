@@ -36,6 +36,7 @@ This project is still under construction...
 - [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) (via the `vim.lsp` API)
 - [Tree-sitter](https://github.com/nvim-treesitter/nvim-treesitter) for syntax analysis
 - [Lazydev](https://github.com/folke/lazydev.nvim) to improve the **Lua** **LSP** experience with configuration files.
+- [nerdfonts](https://www.nerdfonts.com/)
 
 ---
 
@@ -178,6 +179,7 @@ Plugins related to the user interface:
 - file explorer ([neo-tree](https://github.com/nvim-neo-tree/neo-tree.nvim))
 - welcome screen ([alpha](https://github.com/goolord/alpha-nvim))
 - color theme ([Nord](https://www.nordtheme.com/)) - Yes, I'm a die-hard fan of this theme.
+- Diagnostics visualization ([Trouble](https://github.com/folke/trouble.nvim/tree/main))
 
 ---
 

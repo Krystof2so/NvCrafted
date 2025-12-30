@@ -40,16 +40,22 @@ map("n", "<leader>e", "", { desc = " Neotree" })
 map("n", "<leader>ee", ":Neotree<CR>", { desc = "Ouverture de Neotree" })
 map("n", "<leader>eb", ":Neotree buffers<CR>", {desc = "Liste des buffers ouverts" })
 
+-- Trouble
+map("n", "<leader>d", "", {desc = " Diagnostics"})
+map("n", "<leader>ds", "<cmd>Trouble preview_split<CR>", { desc = "Trouble avec split" })
+map("n", "<leader>dd", "<cmd>Trouble diagnostics<CR>", { desc = "Trouble sans split" })
+
 -- *************************************
 -- * Groupe de mappings pour Which-key *
 -- *************************************
 
 local ok, wk = pcall(require, "which-key")
 if ok then
-  wk.register({
+  wk.add({
     b = { name = "Buffers" },
+    d = { name = "Diagnostics" },
     e = { name = "Neotree" },
-    f = { name = "Telescope"},
+    f = { name = "Telescope" },
     l = { name = "Lazy" },
   }, { prefix = "<leader>", mode = "n" })
 end
