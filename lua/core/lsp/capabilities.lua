@@ -16,12 +16,12 @@ function M.get()
   -- ==============================================================
   capabilities.textDocument.completion.completionItem = {
     snippetSupport = true,                              -- Autorise les snippets dans les complétions
-    documentationFormat = { "markdown", "plaintext" },  -- Formats pour la documentation d'une complétion
+    documentationFormat = { "markdown", "plaintext" },  -- Formats pour la documentation d'une complétion (flottant)
     preselectSupport = true,                            -- Autorise les serveur à pré-selectionner un item 
     insertReplaceSupport = true,                        -- Autorise les modes d'insertion 'insert' et 'replace'
-    labelDetailsSupport = true,                         -- Autorise les métadonnées sur le label
+    labelDetailsSupport = true,                         -- Autorise les informations supplémentaires
     deprecatedSupport = true,                           -- Autorise le serveur à marquer un item comme obsolète
-    commitCharactersSupport = true,                     -- Autorise la validation par 
+    commitCharactersSupport = true,                     -- Support des caractères de commit
   }
 
   -- ==========================
