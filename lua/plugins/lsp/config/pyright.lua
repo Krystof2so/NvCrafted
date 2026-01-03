@@ -3,12 +3,21 @@ return {
   settings = {
     python = {
       analysis = {
-        typeCheckingMode = "strict",      -- vérification des types (basic / strict / off)
-        autoSearchPaths = true,           -- détecte automatiquement les chemins
-        useLibraryCodeForTypes = true,    -- inclut les types des librairies
-        diagnosticMode = "workspace",     -- analyse tous les fichiers du projet
-        reportUnusedImport = true,        -- avertir pour les imports inutilisés
+        typeCheckingMode = "strict",
+        autoSearchPaths = true,
+        useLibraryCodeForTypes = true,
+        diagnosticMode = "workspace",
+
+        reportUnusedImport = true,
+        reportUnusedVariable = "warning",
+        reportUnboundVariable = "error",
+        reportMissingTypeStubs = "warning",
+        reportOptionalSubscript = "warning",
+        reportOptionalMemberAccess = "warning",
+        reportGeneralTypeIssues = true,
+        reportFunctionMemberAccess = true,
       },
+      pythonPath = ".venv/bin/python",
     },
   },
 }

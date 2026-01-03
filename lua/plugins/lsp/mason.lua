@@ -31,7 +31,17 @@ return {
     opts = {
       -- Liste des serveurs LSP à installer automatiquement.
       -- Elle est dérivée directement de la source de vérité
-      ensure_installed =  require("core.lsp.servers")
+      ensure_installed = require("core.lsp.servers")
     },
+  },
+
+  {
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
+    opts = {
+      -- Installation d'outils complémentaires (linter, formatter, etc.), via mason-tool-installer 
+      -- (facultatif mais pratique)
+      ensure_installed = require("core.lsp.tools")
+    },
+    auto_update = true,
   },
 }

@@ -14,7 +14,8 @@ local map = vim.keymap.set
 map("n", "<leader>h", ":nohlsearch<CR>", { desc = "Suppression surlignage recherche" })
 
 -- Gestion des buffers
-map("n", "<leader>b", "", { desc = " Buffers"})
+map("n", "<leader>b", "", { desc = " Buffers" })
+map("n", "<leader>bf", "", { desc = "Formatage "})
 map("n", "<leader>bn", ":bnext<CR>", { desc = "Buffer suivant" })
 map("n", "<leader>bp", ":bprevious<CR>", { desc = "Buffer précédent" })
 map("n", "<leader>bd", ":bdelete<CR>", { desc = "Fermer buffer actuel" })
@@ -44,6 +45,25 @@ map("n", "<leader>eb", ":Neotree buffers<CR>", {desc = "Liste des buffers ouvert
 map("n", "<leader>d", "", {desc = " Diagnostics"})
 map("n", "<leader>ds", "<cmd>Trouble preview_split<CR>", { desc = "Trouble avec split" })
 map("n", "<leader>dd", "<cmd>Trouble diagnostics<CR>", { desc = "Trouble sans split" })
+
+
+-- ************************* 
+-- * Formatage des buffers *
+-- *************************
+--
+-- Mapping : save + format Python avec Black
+map("n", "<leader>bfp", function()
+  if vim.bo.filetype ~= "python" then
+    print("Ce mapping ne fonctionne que pour les fichiers Python")
+    return
+  end
+  local filepath = vim.fn.expand("%:p") -- chemin complet du fichier
+  vim.cmd("write")  -- Sauvegarde du fichier
+  vim.fn.system(string.format("~/.local/share/nvim/mason/bin/black %q", filepath))  -- Exécute Black
+  vim.cmd("edit!")  -- recharge le buffer pour appliquer les changements
+  print("Black exécuté sur " .. filepath)
+end, { desc = "Save + format Python avec Black" })
+
 
 -- *************************************
 -- * Groupe de mappings pour Which-key *
