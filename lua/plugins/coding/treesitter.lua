@@ -6,36 +6,39 @@
 -- * folding.                                                             *
 -- ************************************************************************
 
-
 return {
-  {
-    "nvim-treesitter/nvim-treesitter",
-    branch = "master",
-    lazy = false,        -- doit être chargé immédiatement
-    build = ":TSUpdate", -- installe et met à jour les parsers
-    config = function()
-      local ok, ts_configs = pcall(require, "nvim-treesitter.configs")
-      if not ok then return end  -- si plugin pas disponible
+	{
+		"nvim-treesitter/nvim-treesitter",
+		branch = "master",
+		lazy = false, -- doit être chargé immédiatement
+		build = ":TSUpdate", -- installe et met à jour les parsers
+		config = function()
+			local ok, ts_configs = pcall(require, "nvim-treesitter.configs")
+			if not ok then
+				return
+			end -- si plugin pas disponible
 
-      ts_configs.setup({
-        ensure_installed = {
-            "lua",
-            "python",
-            "rust",
-            "toml",
-            -- Indispensables pour le plugin trouble.nvim 
-            -- Peuvent être supprimés si trouble.nvim n'est pas installé
-            "markdown",
-            "markdown_inline"
-        },
-        sync_install = false,
-        ignore_install = {},
-        modules = {},
-        highlight = { enable = true },
-        indent = { enable = true },
-        auto_install = true,  -- Pour les langages non listés dans ensure_installed
-      })
-    end,
-  }
+			ts_configs.setup({
+				ensure_installed = {
+					"lua",
+					"python",
+					"rust",
+					"toml",
+					"html",
+					"css",
+					"json",
+					-- Indispensables pour le plugin trouble.nvim
+					-- Peuvent être supprimés si trouble.nvim n'est pas installé
+					"markdown",
+					"markdown_inline",
+				},
+				sync_install = false,
+				ignore_install = {},
+				modules = {},
+				highlight = { enable = true },
+				indent = { enable = true },
+				auto_install = true, -- Pour les langages non listés dans ensure_installed
+			})
+		end,
+	},
 }
-

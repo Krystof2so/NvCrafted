@@ -19,10 +19,14 @@
 -- **************************************************************************
 
 return {
-  "texlab",
-  "lua_ls",
-  "pyright",
-  "ruff",
-  "rust_analyzer",
+	-- HTML/CSS
+	"html",
+	"cssls",
+	"emmet_ls", -- optionnel mais fortement recommandé
+	"texlab", -- LaTeX
+	"lua_ls", -- Lua
+	-- Python
+	"pyright",
+	"ruff",
+	"rust_analyzer", -- Rust
 }
-

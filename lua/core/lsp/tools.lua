@@ -3,13 +3,12 @@
 -- ****************************************
 
 return {
-    -- Python
-    "black",  -- Formateur
-    "isort",  -- Tri des imports
-    "ruff",   -- Linter / formateur moderne Python
-    -- Lua
-    "stylua",
-    -- Multi-langage via prettier
-    "prettier",
+	-- Python
+	"black", -- Formateur
+	"isort", -- Tri des imports
+	"ruff", -- Linter / formateur moderne Python
+	-- Lua
+	"stylua",
+	-- Multi-langage via prettier
+	"prettier",
 }
-

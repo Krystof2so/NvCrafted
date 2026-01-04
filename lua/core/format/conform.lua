@@ -33,6 +33,9 @@ function M.setup()
 			end,
 			markdown = { "prettier" },
 			json = { "prettier" },
+			html = { "prettier" },
+			css = { "prettier" },
+			scss = { "prettier" },
 		},
 	})
 	-- ============================================
