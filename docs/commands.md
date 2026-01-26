@@ -46,3 +46,31 @@
 
 - `<leader>ds` : Ouverture de Trouble avec split.
 - `<leader>dd` : Ouverture de Trouble sans split.
+
+## NeoTree
+
+- `?` : Aide pour les commandes
+- `<leader>ee` : Ouvre **Neotree**
+- `<leader>eb` : Liste des buffers ouverts (dans une fenêtre flottante)
+- `<leader>eg` : Liste des buffers modifiés (git status - dans une fenêtre flottante)
+- `<` et `>` : Navigation entre sources (`filesystem`, `buffers`, `git_status`)
+- `.` : Passe le répertoire sélectionné comme répertoire racine
+- `C` : Ferme le noeud
+- `z` : ferme tous les noeuds
+- `S` : Ouvre le fichier sélectionné dans un buffer avec split horizontal
+- `s` : Idem, mais dans un split vertical
+- `[g` et `]g` : Navigation entre les fichiers modifiés (git status)
+- `R` : Rafraîchit la vue
+- `o` : Pour modifier l'ordre d'affichage (menu flottant)
+- `/` : Rechercher un fichier
+- `D` : Recherche un répertoire
+
+### Actions sur les fichiers
+
+- `a` : Ajout d'un fichier
+- `A` : Ajout d'une répertoire
+- `d` : Suppression du répertoire ou du fichier
+- `i` : Affiche des informations sur un fichier ou répertoire
+- `r` : Renomme le fichier ou le répertoire
+- `b` : Renomme le fichier sans l'extension
+- `P` : Prévisualisation d'un fichier
