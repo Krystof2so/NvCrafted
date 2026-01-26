@@ -1,0 +1,27 @@
+{
+  "Main Function": {
+    "prefix": "begin",
+    "body": [
+      "def main():",
+      "\t${1:pass}",
+      "",
+      "if __name__ == \"__main__\":",
+      "\tmain()"
+    ],
+    "description": "Crée une fonction main() et le bloc d'exécution principal."
+  },
+  "Class Component": {
+    "prefix": "classcomp",
+    "body": [
+      "class ${1:ClassName}:",
+      "",
+      "\tdef __init__(self, ${2:value1}, ${3:value2}):",
+      "\t\tself.${2:value1} = ${2:value1}",
+      "\t\tself.${3:value2} = ${3:value2}",
+      "",
+      "\tdef ${4:method1}(self) -> ${5:None}:",
+      "\t\t${6:pass}"
+    ],
+    "description": "Crée une classe avec un constructeur et une méthode."
+  }
+}

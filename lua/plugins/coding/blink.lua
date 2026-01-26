@@ -62,8 +62,12 @@ return {
 	config = function(_, opts)
 		require("blink.cmp").setup(opts)
 
-		-- Chargement paresseux des snippets VSCode
-		require("luasnip.loaders.from_vscode").lazy_load()
+		-- Chargement paresseux des snippets VSCode + snippets locaux
+		require("luasnip.loaders.from_vscode").lazy_load({
+			paths = {
+				vim.fn.stdpath("config") .. "/snippets", -- Répertoire des snippets locaux
+			},
+		})
 
 		-- Couleurs pour les fenêtres flottantes LSP/complétion (Cohérence avec le thème 'Nord')
 		vim.cmd([[
