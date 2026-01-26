@@ -34,6 +34,10 @@ map("n", "<leader>ll", ":Lazy<CR>", { desc = "Ouverture de Lazy" })
 map("n", "<leader>lu", ":Lazy update<CR>", { desc = "Lazy update" })
 map("n", "<leader>ls", ":Lazy sync<CR>", { desc = "Lazy sync" })
 
+-- aerial
+map("n", "<leader>a", "", { desc = "Aerial" })
+map("n", "<leader>ao", ":AerialOpen<CR>", { desc = "Ouvre Aerial" })
+
 -- Neotree
 map("n", "<leader>e", "", { desc = " Neotree" })
 map("n", "<leader>ee", ":Neotree<CR>", { desc = "Ouverture de Neotree" })
@@ -52,6 +56,7 @@ map("n", "<leader>dd", "<cmd>Trouble diagnostics<CR>", { desc = "Trouble sans sp
 local ok, wk = pcall(require, "which-key")
 if ok then
 	wk.add({
+		a = { name = "Aerial" },
 		b = { name = "Buffers" },
 		d = { name = "Diagnostics" },
 		e = { name = "Neotree" },
