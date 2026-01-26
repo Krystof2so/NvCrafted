@@ -82,13 +82,13 @@ Point d’entrée principal (purement déclaratif):
 
 Contient la **configuration fondamentale de Neovim**, indépendante des plugins.
 
-| Fichier | Rôle |
-|------|------|
-| `options.lua` | Options Neovim (`vim.opt`) |
-| `keymaps.lua` | Raccourcis clavier globaux |
-| `autocmds.lua` | Autocommandes |
-| `spell.lua` | Dictionnaire personnalisé |
-| `bootstrap.lua` | Démarrage **lazy.nvim** | 
+| Fichier           | Rôle                              |
+| ----------------- | --------------------------------- |
+| `options.lua`     | Options Neovim (`vim.opt`)        |
+| `keymaps.lua`     | Raccourcis clavier globaux        |
+| `autocmds.lua`    | Autocommandes                     |
+| `spell.lua`       | Dictionnaire personnalisé         |
+| `bootstrap.lua`   | Démarrage **lazy.nvim**           |
 | `lsp/servers.lua` | Source de vérité des serveurs LSP |
 
 👉 Ces fichiers ne dépendent d’aucun plugin et peuvent être lus comme une « configuration Neovim pure ».
@@ -97,11 +97,11 @@ Contient la **configuration fondamentale de Neovim**, indépendante des plugins.
 
 ## Conventions d’extension
 
-### Ajouter un *plugin*
+### Ajouter un _plugin_
 
-1. Crée un fichier **Lua** dans le dossier correspondant, par exemple :  
-   - `lua/plugins/ui/` pour un plugin d’interface  
-   - `lua/plugins/coding/` pour un plugin lié à l’édition de code  
+1. Crée un fichier **Lua** dans le dossier correspondant, par exemple :
+   - `lua/plugins/ui/` pour un plugin d’interface
+   - `lua/plugins/coding/` pour un plugin lié à l’édition de code
    - `lua/plugins/tools/` pour les outils transverses
 
 2. Le fichier doit retourner une table compatible **Lazy.nvim**. Exemple minimal :
@@ -117,11 +117,12 @@ return {
 
 ### Ajouter un serveur **LSP**
 
-L’ajout d’un serveur *LSP* suit une approche déclarative en deux niveaux.
+L’ajout d’un serveur _LSP_ suit une approche déclarative en deux niveaux.
 
-1. Déclaration du serveur 
-Ajouter le nom du serveur dans `lua/core/lsp/servers.lua`
-Exemple :
+1. Déclaration du serveur
+   Ajouter le nom du serveur dans `lua/core/lsp/servers.lua`
+   Exemple :
+
 ```lua
 return {
   "lua_ls",
@@ -129,13 +130,16 @@ return {
   "rust_analyzer",
 }
 ```
+
 👉 Ce fichier est la source de vérité :
+
 - utilisé par **Mason** pour l’installation
 - utilisé par l’orchestrateur **LSP** pour l’activation
 
 2. Configuration spécifique
-Créer un fichier nommé selon le serveur : `lua/plugins/lsp/config/<nom_serveur>.lua`.
-Structure du fichier :
+   Créer un fichier nommé selon le serveur : `lua/plugins/lsp/config/<nom_serveur>.lua`.
+   Structure du fichier :
+
 ```lua
 return {
   settings = {
@@ -148,21 +152,23 @@ Principe clé :
 Un serveur LSP fonctionne sans configuration spécifique.
 Une surcouche n’est chargée que si un fichier dédié existe.
 
---- 
+---
 
 ## Gestion des plugins avec Lazy.nvim
 
 ### `lua/plugins/init.lua`
 
 Ce fichier est le **point d’agrégation des plugins**. Il ne contient aucune configuration directe, ne s'occupant que des imports logiques :
+
 - Un scan du dossier `lua/plugins/` est effectué en vue de récupérer tous les sous-répertoires.
 - Transforme chaque sous-répertoire en une entrée `{ import = "plugins.<nom>" }`.
 - Retourne une table directement utilisable par `require("lazy").setup()`.
-Chaque sous-dossier représente un **domaine fonctionnel**.
+  Chaque sous-dossier représente un **domaine fonctionnel**.
 
 👉 Principes clés :
-- Aucun *plugin* n’est déclaré manuellement dans init.lua.
-- Chaque *plugin* dispose de son propre fichier.
+
+- Aucun _plugin_ n’est déclaré manuellement dans init.lua.
+- Chaque _plugin_ dispose de son propre fichier.
 - La philosophie adoptée est de ne configurer que ce qui diffère des valeurs par défaut, afin de garder des fichiers courts et explicites. Par exemple : `autopairs.lua` ne redéfinit que l’intégration **Tree-sitter**.
 
 ---
@@ -190,6 +196,7 @@ Plugins améliorant l’expérience d’édition du code :
 - [Telescope](https://github.com/nvim-telescope/telescope.nvim)
 - formatage ([conform](https://github.com/stevearc/conform.nvim))
 - [Lazydev](https://github.com/folke/lazydev.nvim)
+- [Trouble](https://github.com/folke/trouble.nvim)
 
 ---
 
@@ -204,21 +211,21 @@ Outils transverses (ex. [which-key](https://github.com/folke/which-key.nvim)) qu
 Le support **LSP** est structuré en trois niveaux distincts.
 
 1. Déclaration — `core/lsp/servers.lua`
-    - liste explicite des serveurs utilisés
-    - aucune logique
-    - aucune dépendance *plugin*
+   - liste explicite des serveurs utilisés
+   - aucune logique
+   - aucune dépendance _plugin_
 
 2. Orchestration — plugins/lsp/init.lua
-    Responsabilités :
-    - charger la liste des serveurs
-    - appliquer les surcouches existantes
-    - enregistrer les serveurs via l’API officielle : `vim.lsp.config(server, opts)`
+   Responsabilités :
+   - charger la liste des serveurs
+   - appliquer les surcouches existantes
+   - enregistrer les serveurs via l’API officielle : `vim.lsp.config(server, opts)`
 
 3. Installation — `plugins/lsp/mason.lua`
-    - installation automatique des serveurs déclarés
-    - aucune décision fonctionnelle
+   - installation automatique des serveurs déclarés
+   - aucune décision fonctionnelle
 
---- 
+---
 
 ## Gestion du dictionnaire personnalisé
 
@@ -228,9 +235,9 @@ Le support **LSP** est structuré en trois niveaux distincts.
 - Création automatique : au premier lancement, le fichier `code.utf-8.add` est créé avec les mots techniques fréquents et compilé en `code.utf-8.spl`.
 - Spellcheck ciblé : actif uniquement dans les commentaires et les chaînes de caractères.
 - Ajout automatique : les mots validés avec `zg` sont ajoutés à `code.utf-8.add` et recompilés dans `.spl`.
-- Compatibilité : fonctionne dès le premier lancement, avec **Neo-tree** et tous les *buffers*, sans télécharger de dictionnaire externe.
+- Compatibilité : fonctionne dès le premier lancement, avec **Neo-tree** et tous les _buffers_, sans télécharger de dictionnaire externe.
 
---- 
+---
 
 ## Installation
 
@@ -282,5 +289,4 @@ Libre d’utilisation, de modification et de partage.
 
 ---
 
-✨ *Si vous cherchez une configuration Neovim modulaire et aisément compréhensible, ce dépôt est fait pour vous.*
-
+✨ _Si vous cherchez une configuration Neovim modulaire et aisément compréhensible, ce dépôt est fait pour vous._

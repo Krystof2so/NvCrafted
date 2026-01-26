@@ -84,13 +84,13 @@ The main entry point (purely declarative):
 
 Contains the **fundamental Neovim configuration**, independent of plugins.
 
-| File | Role |
-|------|------|
-| `options.lua` | Neovim options (`vim.opt`) |
-| `keymaps.lua` | Global keybindings |
-| `autocmds.lua` | Autocommands |
-| `spell.lua` | Custom dictionary |
-| `bootstrap.lua` | **lazy.nvim** startup |
+| File              | Role                            |
+| ----------------- | ------------------------------- |
+| `options.lua`     | Neovim options (`vim.opt`)      |
+| `keymaps.lua`     | Global keybindings              |
+| `autocmds.lua`    | Autocommands                    |
+| `spell.lua`       | Custom dictionary               |
+| `bootstrap.lua`   | **lazy.nvim** startup           |
 | `lsp/servers.lua` | Source of truth for LSP servers |
 
 👉 These files do not depend on any plugin and can be read as "pure Neovim configuration."
@@ -99,7 +99,7 @@ Contains the **fundamental Neovim configuration**, independent of plugins.
 
 ## Extension Conventions
 
-### Adding a *Plugin*
+### Adding a _Plugin_
 
 1. Create a **Lua** file in the corresponding folder, for example:
    - `lua/plugins/ui/` for an interface plugin
@@ -124,6 +124,7 @@ Adding an LSP server follows a declarative two-level approach.
 1. Server Declaration
    Add the server name in `lua/core/lsp/servers.lua`
    Example:
+
    ```lua
    return {
      "lua_ls",
@@ -131,6 +132,7 @@ Adding an LSP server follows a declarative two-level approach.
      "rust_analyzer",
    }
    ```
+
    👉 This file is the source of truth:
    - Used by **Mason** for installation
    - Used by the **LSP** orchestrator for activation
@@ -157,14 +159,16 @@ A layer is only loaded if a dedicated file exists.
 ### `lua/plugins/init.lua`
 
 This file is the **aggregation point for plugins**. It contains no direct configuration, only logical imports:
+
 - Scans the `lua/plugins/` directory to retrieve all subdirectories.
 - Transforms each subdirectory into an entry `{ import = "plugins.<name>" }`.
 - Returns a table directly usable by `require("lazy").setup()`.
-Each subfolder represents a **functional domain**.
+  Each subfolder represents a **functional domain**.
 
 👉 Key Principles:
-- No *plugin* is manually declared in init.lua.
-- Each *plugin* has its own file.
+
+- No _plugin_ is manually declared in init.lua.
+- Each _plugin_ has its own file.
 - The philosophy is to only configure what differs from default values, to keep files short and explicit. For example: `autopairs.lua` only redefines **Tree-sitter** integration.
 
 ---
@@ -192,6 +196,7 @@ Plugins enhancing the code editing experience:
 - [Telescope](https://github.com/nvim-telescope/telescope.nvim)
 - formatting ([conform](https://github.com/stevearc/conform.nvim))
 - [Lazydev](https://github.com/folke/lazydev.nvim)
+- [Trouble](https://github.com/folke/trouble.nvim)
 
 ---
 
@@ -208,7 +213,7 @@ LSP support is structured into three distinct levels.
 1. Declaration — `core/lsp/servers.lua`
    - Explicit list of used servers
    - No logic
-   - No *plugin* dependency
+   - No _plugin_ dependency
 
 2. Orchestration — `plugins/lsp/init.lua`
    Responsibilities:
@@ -230,7 +235,7 @@ LSP support is structured into three distinct levels.
 - Automatic creation: On first launch, the `code.utf-8.add` file is created with frequent technical words and compiled into `code.utf-8.spl`.
 - Targeted spell-check: Active only in comments and strings.
 - Automatic addition: Words validated with `zg` are added to `code.utf-8.add` and recompiled into `.spl`.
-- Compatibility: Works from the first launch, with **Neo-tree** and all *buffers*, without downloading external dictionaries.
+- Compatibility: Works from the first launch, with **Neo-tree** and all _buffers_, without downloading external dictionaries.
 
 ---
 
@@ -284,4 +289,4 @@ Free to use, modify, and share.
 
 ---
 
-✨ *If you are looking for a modular and easily understandable Neovim configuration, this repository is for you.*
+✨ _If you are looking for a modular and easily understandable Neovim configuration, this repository is for you._

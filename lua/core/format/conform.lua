@@ -38,6 +38,7 @@ function M.setup()
 			scss = { "prettier" },
 		},
 	})
+
 	-- ============================================
 	-- 2. Formatage automatique à l'enregistrement
 	-- ============================================
