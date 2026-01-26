@@ -196,7 +196,6 @@ Plugins améliorant l’expérience d’édition du code :
 - [Telescope](https://github.com/nvim-telescope/telescope.nvim)
 - formatage ([conform](https://github.com/stevearc/conform.nvim))
 - [Lazydev](https://github.com/folke/lazydev.nvim)
-- [Trouble](https://github.com/folke/trouble.nvim)
 
 ---
 
@@ -224,6 +223,33 @@ Le support **LSP** est structuré en trois niveaux distincts.
 3. Installation — `plugins/lsp/mason.lua`
    - installation automatique des serveurs déclarés
    - aucune décision fonctionnelle
+
+---
+
+## Gestion des _Snippets_
+
+### Structure
+
+Les _snippets_ sont stockés dans `~/.config/nvim/snippets/` au format JSON (compatible VSCode).
+
+### Configuration
+
+Les _snippets_ sont chargés dynamiquement via `lazy_load` :
+
+```lua
+-- plugins/coding/blink.lua
+require("luasnip.loaders.from_vscode").lazy_load({
+  paths = { vim.fn.stdpath("config") .. "/snippets" },
+})
+```
+
+**blink.cmp** est configuré pour inclure **luasnip** comme source de complétion :
+
+```lua
+sources = { -- Sources de complétion prioritaires
+    default = { "lsp", "buffer", "snippets", "path" },
+},
+```
 
 ---
 

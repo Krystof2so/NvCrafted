@@ -227,6 +227,31 @@ LSP support is structured into three distinct levels.
 
 ---
 
+## Snippet Management
+
+### Structure
+
+Snippets are stored in `~/.config/nvim/snippets/` in JSON format (compatible with VSCode).
+
+### Configuration
+
+Snippets are dynamically loaded using `lazy_load`:
+
+````lua
+-- plugins/coding/blink.lua
+require("luasnip.loaders.from_vscode").lazy_load({
+  paths = { vim.fn.stdpath("config") .. "/snippets" },
+})
+
+**blink.cmp** is configured to include **luasnip** as a completion source:
+```lua
+sources = { -- Priority completion sources
+    default = { "lsp", "buffer", "snippets", "path" },
+},
+````
+
+---
+
 ## Custom Dictionary Management
 
 **NvCrafted** integrates a spell-checking system adapted for code and comments.
