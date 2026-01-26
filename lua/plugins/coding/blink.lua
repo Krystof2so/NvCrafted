@@ -12,6 +12,7 @@ return {
 	dependencies = {
 		"rafamadriz/friendly-snippets",
 		"L3MON4D3/LuaSnip",
+		"onsails/lspkind-nvim",
 	},
 
 	event = "InsertEnter", -- Chargement en mode insertion (optimal pour les performances)
@@ -39,6 +40,15 @@ return {
 				border = "rounded",
 				max_height = 18,
 				min_width = 30,
+				draw = {
+					components = {
+						kind_icon = {
+							text = function(ctx)
+								return require("lspkind").symbol_map[ctx.kind] or ""
+							end,
+						},
+					},
+				},
 			},
 		},
 
