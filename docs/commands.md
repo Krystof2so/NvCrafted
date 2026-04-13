@@ -31,6 +31,7 @@
 
 - `<leader>ff` : recherche de fichier
 - `<leader>fg` : recherche de texte au niveau du projet
+- `<leader>ao` : ouvre une fenêtre `aerial` (navigation dans la structure du fichier courant)
 
 ## Mapping de LSP:
 
@@ -65,7 +66,7 @@
 - `/` : Rechercher un fichier
 - `D` : Recherche un répertoire
 
-### Actions sur les fichiers
+## Actions sur les fichiers
 
 - `a` : Ajout d'un fichier
 - `A` : Ajout d'une répertoire

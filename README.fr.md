@@ -184,6 +184,7 @@ Plugins liés à l’interface utilisateur :
 - écran d’accueil ([alpha](https://github.com/goolord/alpha-nvim))
 - thème de couleurs ([Nord](https://www.nordtheme.com/)) - Je sais, je suis un inconditionnel de ce thème.
 - Visualisation des diagnostics ([Trouble](https://github.com/folke/trouble.nvim/tree/main))
+- Visualisation de la structure du fichier courant (et navigation) ([aerial](https://github.com/stevearc/aerial.nvim))
 
 ---
 
