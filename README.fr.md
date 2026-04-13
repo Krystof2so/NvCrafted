@@ -115,6 +115,38 @@ return {
 }
 ```
 
+### Convention : spécification vs déclaration
+
+Certains _plugins_ impliquent une logique de configuration suffisamment riche pour justifier un fichier dédié dans `core/`. **NvCrafted** applique alors une séparation en deux niveaux :
+
+| Niveau        | Fichier                          | Rôle                                                             |
+| ------------- | -------------------------------- | ---------------------------------------------------------------- |
+| Déclaration   | `plugins/<domaine>/<plugin>.lua` | Déclare le _plugin_ auprès de **Lazy**, délègue la configuration |
+| Spécification | `core/<domaine>/<plugin>.lua`    | Contient la logique réelle, indépendante de **Lazy**             |
+
+#### Exemple : `conform.nvim`
+
+`plugins/coding/conform.lua` se limite à déclarer le _plugin_ et à appeler le module `core` :
+
+```lua
+return {
+  "stevearc/conform.nvim",
+  opts = function()
+    require("core.format.conform").setup()
+  end,
+}
+```
+
+Toute la logique réelle — formateurs par type de fichier, sélection dynamique **Python**, formatage automatique à la sauvegarde — vit dans `core/format/conform.lua`.
+
+#### Quand appliquer cette convention ?
+
+- La configuration du _plugin_ contient de la _logique métier_ (conditions, fonctions, autocommandes).
+- Elle est susceptible d'être _réutilisée_ par d'autres modules.
+- On veut qu'elle reste _lisible et testable_ indépendamment du cycle de vie de **Lazy**.
+
+Un _plugin_ dont la configuration tient en quelques lignes d'options statiques n'a pas besoin de ce découpage : `opts = { ... }` directement dans le fichier _plugin_ suffit.
+
 ### Ajouter un serveur **LSP**
 
 L’ajout d’un serveur _LSP_ suit une approche déclarative en deux niveaux.

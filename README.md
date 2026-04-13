@@ -117,6 +117,38 @@ return {
 }
 ```
 
+### Convention: specification vs declaration
+
+Some plugins involve configuration logic rich enough to justify a dedicated file in `core/`. **NvCrafted** then applies a two-level separation:
+
+| Level         | File                            | Role                                                 |
+| ------------- | ------------------------------- | ---------------------------------------------------- |
+| Declaration   | `plugins/<domain>/<plugin>.lua` | Declares the plugin to Lazy, delegates configuration |
+| Specification | `core/<domain>/<plugin>.lua`    | Holds the actual logic, independent from Lazy        |
+
+#### Example: `conform.nvim`
+
+`plugins/coding/conform.lua` only declares the plugin and calls the `core` module:
+
+```lua
+return {
+  "stevearc/conform.nvim",
+  opts = function()
+    require("core.format.conform").setup()
+  end,
+}
+```
+
+All the actual logic — formatters per file type, dynamic Python selection, format-on-save — lives in `core/format/conform.lua`.
+
+#### When to apply this convention?
+
+- the plugin configuration contains **business logic** (conditions, functions, autocommands)
+- it is likely to be **reused** by other modules
+- it should remain **readable and testable** independently from Lazy's lifecycle
+
+A plugin whose configuration fits in a few lines of static options does not need this split : `opts = { ... }` directly in the plugin file is enough.
+
 ### Adding an **LSP Server**
 
 Adding an LSP server follows a declarative two-level approach.

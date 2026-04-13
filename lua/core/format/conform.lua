@@ -1,7 +1,9 @@
 -- ***********************************************************************
 -- * Module : core.format.conform                                        *
 -- *                                                                     *
--- * Configuration centralisée de conform.nvim pour NvCrafted.           *
+-- * Spécification du formatage pour NvCrafted.                          *
+-- * Ce module contient la logique de configuration de conform.nvim,     *
+-- * séparée de sa déclaration Lazy (plugins/coding/conform.lua).        *
 -- * - Formatage automatique à la sauvegarde                             *
 -- * - Choix dynamique des formateurs Python selon Ruff                  *
 -- * - Utilisation des outils installés via Mason / mason-tool-installer *
