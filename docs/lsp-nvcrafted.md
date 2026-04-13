@@ -2,7 +2,8 @@
 
 ## Introduction
 
-**NvCrafted** intègre le *Language Server Protocol* (**LSP**) comme un socle fondamental de son architecture. L’objectif n’est pas seulement de « faire fonctionner des serveurs **LSP** », mais de proposer :
+**NvCrafted** intègre le _Language Server Protocol_ (**LSP**) comme un socle fondamental de son architecture. L’objectif n’est pas seulement de « faire fonctionner des serveurs **LSP** », mais de proposer :
+
 - une orchestration claire et lisible
 - une séparation stricte des responsabilités
 - une extensibilité sans dette technique
@@ -17,14 +18,17 @@ Cette documentation explique comment les serveurs **LSP** sont gérés, où les 
 Le support **LSP** dans **NvCrafted** repose sur trois principes clés :
 
 ### 1. Un serveur **LSP** doit fonctionner sans configuration spécifique
+
 Un serveur **LSP** correctement installé doit être utilisable immédiatement. Toute configuration avancée est considérée comme une surcouche optionnelle.
 
 ### 2. Une responsabilité = un fichier
+
 - orchestration globale → un point d’entrée unique
 - logique partagée → modules `core/lsp`
 - configuration spécifique → un fichier par serveur
 
 ### 3. Aucune magie implicite
+
 Chaque étape du pipeline **LSP** est explicite, traçable et lisible.
 
 ---
@@ -41,9 +45,10 @@ lua/
 └── plugins/
     └── lsp/
         ├── init.lua           # Orchestration globale LSP
-        └── config/
-            ├── pyright.lua    # Configuration spécifique serveur
-            └── lua_ls.lua
+        ├── config/
+        │   ├── pyright.lua    # Configuration spécifique serveur
+        │   └── lua_ls.lua
+        └── tools.lua          # Liste des outils non-LSP installés par Mason
 ```
 
 ---
@@ -53,6 +58,7 @@ lua/
 Ce fichier est le chef d’orchestre **LSP**.
 
 ### Responsabilités
+
 - parcourir la liste des serveurs déclarés
 - injecter :
   - `on_attach`
@@ -61,9 +67,10 @@ Ce fichier est le chef d’orchestre **LSP**.
 - initialiser chaque serveur via `nvim-lspconfig`
 
 ### Ce fichier ne fait PAS
+
 - aucune configuration spécifique serveur
 - aucune logique métier **LSP**
-- aucune définition de *mappings*
+- aucune définition de _mappings_
 
 Il se contente d’assembler les briques.
 
@@ -81,6 +88,7 @@ return {
 ```
 
 ### Pourquoi ce fichier est central
+
 - un serveur ajouté ici est automatiquement :
   - installé (via Mason)
   - initialisé
@@ -89,20 +97,73 @@ return {
 
 ---
 
+## Flux d'installation et d'activation
+
+### Les deux sources de vérité
+
+| Fichier                | Contenu                               | Consommé par                  |
+| ---------------------- | ------------------------------------- | ----------------------------- |
+| `core/lsp/servers.lua` | Serveurs LSP                          | `mason-lspconfig`, `init.lua` |
+| `core/lsp/tools.lua`   | Outils non-LSP (formateurs, linters…) | `mason-tool-installer`        |
+
+Ces deux fichiers sont les seuls endroits où déclarer ce qui doit être installé. Aucune autre partie de la configuration n'effectue d'installation implicite.
+
+### Schéma du flux complet
+
+```text
+core/lsp/servers.lua ──→ mason-lspconfig.nvim ──┐
+                                                 ├──→ mason.nvim (installe)
+core/lsp/tools.lua ────→ mason-tool-installer ──┘
+
+core/lsp/servers.lua ──→ plugins/lsp/init.lua
+                              │
+                              ├── on_attach        (core/lsp/on_attach.lua)
+                              ├── capabilities     (core/lsp/capabilities.lua)
+                              └── surcouche opt.   (plugins/lsp/config/<serveur>.lua)
+                                        │
+                                  vim.lsp.config()
+```
+
+### Ce que cette séparation garantit
+
+- `servers.lua` et `tools.lua` ne contiennent aucune logique
+- `mason.lua` ne prend aucune décision fonctionnelle
+- `init.lua` n'installe rien, il orchestre uniquement
+
+Chaque fichier a une responsabilité unique et non partagée.
+
+### Ajouter un outil (formateur, linter)
+
+1. Ajouter son nom **Mason** dans `core/lsp/tools.lua`
+2. Relancer **Neovim** — **Mason** l'installe automatiquement
+3. Le référencer dans `core/format/conform.lua` s'il s'agit d'un formateur
+
+### Ajouter un serveur LSP
+
+1. Ajouter son nom dans `core/lsp/servers.lua`
+2. Créer `plugins/lsp/config/<serveur>.lua` si une configuration spécifique est nécessaire
+3. Relancer **Neovim**
+
+---
+
 ## Le rôle de `on_attach`
 
 ### Définition
-`on_attach` est une fonction appelée lorsqu’un serveur **LSP** s’attache à un *buffer*. Elle permet de :
-- définir des *mappings buffer-local*
+
+`on_attach` est une fonction appelée lorsqu’un serveur **LSP** s’attache à un _buffer_. Elle permet de :
+
+- définir des _mappings buffer-local_
 - activer uniquement les fonctionnalités réellement disponibles
-- garantir qu’aucun raccourci **LSP** ne pollue les *buffers* sans **LSP**
+- garantir qu’aucun raccourci **LSP** ne pollue les _buffers_ sans **LSP**
 
 ### Emplacement
+
 ```text
 lua/core/lsp/on_attach.lua
 ```
 
 ### Contenu typique
+
 - navigation (`gd`, `gr`, `gi`, …)
 - actions (`rename`, `code_action`)
 - diagnostics
@@ -115,14 +176,17 @@ lua/core/lsp/on_attach.lua
 ## Les capabilities : `core/lsp/capabilities.lua`
 
 ### Qu’est-ce qu’une capability ?
-Les *capabilities* décrivent ce que le client **LSP** (**Neovim**) sait faire. Elles sont envoyées au serveur lors de l’initialisation pour établir un contrat de fonctionnalités.
+
+Les _capabilities_ décrivent ce que le client **LSP** (**Neovim**) sait faire. Elles sont envoyées au serveur lors de l’initialisation pour établir un contrat de fonctionnalités.
 
 ### Exemples de capacités
+
 - support des snippets
 - format de la documentation
 - gestion avancée de la complétion
 
 ### Pourquoi un fichier dédié
+
 - définir une identité claire du **client LSP NvCrafted**
 - éviter la duplication entre serveurs
 - permettre des extensions progressives
@@ -132,15 +196,18 @@ Les *capabilities* décrivent ce que le client **LSP** (**Neovim**) sait faire. 
 ## Configurations spécifiques serveur
 
 ### Emplacement
+
 ```text
 lua/plugins/lsp/config/<server>.lua
 ```
 
 ### Principe
+
 - si le fichier existe → il est chargé
 - sinon → le serveur fonctionne avec les options par défaut
 
 ### Exemple
+
 ```lua
 return {
   settings = {
@@ -154,27 +221,29 @@ return {
 ```
 
 ### Avantages
+
 - aucune logique conditionnelle
 - ajout d’un serveur = 1 fichier (optionnel)
 - lisibilité maximale
 
 ---
 
-## *Pipeline* **LSP** résumé
+## _Pipeline_ **LSP** résumé
 
-1. déclaration du serveur (`servers.lua`)
-2. installation via **Mason**
+Pour l'installation (étapes 1 et 2), voir _Flux d'installation et d'activation_ ci-dessus.
+
 3. construction des options :
    - `on_attach`
    - `capabilities`
 4. fusion avec une surcouche éventuelle
-5. initialisation via `nvim-lspconfig`
+5. initialisation via `vim.lsp.config()`
 
 ---
 
 ## Extensibilité future
 
 Cette architecture permet :
+
 - l’extension des capabilities
 - la gestion fine des diagnostics
 - l’activation conditionnelle de fonctionnalités avancées
@@ -184,9 +253,10 @@ Cette architecture permet :
 ## Conclusion
 
 Le support **LSP** de **NvCrafted** n’est pas une simple intégration technique. C’est un socle structurant, pensé pour être :
+
 - compréhensible
 - modulaire
 - évolutif
 - et documenté
 
-Chaque serveur *LSP* devient une brique interchangeable, jamais une dépendance rigide.
+Chaque serveur _LSP_ devient une brique interchangeable, jamais une dépendance rigide.

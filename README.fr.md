@@ -206,24 +206,41 @@ Outils transverses (ex. [which-key](https://github.com/folke/which-key.nvim)) qu
 
 ---
 
-## Gestion des LSP
+## Gestion des LSP et des outils
 
-Le support **LSP** est structuré en trois niveaux distincts.
+Le support **LSP** et l'installation des outils sont structurés en quatre niveaux distincts.
 
-1. Déclaration — `core/lsp/servers.lua`
-   - liste explicite des serveurs utilisés
-   - aucune logique
-   - aucune dépendance _plugin_
+### 1. Déclaration — `core/lsp/servers.lua`
 
-2. Orchestration — plugins/lsp/init.lua
-   Responsabilités :
-   - charger la liste des serveurs
-   - appliquer les surcouches existantes
-   - enregistrer les serveurs via l’API officielle : `vim.lsp.config(server, opts)`
+- Liste explicite des serveurs activés
+- Aucune logique, aucune dépendance _plugin_
 
-3. Installation — `plugins/lsp/mason.lua`
-   - installation automatique des serveurs déclarés
-   - aucune décision fonctionnelle
+### 2. Déclaration — `core/lsp/tools.lua`
+
+- Liste explicite des outils **Mason** non-**LSP** : formateurs (`black`, `stylua`, `prettier`),_linters_ (`ruff`), et autres binaires.
+- Même philosophie que `servers.lua` : une liste pure, sans logique.
+
+Ces deux fichiers sont les _sources de vérité_ de l'environnement. Tout ce qui doit être installé est déclaré ici, nulle part ailleurs.
+
+### 3. Installation — `plugins/lsp/mason.lua`
+
+Consomme les deux listes :
+
+- `mason-lspconfig` installe les serveurs de `servers.lua`
+- `mason-tool-installer` installe les outils de `tools.lua`
+- `mason.nvim` exécute les installations
+  Aucune décision fonctionnelle ici.
+
+### 4. Orchestration — `plugins/lsp/init.lua`
+
+Pour chaque serveur de `servers.lua` :
+
+- applique `on_attach` et `capabilities` communs
+- charge la surcouche `lsp/config/<serveur>.lua` si elle existe
+- enregistre le serveur via `vim.lsp.config()`
+
+Un serveur fonctionne sans surcouche.
+Une surcouche n'est chargée que si le fichier existe.
 
 ---
 
