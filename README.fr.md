@@ -67,7 +67,21 @@ Ce projet demeure en construction...
         └── ui
 ```
 
-### 1. `init.lua` (racine)
+---
+
+## Le répertoire `docs/`
+
+**NvCrafted** dispose d'une documentation technique complémentaire au `README`, organisée par thématique dans le dossier `docs/`.
+
+| Fichier            | Contenu                                                                                                                                       |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `autocommands.md`  | Description des groupes d'autocommandes définis dans `core/autocmds.lua`                                                                      |
+| `commands.md`      | Liste des commandes disponibles dans **NvCrafted**                                                                                            |
+| `lsp-nvcrafted.md` | Architecture complète du support **LSP** : flux d'installation, orchestration, rôle de `on_attach` et `capabilities`, conventions d'extension |
+
+---
+
+## `init.lua` (racine)
 
 Point d’entrée principal (purement déclaratif):
 
