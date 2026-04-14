@@ -225,6 +225,69 @@ Toute la logique réelle — formateurs par type de fichier, sélection dynamiqu
 
 Un _plugin_ dont la configuration tient en quelques lignes d'options statiques n'a pas besoin de ce découpage : `opts = { ... }` directement dans le fichier _plugin_ suffit.
 
+### `opts` vs `config` dans Lazy.nvim
+
+**Lazy.nvim** propose deux façons de configurer un _plugin_. Le choix dépend de la nature de la configuration.
+
+#### `opts` — options statiques
+
+À utiliser quand la configuration se résume à des valeurs à passer directement au _plugin_ :
+
+```lua
+-- plugins/coding/autopairs.lua
+opts = {
+  check_ts = true,
+  ts_config = {
+    lua = { "string" },
+  },
+}
+```
+
+**Lazy** appelle automatiquement `plugin.setup(opts)`. Aucun code supplémentaire n'est nécessaire.
+
+#### `config` — logique à exécuter
+
+À utiliser quand la configuration nécessite du code : autocommandes, protection par `pcall`, etc.
+
+```lua
+-- plugins/coding/treesitter.lua
+config = function()
+  local ok, ts_configs = pcall(require, "nvim-treesitter.configs")
+  if not ok then return end
+  ts_configs.setup({ ... })
+end
+```
+
+#### `opts` + `config` — les deux ensemble
+
+Quand un _plugin_ a des options statiques et du code à exécuter après son initialisation, les deux coexistent. `opts` est alors reçu en second argument de `config` :
+
+```lua
+-- plugins/coding/blink.lua
+opts = {
+  keymap = { ... },
+  completion = { ... },
+},
+config = function(_, opts)
+  require("blink.cmp").setup(opts)        -- opts transmis ici
+  require("luasnip.loaders.from_vscode")  -- code supplémentaire
+    .lazy_load({ paths = { ... } })
+  vim.cmd([[hi LspFloatBorder ...]])      -- highlights manuels
+end,
+```
+
+Le `_` en premier argument est le _plugin_ lui-même (non utilisé ici, ignoré par convention).
+
+#### Règle de décision
+
+| Situation                                     | Clé à utiliser    |
+| --------------------------------------------- | ----------------- |
+| Options statiques uniquement                  | `opts`            |
+| Code à exécuter (API, autocommandes, `pcall`) | `config`          |
+| Options statiques + code supplémentaire       | `opts` + `config` |
+
+Quand le doute existe, préférer `opts` : c'est plus court, plus lisible, et **Lazy** gère l'appel à `setup()` automatiquement.
+
 ### Ajouter un serveur **LSP**
 
 L’ajout d’un serveur _LSP_ suit une approche déclarative en deux niveaux.
