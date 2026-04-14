@@ -106,6 +106,7 @@ Ce projet demeure en construction...
 | `autocommands.md`  | Description des groupes d'autocommandes définis dans `core/autocmds.lua`                                                                      |
 | `commands.md`      | Liste des commandes disponibles dans **NvCrafted**                                                                                            |
 | `lsp-nvcrafted.md` | Architecture complète du support **LSP** : flux d'installation, orchestration, rôle de `on_attach` et `capabilities`, conventions d'extension |
+| `architecure.md`   | Explication de la conception architecturale de **NvCrafted**                                                                                  |
 
 ---
 

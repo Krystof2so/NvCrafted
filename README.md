@@ -101,14 +101,14 @@ This project is still under construction...
 
 ## The `docs/` directory
 
-**NvCrafted** includes technical documentation complementing the `README`,
-organized by topic in the `docs/` folder.
+**NvCrafted** includes technical documentation complementing the `README`, organized by topic in the `docs/` folder (written exclusively in French).
 
 | File               | Content                                                                                                                                |
 | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
 | `autocommands.md`  | Description of the autocommand groups defined in `core/autocmds.lua`                                                                   |
 | `commands.md`      | List of commands available in **NvCrafted**                                                                                            |
 | `lsp-nvcrafted.md` | Complete **LSP** support architecture: installation flow, orchestration, role of `on_attach` and `capabilities`, extension conventions |
+| `architecture.md`  | An explanation of the architectural design of **NvCrafted**                                                                            |
 
 ---
 
