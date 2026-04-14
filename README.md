@@ -45,28 +45,56 @@ This project is still under construction...
 ```text
 .
 ├── docs
+│   ├── autocommands.md
+│   ├── commands.md
+│   └── lsp-nvcrafted.md
 ├── init.lua
 ├── lazy-lock.json
-└── lua
-    ├── core
-    │   ├── autocmds.lua
-    │   ├── bootstrap.lua
-    │   ├── keymaps.lua
-    │   ├── options.lua
-    │   ├── spell.lua
-    │   └── lsp
-    │       ├── capabilities.lua
-    │       ├── on_attach.lua
-    │       └── servers.lua
-    └── plugins
-        ├── init.lua
-        ├── coding
-        ├── lsp
-        │   ├── init.lua
-        │   ├── mason.lua
-        │   └── config
-        ├── tools
-        └── ui
+├── lua
+│   ├── core
+│   │   ├── autocmds.lua
+│   │   ├── bootstrap.lua
+│   │   ├── format
+│   │   │   └── conform.lua
+│   │   ├── highlights
+│   │   │   └── diagnostics_theme_nord.lua
+│   │   ├── keymaps.lua
+│   │   ├── lsp
+│   │   │   ├── capabilities.lua
+│   │   │   ├── on_attach.lua
+│   │   │   ├── servers.lua
+│   │   │   └── tools.lua
+│   │   ├── options.lua
+│   │   └── spell.lua
+│   └── plugins
+│       ├── coding
+│       │   ├── autopairs.lua
+│       │   ├── blink.lua
+│       │   ├── conform.lua
+│       │   ├── lazydev.lua
+│       │   ├── telescope.lua
+│       │   └── treesitter.lua
+│       ├── init.lua
+│       ├── lsp
+│       │   ├── config
+│       │   │   ├── lua_ls.lua
+│       │   │   ├── pyright.lua
+│       │   │   └── ruff.lua
+│       │   ├── init.lua
+│       │   └── mason.lua
+│       ├── tools
+│       │   └── which_key.lua
+│       └── ui
+│           ├── aerial.lua
+│           ├── alpha.lua
+│           ├── colorscheme.lua
+│           ├── lualine.lua
+│           ├── neo_tree.lua
+│           └── trouble.lua
+├── README.fr.md
+├── README.md
+└── snippets
+    └── python.json
 ```
 
 ---
