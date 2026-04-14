@@ -121,6 +121,41 @@ The main entry point (purely declarative):
 - Loads `core` modules
 - Initializes **Lazy** with automatic plugin imports
 
+### Startup flow
+
+```text
+init.lua (root)
+  │
+  ├── core.bootstrap
+  │     └── installs lazy.nvim if missing
+  │
+  ├── system configuration
+  │     ├── disable unused providers (Perl, Ruby)
+  │     ├── dedicated Neovim Python (~/.venvs/neovim)
+  │     └── append Mason to PATH
+  │
+  ├── leader keys (Space / Backslash)
+  │
+  ├── core/ modules (plugin-independent)
+  │     ├── core.spell
+  │     ├── core.options
+  │     ├── core.keymaps
+  │     └── core.autocmds
+  │
+  └── lazy.setup("plugins")
+        └── plugins/init.lua
+              └── automatic subdirectory scan
+                    ├── plugins/coding/
+                    ├── plugins/ui/
+                    ├── plugins/tools/
+                    └── plugins/lsp/
+                          └── init.lua
+                                ├── servers.lua → LSP activation
+                                └── tools.lua   → Mason tools
+```
+
+The order is intentional: `core/` modules are loaded before **Lazy**, ensuring that options and leader keys are in place before any plugin is initialized.
+
 ---
 
 ## The `core/` Directory
