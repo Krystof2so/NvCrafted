@@ -80,9 +80,6 @@ opt.wrap = true -- bool : Activer le retour automatique à la ligne à l'afficha
 -- [[ UI - plugins ]]
 opt.laststatus = 3 -- bool : Afficher une ligne de statut unique
 
--- [[ Performance ]]
-opt.lazyredraw = true -- bool : Accélère les macros et recherche
-
 -- [[ Correction orthographique ]]
 opt.spell = false -- bool : Activation uniquement selon contexte via auto-commandes
 

@@ -54,7 +54,7 @@ return {
 			-- Boutons : Actions principales
 			-- ==============================
 			dashboard.section.buttons.val = {
-				dashboard.button("h", "✅ Vérifier la configuration", ":checkhealth nvcrafted<CR>"),
+				dashboard.button("h", "✅ Vérifier la configuration", ":checkhealth<CR>"),
 				dashboard.button("u", "🔄 Mettre à jour les plugins", ":Lazy update<CR>"),
 				dashboard.button("m", "🔧  Gérer les LSP/Tools", ":Mason<CR>"),
 				dashboard.button("e", "🗃️  Ouvrir l'explorateur", ":Neotree<CR>"),
