@@ -22,34 +22,64 @@ function M.preview_with_telescope()
 
 	local current_theme = vim.g.colors_name
 
+	local function preview_selected()
+		local entry = action_state.get_selected_entry()
+		if entry then
+			M.apply(entry[1])
+		end
+	end
+
+	local function close_and_restore(bufnr)
+		actions.close(bufnr)
+		M.apply(current_theme)
+	end
+
 	pickers
 		.new({}, {
-			prompt_title = "Select Theme",
-
+			prompt_title = "Sélection du thème",
+			initial_mode = "normal",
 			finder = finders.new_table({
 				results = M.available,
 			}),
-
 			sorter = conf.generic_sorter({}),
-
 			attach_mappings = function(prompt_bufnr, map)
-				local function preview_theme()
-					local entry = action_state.get_selected_entry()
-					if entry then
-						M.apply(entry[1])
-					end
-				end
-
-				map("i", "<C-n>", preview_theme)
-				map("i", "<C-p>", preview_theme)
-				map("n", "j", preview_theme)
-				map("n", "k", preview_theme)
-
+				-- Navigation mode insertion avec prévisualisation
+				map("i", "<C-n>", function()
+					actions.move_selection_next(prompt_bufnr)
+					preview_selected()
+				end)
+				map("i", "<C-p>", function()
+					actions.move_selection_previous(prompt_bufnr)
+					preview_selected()
+				end)
+				-- Navigation mode normal avec prévisualisation
+				map("n", "j", function()
+					actions.move_selection_next(prompt_bufnr)
+					preview_selected()
+				end)
+				map("n", "k", function()
+					actions.move_selection_previous(prompt_bufnr)
+					preview_selected()
+				end)
+				-- Echap : passe en mode normal sans fermer
+				map("i", "<Esc>", function()
+					vim.cmd("stopinsert")
+				end)
+				-- Fermeture avec restauration
+				map("n", "<Esc>", function()
+					close_and_restore(prompt_bufnr)
+				end)
+				map("n", "q", function()
+					close_and_restore(prompt_bufnr)
+				end)
+				-- Confirmation
 				actions.select_default:replace(function()
 					local entry = action_state.get_selected_entry()
 					actions.close(prompt_bufnr)
 					if entry then
 						M.apply(entry[1])
+					else
+						M.apply(current_theme)
 					end
 				end)
 
@@ -57,10 +87,6 @@ function M.preview_with_telescope()
 			end,
 		})
 		:find()
-	-- restore si fermeture sans sélection
-	vim.schedule(function()
-		vim.cmd.colorscheme(current_theme)
-	end)
 end
 
 return M
