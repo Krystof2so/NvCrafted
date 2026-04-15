@@ -11,7 +11,9 @@ local map = vim.keymap.set
 
 -- Raccourcis utilitaires
 map("n", "<leader>h", ":nohlsearch<CR>", { desc = "Suppression surlignage recherche" })
-
+map("n", "<leader>t", function()
+	require("core.theme").preview_with_telescope()
+end, { desc = "Sélectionner un thème" })
 -- Gestion des buffers
 map("n", "<leader>b", "", { desc = " Buffers" })
 map("n", "<leader>bn", ":bnext<CR>", { desc = "Buffer suivant" })

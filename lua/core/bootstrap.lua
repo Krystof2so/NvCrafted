@@ -55,3 +55,4 @@ if not uv.fs_stat(lazypath) then
 end
 -- Ajout de lazy.nvim en tête du runtimepath
 vim.opt.rtp:prepend(lazypath)
+
