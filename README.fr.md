@@ -288,6 +288,49 @@ Le `_` en premier argument est le _plugin_ lui-même (non utilisé ici, ignoré 
 
 Quand le doute existe, préférer `opts` : c'est plus court, plus lisible, et **Lazy** gère l'appel à `setup()` automatiquement.
 
+### Organisation des _keymaps_
+
+Les raccourcis clavier sont répartis en trois espaces distincts selon leur portée.
+
+#### `core/keymaps.lua` — raccourcis globaux
+
+Tous les raccourcis actifs en permanence, quelle que soit la situation, sont définis ici. Cela inclut les raccourcis qui invoquent des _plugins_, car ils font partie de l'interface globale de **NvCrafted** :
+
+```lua
+-- core/keymaps.lua
+map("n", "<leader>ff", ":Telescope find_files<CR>", { desc = "Chercher fichiers" })
+map("n", "<leader>ee", ":Neotree<CR>", { desc = "Ouverture de Neotree" })
+```
+
+#### Dans le fichier plugin — raccourcis contextuels
+
+Les raccourcis qui n'ont de sens que dans un contexte précis (_popup_, menu flottant) restent dans le fichier _plugin_ :
+
+```lua
+-- plugins/coding/blink.lua
+opts = {
+  keymap = {
+    ["<CR>"]    = { "accept", "fallback" },
+    ["<Tab>"]   = { "select_next", "fallback" },
+    ["<S-Tab>"] = { "select_prev", "fallback" },
+  },
+}
+```
+
+Ces raccourcis sont gérés par **blink.cmp** lui-même et n'ont aucun effet en dehors du menu de complétion. Les définir dans `core/keymaps.lua` serait sans objet.
+
+#### `core/lsp/on_attach.lua` — raccourcis buffer-local LSP
+
+Un troisième espace existe pour les raccourcis **LSP** : ils sont définis dans `on_attach` et ne s'activent que lorsqu'un serveur **LSP** est attaché au _buffer_ courant.
+
+```lua
+-- core/lsp/on_attach.lua
+vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, opts)
+```
+
+Les raccourcis **LSP** appartiennent à `on_attach`, jamais à `core/keymaps.lua` — ils ne doivent pas polluer les _buffers_ sans **LSP**.
+
 ### Ajouter un serveur **LSP**
 
 L’ajout d’un serveur _LSP_ suit une approche déclarative en deux niveaux.

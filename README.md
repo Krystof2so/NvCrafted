@@ -290,6 +290,49 @@ The `_` as the first argument is the plugin itself (unused here, ignored by conv
 
 When in doubt, prefer `opts`: it is shorter, more readable, and **Lazy** handles the `setup()` call automatically.
 
+### Keymap organization
+
+Keybindings are distributed across three distinct spaces depending on their scope.
+
+#### `core/keymaps.lua` — global keymaps
+
+All keybindings that are always active, regardless of context, are defined here. This includes shortcuts that invoke _plugins_, as they are part of **NvCrafted**'s global interface:
+
+```lua
+-- core/keymaps.lua
+map("n", "<leader>ff", ":Telescope find_files<CR>", { desc = "Chercher fichiers" })
+map("n", "<leader>ee", ":Neotree<CR>",              { desc = "Ouverture de Neotree" })
+```
+
+#### In the plugin file — contextual keymaps
+
+Keybindings that only make sense in a specific context (_popup_, floating menu) stay in the plugin file:
+
+```lua
+-- plugins/coding/blink.lua
+opts = {
+  keymap = {
+    ["<CR>"]    = { "accept", "fallback" },
+    ["<Tab>"]   = { "select_next", "fallback" },
+    ["<S-Tab>"] = { "select_prev", "fallback" },
+  },
+}
+```
+
+These keybindings are managed by **blink.cmp** itself and have no effect outside the completion menu. Defining them in `core/keymaps.lua` would serve no purpose.
+
+#### `core/lsp/on_attach.lua` — buffer-local LSP keymaps
+
+A third space exists for **LSP** keybindings: they are defined in `on_attach` and only activate when an **LSP** server is attached to the current _buffer_.
+
+```lua
+-- core/lsp/on_attach.lua
+vim.keymap.set("n", "gd",         vim.lsp.buf.definition, opts)
+vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename,     opts)
+```
+
+**LSP** keybindings belong in `on_attach`, never in `core/keymaps.lua` — they must not pollute _buffers_ where no **LSP** is attached.
+
 ### Adding an **LSP Server**
 
 Adding an LSP server follows a declarative two-level approach.
