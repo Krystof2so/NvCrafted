@@ -1,13 +1,19 @@
 -- *************************************************************
 -- * plugins/ui/noice.lua                                      *
 -- *                                                           *
--- * Remplacement complet de l'UI Neovim pour :                *
--- * - la cmdline (popup centré avec icônes et coloration)     *
--- * - les messages (routage vers vues configurables)          *
--- * - le popupmenu                                            *
--- * - la progression LSP                                      *
+-- * Configuration de Noice.nvim pour :                        *
+-- * - Remplacer l'UI par défaut de Neovim pour :              *
+-- *   - la cmdline (popup centré avec icônes)                 *
+-- *   - les messages (affichage dans des popups)              *
+-- *   - le popupmenu                                          *
+-- *   - la progression LSP                                    *
+-- * - Utiliser nvim-notify pour les notifications sobres      *
+-- * - Rediriger les commandes Noice (history, last, etc.)     *
+-- *   vers des popups avec détails                            *
 -- *                                                           *
--- * Dépendance : nui.nvim (déjà présent via neo-tree)         *
+-- * Dépendances :                                             *
+-- * - nui.nvim (déjà présent via neo-tree)                    *
+-- * - nvim-notify (pour les notifications)                    *
 -- *************************************************************
 
 -- Pour un affichage des sorties de commandes dans un popup
