@@ -17,7 +17,19 @@
 -- *************************************************************
 
 -- Pour un affichage des sorties de commandes dans un popup
-local joint_instruction = { view = "popup", opts = { enter = false, format = "details" } }
+local joint_instruction = {
+	view = "popup",
+	opts = {
+		enter = false,
+		format = "details",
+		border = "double",
+		style = "rounded",
+		size = {
+			width = "50%",
+			height = "50%",
+		},
+	},
+}
 
 return {
 	"folke/noice.nvim",
