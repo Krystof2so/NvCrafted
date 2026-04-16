@@ -11,14 +11,15 @@
 -- 1. Fonction pour récupérer tous les sous-répertoires sous forme d'une table
 -- ============================================================================
 local function get_plugin_dirs(path)
-	if vim.loop.fs_stat(path) == nil then
+	local uv = vim.uv or vim.loop -- fallback pour Neovim < 0.10
+	if uv.fs_stat(path) == nil then
 		return {} -- Retourne une table vide si le dossier n'existe pas
 	end
 	local dirs = {}
-	local scan_handle = vim.loop.fs_scandir(path) -- Descripteur de répertoire - nil si répertoire est vide
+	local scan_handle = uv.fs_scandir(path) -- Descripteur de répertoire - nil si répertoire est vide
 	if scan_handle then -- uniquement si non nil, sinon sortie de la condition
 		while true do
-			local name, type = vim.loop.fs_scandir_next(scan_handle)
+			local name, type = uv.fs_scandir_next(scan_handle)
 			if not name then
 				break
 			end -- quand il n'y a plus d'élément, name = nil
