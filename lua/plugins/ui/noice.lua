@@ -30,6 +30,15 @@ return {
 		},
 	},
 	opts = {
+		-- Configuration de la cmdline avec icône de stylo
+		cmdline = {
+			format = {
+				cmdline = { icon = "" }, -- Stylo (U+F040)
+				search_down = { icon = " " },
+				search_up = { icon = " " },
+				lua = { icon = "" },
+			},
+		},
 		lsp = {
 			override = {
 				-- Rendu markdown enrichi via Tree-sitter pour les docs LSP
