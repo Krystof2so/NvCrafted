@@ -31,6 +31,9 @@ return {
 					-- Peuvent être supprimés si trouble.nvim n'est pas installé
 					"markdown",
 					"markdown_inline",
+					"vim", -- utile aussi pour la cmdline Vim
+					"regex", -- pour Noice : coloration des patterns de recherche
+					"bash", -- pour Noice : coloration des commandes shell
 				},
 				sync_install = false,
 				ignore_install = {},
