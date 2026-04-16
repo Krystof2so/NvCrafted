@@ -10,6 +10,9 @@
 -- * Dépendance : nui.nvim (déjà présent via neo-tree)         *
 -- *************************************************************
 
+-- Pour un affichage des sorties de commandes dans un popup
+local joint_instruction = { view = "popup", opts = { enter = false, format = "details" } }
+
 return {
 	"folke/noice.nvim",
 	event = "VeryLazy",
@@ -30,6 +33,13 @@ return {
 		},
 	},
 	opts = {
+		-- Application de la vue personnalisée aux commandes Noice
+		commands = {
+			history = joint_instruction,
+			last = joint_instruction,
+			errors = joint_instruction,
+			stats = joint_instruction,
+		},
 		-- Configuration de la cmdline avec icône de stylo
 		cmdline = {
 			format = {
