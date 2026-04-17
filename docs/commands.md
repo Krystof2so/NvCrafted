@@ -22,10 +22,31 @@
 
 ## Au niveau des _buffers_
 
-- ̀`<leader>bd` : Ferme le _buffer_ courant
-- `<leader>bl` : Liste les _buffer_ ouverts
-- `<leader>bn` : _buffer_ suivant
-- `<leader>bp` : _buffer_ précédent
+### Navigation entre buffers
+
+- `<leader>b1` à `<leader>b9` : Accéder directement au _buffer_ N°1 à 9
+- `<leader>b0` : Se rendre au dernier _buffer_
+- `<leader>bn` : _Buffer_ suivant
+- `<leader>bp` : _Buffer_ précédent
+- `<leader>bg` : Accéder au _buffer_ épinglé
+
+### Fermeture de buffers
+
+- `<leader>bcc` : Ferme le _buffer_ courant
+- `<leader>bca` : Ferme tous les _buffers_ sauf le courant
+- `<leader>bcp` : Ferme tous les _buffers_ sauf le courant ou les épinglés
+- `<leader>bcP` : Ferme tous les _buffers_ sauf les épinglés
+- `<leader>bcl` : Ferme les _buffers_ à gauche du buffer actuel
+- `<leader>bcr` : Ferme les _buffers_ à droite du buffer actuel
+
+### Épinglage et tri
+
+- `<leader>bP` : Épingler/désépingler un _buffer_
+- `<leader>bo` : Trier les _buffers_ par nom
+
+### Liste des buffers
+
+- `<leader>bl` : Liste des _buffers_ ouverts (via Telescope)
 
 ## Recherche au niveau des fichiers
 
