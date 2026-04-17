@@ -52,7 +52,7 @@ return {
 			["neo-tree"] = {
 				event = "BufWipeout",
 				text = " Arborescence",
-				highlight = "NeoTreeTitleBar", -- Toujours bleu
+				highlight = "PanelHeading",
 			},
 		},
 	},
