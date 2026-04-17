@@ -19,24 +19,13 @@ return {
 		vim.g.barbar_auto_setup = false -- Désactive l'initialisation automatique
 	end,
 	opts = {
-		-- Séparateurs entre les onglets (Powerline)
-		separator = { left = "", right = "" },
-
-		-- Séparateurs pour l'onglet actif (peut différer du style général)
+		separator = { left = "", right = "" }, -- Séparateurs entre les onglets (Powerline)
 		separator_at_end = true, -- affiche un séparateur après le dernier onglet
-
-		-- Animation lors du déplacement / fermeture d'un onglet
-		animation = true,
-
-		-- Fermeture automatique de barbar si un seul buffer est ouvert
-		auto_hide = false,
-
-		-- Affichage du numéro de buffer dans l'onglet
-		-- 'both' = numéro absolu + numéro relatif
-		-- false = désactivé
+		animation = true, -- Animation lors du déplacement / fermeture d'un onglet
+		auto_hide = true, -- Fermeture automatique de barbar si un seul buffer est ouvert
 		icons = {
-			buffer_index = false, -- numéro de buffer (utile pour les raccourcis)
-			buffer_number = true,
+			buffer_index = true, -- numéro de buffer (utile pour les raccourcis)
+			buffer_number = false,
 			button = "", -- icône du bouton de fermeture
 			-- Indicateurs de diagnostic LSP dans chaque onglet
 			diagnostics = {
@@ -45,10 +34,11 @@ return {
 				{ enabled = false }, -- Info  (désactivé)
 				{ enabled = false }, -- Hint  (désactivé)
 			},
+			-- Indicateurs Git (visuel chiffré)
 			gitsigns = {
-				added = { enabled = true, icon = "+" },
-				changed = { enabled = true, icon = "~" },
-				deleted = { enabled = true, icon = "-" },
+				added = { enabled = true, icon = "+" }, -- '+2'
+				changed = { enabled = true, icon = "~" }, -- '~5'
+				deleted = { enabled = true, icon = "-" }, -- '-6'
 			},
 			filetype = {
 				enabled = true, -- icône de type de fichier (nvim-web-devicons)
@@ -61,7 +51,8 @@ return {
 			-- Intégration Neo-tree : masque la barre barbar dans le panneau Neo-tree
 			["neo-tree"] = {
 				event = "BufWipeout",
-				text = "  Explorateur",
+				text = " Arborescence",
+				highlight = "NeoTreeTitleBar", -- Toujours bleu
 			},
 		},
 	},
