@@ -28,7 +28,6 @@
 - `<leader>b0` : Se rendre au dernier _buffer_
 - `<leader>bn` : _Buffer_ suivant
 - `<leader>bp` : _Buffer_ précédent
-- `<leader>bg` : Accéder au _buffer_ épinglé
 
 ### Fermeture de buffers
 

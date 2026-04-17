@@ -30,7 +30,6 @@ map("n", "<leader>b6", ":BufferGoto 6<CR>", { desc = "Buffer N°6" })
 map("n", "<leader>b7", ":BufferGoto 7<CR>", { desc = "Buffer N°7" })
 map("n", "<leader>b8", ":BufferGoto 8<CR>", { desc = "Buffer N°8" })
 map("n", "<leader>b9", ":BufferGoto 9<CR>", { desc = "Buffer N°9" })
-map("n", "<leader>bg", ":BufferGotoPinned<CR>", { desc = "Aller au buffer épinglé" })
 -- Fermeture de buffers
 map("n", "<leader>bc", "", { desc = "Fermeture de buffer(s)" })
 map("n", "<leader>bca", ":BufferCloseAllButCurrent<CR>", { desc = "Fermer tous SAUF actuel" })
