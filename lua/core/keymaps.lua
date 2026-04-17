@@ -17,10 +17,33 @@ end, { desc = "Sélectionner un thème" })
 
 -- Gestion des buffers
 map("n", "<leader>b", "", { desc = " Buffers" })
-map("n", "<leader>bn", ":bnext<CR>", { desc = "Buffer suivant" })
-map("n", "<leader>bp", ":bprevious<CR>", { desc = "Buffer précédent" })
-map("n", "<leader>bd", ":bdelete<CR>", { desc = "Fermer buffer actuel" })
-map("n", "<leader>bl", ":Telescope buffers<CR>", { desc = "Liste des buffers" })
+-- Navigation entre buffers
+map("n", "<leader>bn", ":BufferNext<CR>", { desc = "Buffer suivant" })
+map("n", "<leader>bp", ":BufferPrevious<CR>", { desc = "Buffer précédent" })
+map("n", "<leader>b0", ":BufferLast<CR>", { desc = "Dernier buffer" })
+map("n", "<leader>b1", ":BufferGoto 1<CR>", { desc = "Buffer N°1" })
+map("n", "<leader>b2", ":BufferGoto 2<CR>", { desc = "Buffer N°2" })
+map("n", "<leader>b3", ":BufferGoto 3<CR>", { desc = "Buffer N°3" })
+map("n", "<leader>b4", ":BufferGoto 4<CR>", { desc = "Buffer N°4" })
+map("n", "<leader>b5", ":BufferGoto 5<CR>", { desc = "Buffer N°5" })
+map("n", "<leader>b6", ":BufferGoto 6<CR>", { desc = "Buffer N°6" })
+map("n", "<leader>b7", ":BufferGoto 7<CR>", { desc = "Buffer N°7" })
+map("n", "<leader>b8", ":BufferGoto 8<CR>", { desc = "Buffer N°8" })
+map("n", "<leader>b9", ":BufferGoto 9<CR>", { desc = "Buffer N°9" })
+map("n", "<leader>bg", ":BufferGotoPinned<CR>", { desc = "Aller au buffer épinglé" })
+-- Fermeture de buffers
+map("n", "<leader>bc", "", { desc = "Fermeture de buffer(s)" })
+map("n", "<leader>bca", ":BufferCloseAllButCurrent<CR>", { desc = "Fermer tous SAUF actuel" })
+map("n", "<leader>bcc", ":BufferClose<CR>", { desc = "Fermer buffer actuel" })
+map("n", "<leader>bcp", ":BufferCloseAllButCurrentOrPinned<CR>", { desc = "Fermer tous SAUF actuel/épinglés" })
+map("n", "<leader>bcP", ":BufferCloseAllButPinned<CR>", { desc = "Fermer tous SAUF épinglés" })
+map("n", "<leader>bcl", ":BufferCloseBuffersLeft<CR>", { desc = "Fermer buffers à GAUCHE" })
+map("n", "<leader>bcr", ":BufferCloseBuffersRight<CR>", { desc = "Fermer buffers à DROITE" })
+-- Épinglage et tri
+map("n", "<leader>bP", ":BufferPin<CR>", { desc = "Épingler/désépingler buffer" })
+map("n", "<leader>bo", ":BufferOrderByName<CR>", { desc = "Trier buffers par nom" })
+-- Liste des buffers (Telescope)
+map("n", "<leader>bl", ":Telescope buffers<CR>", { desc = "Liste des buffers (Telescope)" })
 
 -- aerial
 map("n", "<leader>a", "", { desc = "Aerial" })
