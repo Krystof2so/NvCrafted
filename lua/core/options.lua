@@ -88,3 +88,8 @@ opt.spell = false -- bool : Activation uniquement selon contexte via auto-comman
 opt.foldenable = false -- Désactive le repliement
 opt.foldmethod = "manual" -- Mode manuel
 opt.foldcolumn = "0" -- Masque la colonne de repliement
+
+-- [[ LSP ]]
+-- Limiter les logs LSP uniquement aux erreurs (évite des fichiers de log volumineux)
+vim.lsp.set_log_level("error")
+-- Si fichier trop volumineux => rm ~/.local/state/nvim/lsp.log
