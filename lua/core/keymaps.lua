@@ -14,6 +14,7 @@ map("n", "<leader>h", ":nohlsearch<CR>", { desc = "Suppression surlignage recher
 map("n", "<leader>t", function()
 	require("core.theme").preview_with_telescope()
 end, { desc = "Sélectionner un thème" })
+map("n", "<leader>z", ":ZenMode<CR>", { desc = "Toggle Zen Mode" })
 
 -- Gestion des buffers
 map("n", "<leader>b", "", { desc = " Buffers" })
