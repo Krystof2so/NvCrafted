@@ -92,4 +92,3 @@ opt.foldcolumn = "0" -- Masque la colonne de repliement
 -- [[ LSP ]]
 -- Limiter les logs LSP uniquement aux erreurs (évite des fichiers de log volumineux)
 vim.lsp.log.set_level("error")
--- Si fichier trop volumineux => rm ~/.local/state/nvim/lsp.log

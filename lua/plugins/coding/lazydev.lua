@@ -14,44 +14,43 @@
 -- ************************************************************************************
 
 return {
-  "folke/lazydev.nvim",
-  ft = "lua",  -- ne se charge que pour les fichiers Lua (Réduction consommation mémoire et temps de démarrage)
-  opts = {
-    library = {
-      -- Charger les modules utilisés dans NvCrafted pour enrichir l'auto-complétion 
-      "lazy.nvim",                  -- gestionnaire de plugins
-      "core",                       -- dossier core de NvCrafted
-      "plugins",                    -- tous les plugins NvCrafted
-      -- Auto-complétion et vérification de type pour vim.uv
-      { path = "${3rd}/luv/library", words = { "vim%.uv" } },
-    },
-    -- activation par défaut
-    enabled = true
-  },
+	"folke/lazydev.nvim",
+	ft = "lua", -- ne se charge que pour les fichiers Lua (Réduction consommation mémoire et temps de démarrage)
+	opts = {
+		library = {
+			-- Charger les modules utilisés dans NvCrafted pour enrichir l'auto-complétion
+			"lazy.nvim", -- gestionnaire de plugins
+			"core", -- dossier core de NvCrafted
+			"plugins", -- tous les plugins NvCrafted
+			-- Auto-complétion et vérification de type pour vim.uv
+			{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
+		},
+		-- activation par défaut
+		enabled = true,
+	},
 
-  -- Intégration avec Blink pour la complétion (chargé avant lazydev)
-  dependencies = {
-    "saghen/blink.cmp",
-  },
+	-- Intégration avec Blink pour la complétion (chargé avant lazydev)
+	dependencies = {
+		"saghen/blink.cmp",
+	},
 
-  config = function(_, opts)
-    -- Initialisation de lazydev
-    require("lazydev").setup(opts)
+	config = function(_, opts)
+		-- Initialisation de lazydev
+		require("lazydev").setup(opts)
 
-    -- Ajouter Lazydev à Blink comme source prioritaire
-    local blink = require("blink.cmp")
-    blink.setup({
-      sources = {
-        default = { "lazydev", "lsp", "path", "snippets", "buffer" },
-        providers = {
-          lazydev = {
-            name = "LazyDev",
-            module = "lazydev.integrations.blink",
-            score_offset = 100,  -- Prioriser Lazydev
-          },
-        },
-      },
-    })
-  end,
+		-- Ajouter Lazydev à Blink comme source prioritaire
+		local blink = require("blink.cmp")
+		blink.setup({
+			sources = {
+				default = { "lazydev", "lsp", "path", "snippets", "buffer" },
+				providers = {
+					lazydev = {
+						name = "LazyDev",
+						module = "lazydev.integrations.blink",
+						score_offset = 100, -- Prioriser Lazydev
+					},
+				},
+			},
+		})
+	end,
 }
-

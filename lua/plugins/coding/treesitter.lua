@@ -10,7 +10,7 @@ return {
 	{
 		"nvim-treesitter/nvim-treesitter",
 		branch = "master",
-		lazy = false, -- doit être chargé immédiatement
+		event = { "BufReadPost", "BufNewFile" }, -- charger après l'ouverture du buffer
 		build = ":TSUpdate", -- installe et met à jour les parsers
 		config = function()
 			local ok, ts_configs = pcall(require, "nvim-treesitter.configs")
@@ -27,18 +27,23 @@ return {
 					"html",
 					"css",
 					"json",
-					-- Indispensables pour le plugin trouble.nvim
-					-- Peuvent être supprimés si trouble.nvim n'est pas installé
-					"markdown",
-					"markdown_inline",
 					"vim", -- utile aussi pour la cmdline Vim
 					"regex", -- pour Noice : coloration des patterns de recherche
 					"bash", -- pour Noice : coloration des commandes shell
+					-- markdown et markdown_inline gérés nativement
+					-- par Neovim 0.12 — exclus de nvim-treesitter
+					-- pour éviter le conflit de highlighter
 				},
 				sync_install = false,
-				ignore_install = {},
+				ignore_install = {
+					"markdown", -- géré nativement par Neovim 0.12
+					"markdown_inline", -- idem
+				},
 				modules = {},
-				highlight = { enable = true },
+				highlight = {
+					enable = true,
+					disable = { "markdown", "markdown_inline" }, -- sécurité supplémentaire
+				},
 				indent = { enable = true },
 				auto_install = true, -- Pour les langages non listés dans ensure_installed
 			})
