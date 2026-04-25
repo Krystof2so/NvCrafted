@@ -85,10 +85,13 @@ Ce projet demeure en construction...
 │       └── ui
 │           ├── aerial.lua
 │           ├── alpha.lua
+│           ├── barbar.lua
 │           ├── colorscheme.lua
 │           ├── lualine.lua
 │           ├── neo_tree.lua
-│           └── trouble.lua
+│           ├── noice.lua
+│           ├── trouble.lua
+│           └── zen-mode.lua
 ├── README.fr.md
 ├── README.md
 └── snippets
@@ -107,6 +110,7 @@ Ce projet demeure en construction...
 | `commands.md`      | Liste des commandes disponibles dans **NvCrafted**                                                                                            |
 | `lsp-nvcrafted.md` | Architecture complète du support **LSP** : flux d'installation, orchestration, rôle de `on_attach` et `capabilities`, conventions d'extension |
 | `architecure.md`   | Explication de la conception architecturale de **NvCrafted**                                                                                  |
+| `themes.md`        | Explications sur installation et gestion des thèmes                                                                                           |
 
 ---
 
