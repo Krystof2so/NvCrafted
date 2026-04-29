@@ -1,15 +1,15 @@
-# Leçon 1 — Les modes de Neovim
+## Leçon 1 — Les modes de Neovim
 
-> **NvCrafted Tutor** · Niveau : Grand débutant
-> Navigation : `]l` leçon suivante · `[l` leçon précédente · `gh` hint · `q` quitter
+> NvCrafted Tutor · Niveau : Grand débutant
+> Navigation : <]l> leçon suivante · <[l> leçon précédente · <gh> hint · <q> quitter
 
 ---
 
 ## Bienvenue dans NvCrafted Tutor !
 
-**Neovim** n'est pas un éditeur comme les autres.
+Neovim n'est pas un éditeur comme les autres.
 Avec la plupart des éditeurs, nous saisissons simplement du texte.
-Avec **Neovim**, **tout dépend du mode dans lequel nous nous trouvons**.
+Avec Neovim, tout dépend du mode dans lequel nous nous trouvons.
 
 C'est déroutant au début, mais c'est précisément ce qui rend Neovim
 si puissant une fois maîtrisé.
@@ -20,16 +20,14 @@ si puissant une fois maîtrisé.
 
 ### 🟦 Mode Normal
 
-C'est le mode **par défaut** au démarrage. Nous n'écrivons pas de texte ici : nous naviguons, nous supprimons, nous copions, nous collons.
+C'est le mode par défaut au démarrage. Nous n'écrivons pas de texte ici : nous naviguons, nous supprimons, nous copions, nous collons.
 
-Il est à penser comme à un "mode de commande". Chaque touche est un ordre donné à **Neovim**.
+Il est à penser comme à un "mode de commande". Chaque touche est un ordre donné à Neovim.
 
 Pour y revenir depuis n'importe quel autre mode :
 
-```txt
-<Esc>       retour au mode Normal (toujours)
-<C-[>       équivalent à <Esc> (plus rapide à taper)
-```
+<Esc> : retour au mode Normal (toujours)
+<C-[> : équivalent à <Esc>
 
 ---
 
@@ -37,18 +35,20 @@ Pour y revenir depuis n'importe quel autre mode :
 
 C'est avec ce mode que nous écrivons du texte, au même titre qu'un éditeur classique.
 
-Pour entrer en mode _Insert_ depuis le mode _Normal_ :
-
 ```txt
-i           insère avant le curseur
-a           insère après le curseur  (append)
-I           insère en début de ligne
-A           insère en fin de ligne
-o           crée une nouvelle ligne en dessous et insère
-O           crée une nouvelle ligne au dessus et insère
+┌────────────────────────────────────────────────────────┐
+│   ENTRER EN MODE INSERT DEPUIS LE MODE NORMAL          │
+│                                                        │
+│    i   ──►    Avant le curseur                         │
+│    a   ──►    Après le curseur (append)                │
+│    I   ──►    En début de ligne                        │
+│    A   ──►    En fin de ligne                          │
+│    o   ──►    Création d'une nouvelle ligne en dessous │
+│    O   ──►    Création d'une nouvelle ligne au dessus  │
+└────────────────────────────────────────────────────────┘
 ```
 
-Le bas de l'écran affiche `-- INSERT --` quand nous sommes dans ce mode.
+Le bas de l'écran affiche "-- INSERT --" quand nous sommes dans ce mode.
 
 ---
 
@@ -95,7 +95,6 @@ Appuyer sur `<Esc>` pour annuler et revenir au mode _Normal_.
 
 ```txt
 ┌─────────────────────────────────────────┐
-│            MODE NORMAL                  │
 │   (point de départ, toujours <Esc>)     │
 │                                         │
 │   i/a/o ──► INSERT   (écrire du texte)  │

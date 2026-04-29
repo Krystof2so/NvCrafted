@@ -179,6 +179,11 @@ local function pick_with_telescope(files, labels, callback)
 	pickers
 		.new({}, {
 			prompt_title = "NvCrafted — Documentation",
+			sorting_strategy = "ascending", -- entrées dans l'ordre normal
+			layout_config = {
+				prompt_position = "top", -- prompt en haut, curseur sur la première entrée
+			},
+
 			finder = finders.new_table({
 				results = entries,
 				entry_maker = function(entry)
