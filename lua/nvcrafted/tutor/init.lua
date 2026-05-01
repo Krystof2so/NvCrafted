@@ -11,7 +11,7 @@ local M = {}
 
 M.config = {
 	-- Dossier contenant les fichiers de leçons Markdown
-	lessons_dir = vim.fn.stdpath("config") .. "/tutor/lessons",
+	lessons_dir = vim.fn.stdpath("config") .. "/tutor_lessons",
 	-- Dossier contenant la documentation
 	docs_dir = vim.fn.stdpath("config") .. "/docs",
 	-- Fichier JSON pour sauvegarder la progression
@@ -22,7 +22,6 @@ M.config = {
 	keymaps = {
 		next_lesson = "]l",
 		prev_lesson = "[l",
-		hint = "gh",
 		quit = "q",
 		goto_lesson = "gl",
 	},
@@ -80,14 +79,6 @@ local function read_file(path)
 	f:close()
 	return lines
 end
-
---- Formatage affichage des leçons
---local function to_label(path)
---	local name = vim.fn.fnamemodify(path, ":t:r") -- "01-Les-modes"
---	name = name:gsub("^%d+%-", "") -- supprime "01-"
---	name = name:gsub("%-", " ") -- remplace les tirets par des espaces
---	return name
---end
 
 -- ---------------------------------------------------------------------------
 -- Rendu dans le buffer
@@ -233,14 +224,6 @@ function M.goto_lesson()
 	end
 end
 
---- Affiche un hint (pour l'instant : ligne de tip en bas)
-function M.show_hint()
-	vim.notify(
-		"[NvCrafted Tutor] Hint : lis attentivement les instructions et essaie la commande indiquée.",
-		vim.log.levels.INFO
-	)
-end
-
 -- ---------------------------------------------------------------------------
 -- Keymaps locaux au buffer tutoriel
 -- ---------------------------------------------------------------------------
@@ -252,7 +235,6 @@ local function setup_keymaps()
 
 	vim.keymap.set("n", km.next_lesson, M.next_lesson, vim.tbl_extend("force", opts, { desc = "Leçon suivante" }))
 	vim.keymap.set("n", km.prev_lesson, M.prev_lesson, vim.tbl_extend("force", opts, { desc = "Leçon précédente" }))
-	vim.keymap.set("n", km.hint, M.show_hint, vim.tbl_extend("force", opts, { desc = "Afficher un hint" }))
 	vim.keymap.set("n", km.goto_lesson, M.goto_lesson, vim.tbl_extend("force", opts, { desc = "Aller à une leçon" }))
 	vim.keymap.set("n", km.quit, M.close, vim.tbl_extend("force", opts, { desc = "Fermer le tutoriel" }))
 end
