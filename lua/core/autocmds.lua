@@ -31,6 +31,18 @@ api.nvim_create_autocmd("BufReadPost", {
 	end,
 })
 
+-- Ouvre les buffers d'aide en split vertical à droite
+api.nvim_create_autocmd("BufWinEnter", {
+	group = general_group,
+	pattern = "*",
+	callback = function()
+		if vim.bo.filetype == "help" then
+			vim.cmd("wincmd L") -- déplace le split en vertical à droite
+			vim.api.nvim_win_set_width(0, 85) -- largeur fixe, lisible sans être envahissante
+		end
+	end,
+})
+
 -- ================================================================
 -- = GROUPE : Folding
 -- ================================================================
