@@ -1,8 +1,13 @@
+-- **************************************************************
+-- * lua/plugins/themes/nordic.lua                              *
+-- *                                                            *
+-- * Thème Nordic — disponible dans le picker de thèmes.        *
+-- * Chargé en lazy (non appliqué au démarrage).                *
+-- * Le thème par défaut est désormais Rosé Pine.               *
+-- **************************************************************
+
 return {
 	"AlexvZyl/nordic.nvim",
-	lazy = false,
-  	priority = 1000,
-  	config = function()
-    	    vim.cmd.colorscheme("nordic")
-  	end,
+	lazy = true,
+	priority = 1000,
 }

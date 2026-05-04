@@ -1,18 +1,53 @@
+-- *************************************************************
+-- * lua/core/theme.lua                                        *
+-- *                                                           *
+-- * Gestion des thèmes de NvCrafted.                          *
+-- * Thème principal : Rosé Pine (variante "main" par défaut). *
+-- *                                                           *
+-- * Variantes Rosé Pine disponibles via le toggle :           *
+-- *   rose-pine       →  main  (sombre, tons chauds)          *
+-- *   rose-pine-moon  →  moon  (sombre, tons froids)          *
+-- *   rose-pine-dawn  →  dawn  (clair)                        *
+-- *                                                           *
+-- * Autres thèmes conservés :                                 *
+-- *   nordic, evergarden                                      *
+-- *************************************************************
+
 local M = {}
 
+-- ================================================================
+-- = Liste des thèmes disponibles dans le picker Telescope        =
+-- ================================================================
 M.available = {
-	"evergarden",
+	-- Variantes Rosé Pine
+	"rose-pine", -- main  (thème par défaut)
+	"rose-pine-moon", -- moon
+	"rose-pine-dawn", -- dawn (clair)
+	-- Autres thèmes
 	"nordic",
-	"thorn",
-	"tokyonight",
+	"evergarden",
 }
 
-M.default = "nordic"
+-- ================================================================
+-- = Thème appliqué au démarrage de NvCrafted                     =
+-- ================================================================
+M.default = "rose-pine"
 
+-- ================================================================
+-- = Application d'un thème                                       =
+-- ================================================================
 function M.apply(theme)
 	vim.cmd.colorscheme(theme)
+	-- Rafraîchit les highlights adaptatifs après chaque changement de thème.
+	-- pcall évite un crash si le module n'est pas encore chargé.
+	pcall(function()
+		require("core.highlights.diagnostics").setup()
+	end)
 end
 
+-- ================================================================
+-- = Picker Telescope avec prévisualisation temps réel            =
+-- ================================================================
 function M.preview_with_telescope()
 	local pickers = require("telescope.pickers")
 	local finders = require("telescope.finders")
@@ -72,7 +107,7 @@ function M.preview_with_telescope()
 				map("n", "q", function()
 					close_and_restore(prompt_bufnr)
 				end)
-				-- Confirmation
+				-- Confirmation : applique définitivement le thème sélectionné
 				actions.select_default:replace(function()
 					local entry = action_state.get_selected_entry()
 					actions.close(prompt_bufnr)
@@ -82,7 +117,6 @@ function M.preview_with_telescope()
 						M.apply(current_theme)
 					end
 				end)
-
 				return true
 			end,
 		})
