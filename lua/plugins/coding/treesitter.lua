@@ -9,43 +9,55 @@
 return {
 	{
 		"nvim-treesitter/nvim-treesitter",
-		branch = "master",
-		event = { "BufReadPost", "BufNewFile" }, -- charger après l'ouverture du buffer
+		branch = "main",
 		build = ":TSUpdate", -- installe et met à jour les parsers
-		config = function()
-			local ok, ts_configs = pcall(require, "nvim-treesitter.configs")
-			if not ok then
-				return
-			end -- si plugin pas disponible
+		-- Pas d'event ici : l'init gère le FileType lui-même
+		init = function()
+			-- ================================================================
+			-- Installation des parsers manquants au démarrage
+			-- Diff entre les parsers déjà installés pour éviter
+			-- de tout réinstaller à chaque lancement
+			-- ================================================================
+			local ensure_installed = {
+				"lua",
+				"python",
+				"rust",
+				"toml",
+				"html",
+				"css",
+				"json",
+				"vim",
+				"regex",
+				"bash",
+				-- markdown et markdown_inline gérés nativement
+				-- par Neovim 0.12 — exclus de nvim-treesitter
+				-- pour éviter le conflit de highlighter
+			}
 
-			ts_configs.setup({
-				ensure_installed = {
-					"lua",
-					"python",
-					"rust",
-					"toml",
-					"html",
-					"css",
-					"json",
-					"vim", -- utile aussi pour la cmdline Vim
-					"regex", -- pour Noice : coloration des patterns de recherche
-					"bash", -- pour Noice : coloration des commandes shell
-					-- markdown et markdown_inline gérés nativement
-					-- par Neovim 0.12 — exclus de nvim-treesitter
-					-- pour éviter le conflit de highlighter
-				},
-				sync_install = false,
-				ignore_install = {
-					"markdown", -- géré nativement par Neovim 0.12
-					"markdown_inline", -- idem
-				},
-				modules = {},
-				highlight = {
-					enable = true,
-					disable = { "markdown", "markdown_inline" }, -- sécurité supplémentaire
-				},
-				indent = { enable = true },
-				auto_install = true, -- Pour les langages non listés dans ensure_installed
+			local already_installed = require("nvim-treesitter.config").get_installed()
+			local to_install = vim.iter(ensure_installed)
+				:filter(function(parser)
+					return not vim.tbl_contains(already_installed, parser)
+				end)
+				:totable()
+
+			if #to_install > 0 then
+				require("nvim-treesitter").install(to_install)
+			end
+
+			-- ================================================================
+			-- Activation du highlight et de l'indentation par FileType
+			-- L'ancienne API (highlight.enable, indent.enable dans setup())
+			-- n'existe plus — on les active manuellement via autocmd
+			-- ================================================================
+			vim.api.nvim_create_autocmd("FileType", {
+				callback = function()
+					-- Démarre le highlight Tree-sitter (pcall = silencieux
+					-- si le parser n'est pas disponible pour ce filetype)
+					pcall(vim.treesitter.start)
+					-- Indentation Tree-sitter
+					vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+				end,
 			})
 		end,
 	},
