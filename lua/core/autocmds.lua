@@ -38,9 +38,9 @@ api.nvim_create_autocmd("BufReadPost", {
 })
 
 -- Ouvre les buffers d'aide en split vertical à droite
-api.nvim_create_autocmd("BufWinEnter", {
+api.nvim_create_autocmd("FileType", {
 	group = general_group,
-	pattern = "help*", -- Spécifique aux buffers d'aide
+	pattern = "help", -- Spécifique aux buffers d'aide
 	callback = function()
 		vim.cmd("wincmd L") -- déplace le split en vertical à droite
 		vim.api.nvim_win_set_width(0, 85) -- largeur fixe, lisible sans être envahissante
