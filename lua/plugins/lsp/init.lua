@@ -21,7 +21,7 @@ return {
 		config = function()
 			local servers = require("core.lsp.servers")
 			-- Récupération des capabilities propres à NvCrafted
-			local capabilities = require("core.lsp.capabilities").capabilities
+			local capabilities = require("core.lsp.capabilities").get()
 			local on_attach = require("core.lsp.on_attach").on_attach
 
 			-- Parcours de chaque serveur déclaré pour qu'il reconnaisse les mappings (on_attach) et les capabilities
@@ -43,7 +43,7 @@ return {
 
 				-- Initialisation du serveur LSP
 				vim.lsp.config(server, opts)
-
+				vim.lsp.enable(server)
 				-- Limiter les logs LSP uniquement aux erreurs (évite des fichiers de log volumineux)
 				vim.lsp.log.set_level("error")
 			end
