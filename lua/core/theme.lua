@@ -20,7 +20,7 @@ local M = {}
 -- ================================================================
 M.available = {
 	-- Variantes Rosé Pine
-	"rose-pine", -- main  (thème par défaut)
+	"rose-pine-main", -- main  (thème par défaut)
 	"rose-pine-moon", -- moon
 	"rose-pine-dawn", -- dawn (clair)
 	-- Autres thèmes

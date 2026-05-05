@@ -45,24 +45,24 @@ return {
 				panel = "surface",
 
 				-- Diagnostics — mappés sur la palette Rosé Pine
-				error = "love",   -- rouge doux
-				hint  = "iris",   -- violet
-				info  = "foam",   -- bleu-vert
-				note  = "pine",   -- vert
-				todo  = "rose",   -- rose
-				warn  = "gold",   -- or
+				error = "love", -- rouge doux
+				hint = "iris", -- violet
+				info = "foam", -- bleu-vert
+				note = "pine", -- vert
+				todo = "rose", -- rose
+				warn = "gold", -- or
 
 				-- Git
-				git_add        = "foam",
-				git_change     = "rose",
-				git_delete     = "love",
-				git_dirty      = "rose",
-				git_ignore     = "muted",
-				git_merge      = "iris",
-				git_rename     = "pine",
-				git_stage      = "iris",
-				git_text       = "rose",
-				git_untracked  = "subtle",
+				git_add = "foam",
+				git_change = "rose",
+				git_delete = "love",
+				git_dirty = "rose",
+				git_ignore = "muted",
+				git_merge = "iris",
+				git_rename = "pine",
+				git_stage = "iris",
+				git_text = "rose",
+				git_untracked = "subtle",
 
 				-- Titres Markdown
 				h1 = "iris",
@@ -78,6 +78,6 @@ return {
 		-- La variante est contrôlée par M.default dans core/theme.lua.
 		-- Pour utiliser moon ou dawn, changer "rose-pine" par
 		-- "rose-pine-moon" ou "rose-pine-dawn" dans les deux fichiers.
-		vim.cmd.colorscheme("rose-pine")
+		vim.cmd.colorscheme("rose-pine-main")
 	end,
 }
