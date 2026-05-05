@@ -55,7 +55,14 @@ return {
 		signature = { enabled = true },
 
 		sources = { -- Sources de complétion prioritaires
-			default = { "lsp", "buffer", "snippets", "path" },
+			default = { "lazydev", "lsp", "buffer", "snippets", "path" },
+			providers = {
+				lazydev = {
+					name = "LazyDev",
+					module = "lazydev.integrations.blink",
+					score_offset = 100, -- lazydev prioritaire sur les suggestions LSP génériques
+				},
+			},
 		},
 	},
 
