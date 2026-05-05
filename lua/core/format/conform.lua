@@ -23,16 +23,7 @@ function M.setup()
 			lua = { "stylua" },
 			rust = { lsp_format = "fallback" }, -- Rust : fallback LSP
 
-			-- Python : dynamique avec Ruff
-			python = function(bufnr)
-				if conform.get_formatter_info("ruff_format", bufnr).available then
-					-- Ruff formate le code si possible
-					return { "ruff_format" }
-				else
-					-- Sinon : tri des imports + formatage
-					return { "isort", "black" }
-				end
-			end,
+			python = { "ruff", "isort", "black" }, -- Python : dynamique avec Ruff
 			markdown = { "prettier" },
 			json = { "prettier" },
 			html = { "prettier" },
