@@ -19,19 +19,14 @@ return {
 			-- de tout réinstaller à chaque lancement
 			-- ================================================================
 			local ensure_installed = {
-				"lua",
 				"python",
 				"rust",
 				"toml",
 				"html",
 				"css",
 				"json",
-				"vim",
 				"regex",
 				"bash",
-				-- markdown et markdown_inline gérés nativement
-				-- par Neovim 0.12 — exclus de nvim-treesitter
-				-- pour éviter le conflit de highlighter
 			}
 
 			local already_installed = require("nvim-treesitter.config").get_installed()

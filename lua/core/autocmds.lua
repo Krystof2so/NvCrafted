@@ -47,15 +47,6 @@ api.nvim_create_autocmd("FileType", {
 	end,
 })
 
--- Neutralise le _highlighter_ natif (cf. 'docs/architecture')
-api.nvim_create_autocmd("FileType", {
-	group = general_group,
-	pattern = "markdown",
-	callback = function(args)
-		vim.treesitter.stop(args.buf)
-	end,
-})
-
 -- Mise en évidence du texte copié (feedback visuel après un yank)
 api.nvim_create_autocmd("TextYankPost", {
 	group = general_group,
