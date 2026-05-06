@@ -72,7 +72,7 @@ ajouter un fichier dans le bon sous-dossier suffit.
 
 ```lua
 -- Chaque sous-dossier devient une entrée Lazy :
-{ import = "plugins.coding" }
+--[[ { import = "plugins.coding" } ]]
 { import = "plugins.ui" }
 { import = "plugins.lsp" }
 { import = "plugins.tools" }
