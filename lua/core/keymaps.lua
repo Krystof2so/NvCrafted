@@ -55,6 +55,8 @@ map("n", "<leader>ll", ":Lazy<CR>", { desc = "Ouverture de Lazy" })
 map("n", "<leader>lu", ":Lazy update<CR>", { desc = "Lazy update" })
 map("n", "<leader>ls", ":Lazy sync<CR>", { desc = "Lazy sync" })
 
+-- TODO: Neogen
+
 -- Neotree
 map("n", "<leader>e", "", { desc = " Neotree" })
 map("n", "<leader>ee", ":Neotree<CR>", { desc = "Ouverture de Neotree" })
