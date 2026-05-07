@@ -10,6 +10,7 @@ return {
 	{
 		"numToStr/Comment.nvim",
 		event = "BufReadPost", -- chargement différé (à l'ouverture d'un buffer)
+        keys = { "gc", "gb", { "gc", mode = "v" }, { "gb", mode = "v" } },
 		dependencies = {
 			-- Intégration Tree-sitter pour la détection contextuelle du langage
 			-- (indispensable pour les fichiers mixtes : HTML/CSS, Vue, Svelte…)
