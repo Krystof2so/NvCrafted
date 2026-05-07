@@ -13,7 +13,7 @@ local api = vim.api
 -- ========================================
 -- 1. Vérification de la version de Neovim
 -- ========================================
-local required_neovim_version = "0.11.0"
+local required_neovim_version = "0.12.2"
 if fn.has("nvim-" .. required_neovim_version) ~= 1 then
 	api.nvim_echo({
 		{ "NvCrafted nécessite Neovim >= " .. required_neovim_version .. "\n", "ErrorMsg" },
@@ -55,4 +55,3 @@ if not uv.fs_stat(lazypath) then
 end
 -- Ajout de lazy.nvim en tête du runtimepath
 vim.opt.rtp:prepend(lazypath)
-
