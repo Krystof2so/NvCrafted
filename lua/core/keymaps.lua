@@ -80,6 +80,7 @@ map("n", "<leader>fh", ":Telescope help_tags<CR>", { desc = "Aide Neovim" })
 map("n", "<leader>fk", ":Telescope keymaps<CR>", { desc = "Keymaps" })
 map("n", "<leader>fc", ":Telescope commands<CR>", { desc = "Commandes" })
 map("n", "<leader>fo", ":Telescope vim_options<CR>", { desc = "Options Neovim" })
+map("n", "<leader>ft", ":TodoTelescope cwd=" .. vim.fn.getcwd() .. "<CR>", { desc = "Recherche les TODOs" })
 
 -- Trouble
 map("n", "<leader>d", "", { desc = " Diagnostics" })

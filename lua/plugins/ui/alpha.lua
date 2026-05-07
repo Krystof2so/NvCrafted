@@ -61,6 +61,7 @@ return {
 				dashboard.button("n", "📄 Nouveau fichier", ":ene <BAR> startinsert <CR>"),
 				dashboard.button("f", "🔍 Rechercher des fichiers", ":Telescope find_files<CR>"),
 				dashboard.button("r", "⌛ Fichiers récents", ":Telescope oldfiles<CR>"),
+				dashboard.button("t", "🔍 Rechercher TODO, FIX, BUG, etc.", ":TodoTelescope<CR>"),
 				dashboard.button("q", "❌ Quitter NvCrafted", ":qa<CR>"),
 			}
 
