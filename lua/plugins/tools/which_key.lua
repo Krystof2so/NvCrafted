@@ -1,4 +1,3 @@
--- ***************************************************
 -- * GitHub: https://github.com/folke/which-key.nvim *
 -- *                                                 *
 -- * WhichKey aide à mémoriser les raccourcis        *
@@ -21,15 +20,12 @@ return {
 				padding = { 1, 2 },
 				title = false,
 				zindex = 1000,
-			},
-			spec = {
-				{ "gc", group = "Commentaires", mode = { "n", "v" } },
-				{ "gb", group = "Commentaires (bloc)", mode = { "n", "v" } },
-                { "gr", group = "LSP références", mode = "n" },
-                { "gd", desc = "Aller à la définition", mode = "n" },
-                { "gD", desc = "Aller à la déclaration", mode = "n" },
-                { "K",  desc = "Documentation (hover)", mode = "n" },
-			},
+				-- Positionnement flottant
+				row = -1, -- -1 = colle au bas de l'écran (valeur négative = depuis le bas)
+				col = -1, -- -1 = colle à droite de l'écran
+                width = { min = 20, max = 120 },  -- jamais moins de 20, jamais plus de 120 colonnes
+                height = { min = 4, max = 40 },  -- jamais moins de 4, jamais plus de 40 lignes
+            },
 		},
 		keys = {
 			{
@@ -40,19 +36,18 @@ return {
 				desc = "Buffer Local Keymaps (which-key)",
 			},
 		},
-		config = function(_, opts)
-			local wk = require("which-key")
+        config = function(_, opts)
+            local wk = require("which-key")
+            wk.setup(opts)
 			local hl = vim.api.nvim_set_hl
-			wk.setup(opts)
-			-- fond global du popup
-			hl(0, "NormalFloat", { bg = "#3b4252", fg = "#D8DEE9" })
-			-- bordure
-			hl(0, "WhichKeyBorder", { bg = "#3b4252", fg = "#b48ead" })
-			-- description et texte
-			hl(0, "WhichKeyDesc", { fg = "#81A1C1" })
-			hl(0, "WhichKeyGroup", { fg = "#8FBCBB", bold = true })
-			hl(0, "WhichKeySeparator", { fg = "#d08770" })
-			hl(0, "WhichKeyValue", { fg = "#d08770" })
-		end,
+            -- Les highlights which-key linkent vers les groupes natifs Neovim
+            -- qui s'adaptent automatiquement au thème courant
+            hl(0, "WhichKeyDesc",      { link = "Identifier" })
+            hl(0, "WhichKeyGroup",     { link = "Function" })
+            hl(0, "WhichKeySeparator", { link = "Comment" })
+            hl(0, "WhichKeyValue",     { link = "Comment" })
+            hl(0, "WhichKeyBorder",    { link = "FloatBorder" })
+            hl(0, "NormalFloat",       { link = "Normal" })
+        end,
 	},
 }
