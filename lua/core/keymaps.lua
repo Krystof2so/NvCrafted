@@ -55,8 +55,15 @@ map("n", "<leader>ll", ":Lazy<CR>", { desc = "Ouverture de Lazy" })
 map("n", "<leader>lu", ":Lazy update<CR>", { desc = "Lazy update" })
 map("n", "<leader>ls", ":Lazy sync<CR>", { desc = "Lazy sync" })
 
--- TODO: Neogen
+-- Neogen — génération d'annotations
+map("n", "<leader>c", "", { desc = "Neogen"})
+map("n", "<leader>cf", function() require("neogen").generate({ type = "func" })  end, { desc = "Annoter la fonction" })
+map("n", "<leader>cc", function() require("neogen").generate({ type = "class" }) end, { desc = "Annoter la classe"   })
+map("n", "<leader>ct", function() require("neogen").generate({ type = "type" })  end, { desc = "Annoter le type"     })
+map("n", "<leader>cF", function() require("neogen").generate({ type = "file" })  end, { desc = "Annoter le fichier"  })
 
+-- Todo-comments
+map("n", "<leader>ft", ":TodoTelescope cwd=" .. vim.fn.getcwd() .. "<CR>", { desc = "Rechercher les TODOs" })
 -- Neotree
 map("n", "<leader>e", "", { desc = " Neotree" })
 map("n", "<leader>ee", ":Neotree<CR>", { desc = "Ouverture de Neotree" })
@@ -98,6 +105,7 @@ if ok then
 	wk.add({
 		a = { name = "Aerial" },
 		b = { name = "Buffers" },
+        c = { name = "Docstrings"},
 		d = { name = "Diagnostics" },
 		e = { name = "Neotree" },
 		f = { name = "Telescope" },

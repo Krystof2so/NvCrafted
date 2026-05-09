@@ -55,7 +55,7 @@ return {
 		signature = { enabled = true },
 
 		sources = { -- Sources de complétion prioritaires
-			default = { "lazydev", "lsp", "buffer", "snippets", "path" },
+			default = { "lazydev", "lsp", "buffer", "snippets", "path", "cmdline" },
 			providers = {
 				lazydev = {
 					name = "LazyDev",

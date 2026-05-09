@@ -24,7 +24,7 @@ return {
 		-- Conventions d'annotations par langage
 		-- ============================================================
 		languages = {
-			bash = { -- Bash : convention shell standard
+			sh = { -- Bash : convention shell standard
 				template = {
 					annotation_convention = "google_bash",
 				},
