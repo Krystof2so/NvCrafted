@@ -75,9 +75,5 @@ return {
 				vim.fn.stdpath("config") .. "/snippets", -- Répertoire des snippets locaux
 			},
 		})
-
-		-- Couleurs pour les fenêtres flottantes LSP/complétion (Cohérence avec le thème 'Nord')
-		vim.api.nvim_set_hl(0, "LspFloatBorder", { fg = "#81a1c1", bg = "#2e3440" })
-		vim.api.nvim_set_hl(0, "LspFloatWinNormal", { fg = "#d8dee9", bg = "#3b4252" })
 	end,
 }

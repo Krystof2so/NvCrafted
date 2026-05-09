@@ -52,7 +52,7 @@ api.nvim_create_autocmd("TextYankPost", {
 	group = general_group,
 	pattern = "*",
 	callback = function()
-		vim.highlight.on_yank({ higroup = "Visual", timeout = 150 })
+		vim.hl.on_yank({ higroup = "Visual", timeout = 150 })
 	end,
 })
 

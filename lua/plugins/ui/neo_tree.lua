@@ -68,27 +68,6 @@ return {
 				popup_border_style = "NC", -- Style de bordure "NC" pour un rendu moderne
 				use_libuv_file_watcher = true, -- Rafraîchissement automatique de NeoTree
 			})
-
-			-- Définition manuelle des couleurs
-			local hl = vim.api.nvim_set_hl
-			hl(0, "NeoTreeFloatNormal", {
-				bg = "#2E3440", -- Fond sombre (Nord1)
-				fg = "#D8DEE9", -- Texte clair (Nord4)
-			})
-			hl(0, "NeoTreeFloatBorder", {
-				bg = "#2E3440", -- Fond identique pour un rendu homogène
-				fg = "#d08770", -- Orange (Nord12) pour la bordure
-			})
-			hl(0, "NeoTreeFloatTitle", {
-				bg = "#3B4252", -- Fond légèrement plus clair (Nord2)
-				fg = "#ECEFF4", -- Texte très clair (Nord6) pour le titre
-				bold = true, -- Gras pour le titre
-			})
-			hl(0, "NeoTreeTitleBar", {
-				bg = "#434C5E", -- Fond légèrement plus clair (Nord3)
-				fg = "#81a1c1", -- Texte bleu
-				bold = true, -- Gras pour le titre
-			})
 		end,
 	},
 }

@@ -15,7 +15,7 @@ function M.on_attach(_, bufnr)
 	-- Highlights de diagnostics adaptatifs au thème courant.
 	-- Le module détecte automatiquement la famille du thème actif
 	-- (rose-pine, nordic, evergarden, ou fallback).
-	require("core.highlights.diagnostics").setup()
+	require("core.highlights").setup()
 
 	-- ------------------------------------------------------------
 	-- Options buffer-local liées au LSP

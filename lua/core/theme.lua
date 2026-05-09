@@ -41,7 +41,7 @@ function M.apply(theme)
 	-- Rafraîchit les highlights adaptatifs après chaque changement de thème.
 	-- pcall évite un crash si le module n'est pas encore chargé.
 	pcall(function()
-		require("core.highlights.diagnostics").setup()
+		require("core.highlights").setup()
 	end)
 end
 

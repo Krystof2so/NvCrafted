@@ -12,6 +12,5 @@ return {
 		event = "VimEnter", -- A l'ouverture de Neovim
 		dependencies = { "nvim-lua/plenary.nvim" },
 		opts = {},
-		-- TODO: higlight adaptatif (selon thème courant) => déléguer
 	},
 }
