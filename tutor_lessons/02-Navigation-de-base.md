@@ -122,3 +122,11 @@ Objectif : Atteindre la ligne 15, puis aller au début et à la fin de cette lig
 ### Exercice 3 : Combinaison de commandes
 
 Objectif : Atteindre le 3ème mot de la 5ème ligne en partant du début du fichier.
+
+---
+
+## Prochaine leçon
+
+Leçon 3 — La grammaire de Neovim
+
+Appuyer sur `]l` pour continuer.
