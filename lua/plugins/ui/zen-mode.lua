@@ -31,14 +31,22 @@ return {
 				showcmd = false, -- masque la commande en cours
 				laststatus = 0, -- masque la statusline (lualine) en mode zen
 			},
-			twilight = { enabled = true }, -- activation de Twilight à l'entrée en mode zen
+			twilight = { enabled = false }, -- Désactivation car géré par 'on_open'
 			gitsigns = { enabled = false }, -- gitsigns masqué en mode zen
 			wezterm = {
 				enabled = true,
 				font = "+2", -- +2 pas incrémentation ≈ +20% (chaque pas = ~10%)
 			},
 		},
-		on_open = function(_) end,
-		on_close = function() end,
+		on_open = function(_)
+            local ft = vim.bo.filetype  -- Récupère le type du fichier ("" si pas de type)
+			local ok = ft ~= "" and pcall(vim.treesitter.get_parser, 0)
+			if ok then
+				require("twilight").enable()
+			end
+		end,
+		on_close = function()
+			require("twilight").disable()
+		end,
 	},
 }
