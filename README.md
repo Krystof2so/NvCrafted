@@ -43,61 +43,89 @@ This project is still under construction...
 ## Project Structure
 
 ```text
-.
-├── docs
-│   ├── autocommands.md
-│   ├── commands.md
-│   └── lsp-nvcrafted.md
-├── init.lua
-├── lazy-lock.json
-├── lua
-│   ├── core
-│   │   ├── autocmds.lua
-│   │   ├── bootstrap.lua
-│   │   ├── format
-│   │   │   └── conform.lua
-│   │   ├── highlights
-│   │   │   └── diagnostics_theme_nord.lua
-│   │   ├── keymaps.lua
-│   │   ├── lsp
-│   │   │   ├── capabilities.lua
-│   │   │   ├── on_attach.lua
-│   │   │   ├── servers.lua
-│   │   │   └── tools.lua
-│   │   ├── options.lua
-│   │   └── spell.lua
-│   └── plugins
-│       ├── coding
-│       │   ├── autopairs.lua
-│       │   ├── blink.lua
-│       │   ├── conform.lua
-│       │   ├── lazydev.lua
-│       │   ├── telescope.lua
-│       │   └── treesitter.lua
-│       ├── init.lua
-│       ├── lsp
-│       │   ├── config
-│       │   │   ├── lua_ls.lua
-│       │   │   ├── pyright.lua
-│       │   │   └── ruff.lua
-│       │   ├── init.lua
-│       │   └── mason.lua
-│       ├── tools
-│       │   └── which_key.lua
-│       └── ui
-│           ├── aerial.lua
-│           ├── alpha.lua
-│           ├── barbar.lua
-│           ├── colorscheme.lua
-│           ├── lualine.lua
-│           ├── neo_tree.lua
-│           ├── noice.lua
-│           ├── trouble.lua
-│           └── zen-mode.lua
-├── README.fr.md
-├── README.md
-└── snippets
-    └── python.json
+ .
+├──  docs
+│   ├──  architecture.md
+│   ├──  autocommands.md
+│   ├──  commands.md
+│   ├──  highlights.md
+│   ├──  lsp-nvcrafted.md
+│   └──  themes.md
+├──  init.lua
+├──  lazy-lock.json
+├──  lua
+│   ├──  core
+│   │   ├──  autocmds.lua
+│   │   ├──  bootstrap.lua
+│   │   ├──  format
+│   │   │   └──  conform.lua
+│   │   ├──  highlights
+│   │   │   ├──  blink_hl.lua
+│   │   │   ├──  diagnostics.lua
+│   │   │   ├──  init.lua
+│   │   │   ├──  neo_tree_ls.lua
+│   │   │   ├──  palettes.lua
+│   │   │   ├──  todo_comments_hl.lua
+│   │   │   └──  which_key_ls.lua
+│   │   ├──  keymaps.lua
+│   │   ├──  lsp
+│   │   │   ├──  capabilities.lua
+│   │   │   ├──  on_attach.lua
+│   │   │   ├──  servers.lua
+│   │   │   └──  tools.lua
+│   │   ├──  options.lua
+│   │   ├──  spell.lua
+│   │   └──  theme.lua
+│   ├──  nvcrafted
+│   │   └──  tutor
+│   │       ├──  docs.lua
+│   │       ├──  init.lua
+│   │       ├──  progress.lua
+│   │       └──  tutor.lua
+│   └──  plugins
+│       ├──  appearence
+│       │   ├──  alpha.lua
+│       │   ├──  barbar.lua
+│       │   ├──  everviolet.lua
+│       │   ├──  lualine.lua
+│       │   ├──  nordic.lua
+│       │   └──  rose-pine.lua
+│       ├──  editing
+│       │   ├──  autopairs.lua
+│       │   ├──  blink.lua
+│       │   ├──  comment_nvim.lua
+│       │   ├──  conform.lua
+│       │   ├──  lazydev.lua
+│       │   ├──  neogen.lua
+│       │   ├──  todo_comments.lua
+│       │   └──  treesitter.lua
+│       ├──  init.lua
+│       ├──  lsp
+│       │   ├──  config
+│       │   │   ├──  lua_ls.lua
+│       │   │   ├──  pyright.lua
+│       │   │   └──  ruff.lua
+│       │   ├──  init.lua
+│       │   └──  mason.lua
+│       ├──  meta
+│       │   └──  tutor.lua
+│       ├──  navigation
+│       │   ├──  aerial.lua
+│       │   ├──  neo_tree.lua
+│       │   ├──  telescope.lua
+│       │   └──  trouble.lua
+│       └──  ux
+│           ├──  noice.lua
+│           ├──  which_key.lua
+│           └──  zen-mode.lua
+├──  README.fr.md
+├── 󰂺 README.md
+├──  snippets
+│   └──  python.json
+└──  tutor_lessons
+    ├──  01-Les-modes.md
+    ├──  02-Navigation-de-base.md
+    └──  03-La-grammaire-de-Neovim.md
 ```
 
 ---
@@ -149,13 +177,15 @@ init.lua (root)
   └── lazy.setup("plugins")
         └── plugins/init.lua
               └── automatic subdirectory scan
-                    ├── plugins/coding/
-                    ├── plugins/ui/
-                    ├── plugins/tools/
-                    └── plugins/lsp/
-                          └── init.lua
-                                ├── servers.lua → LSP activation
-                                └── tools.lua   → Mason tools
+                    ├── plugins/appearence/
+                    ├── plugins/editing/
+                    ├── plugins/meta/
+                    ├── plugins/lsp/
+                    │     └── init.lua
+                    │           ├── servers.lua → activation LSP
+                    │           └── tools.lua  → outils Mason
+                    ├── plugins/navigation/
+                    └── plugins/ux
 ```
 
 The order is intentional: `core/` modules are loaded before **Lazy**, ensuring that options and leader keys are in place before any plugin is initialized.
@@ -184,9 +214,9 @@ Contains the **fundamental Neovim configuration**, independent of plugins.
 ### Adding a _Plugin_
 
 1. Create a **Lua** file in the corresponding folder, for example:
-   - `lua/plugins/ui/` for an interface plugin
-   - `lua/plugins/coding/` for a code editing plugin
-   - `lua/plugins/tools/` for cross-cutting tools
+   - `lua/plugins/ux/` relates to ergonomics
+   - `lua/plugins/editing/` relates to editing
+   - `lua/plugins/navigation/` relates to navigation
 
 2. The file must return a table compatible with **Lazy.nvim**. Minimal example:
 
@@ -210,7 +240,7 @@ Some plugins involve configuration logic rich enough to justify a dedicated file
 
 #### Example: `conform.nvim`
 
-`plugins/coding/conform.lua` only declares the plugin and calls the `core` module:
+`plugins/editing/conform.lua` only declares the plugin and calls the `core` module:
 
 ```lua
 return {
@@ -240,7 +270,7 @@ A plugin whose configuration fits in a few lines of static options does not need
 Use when the configuration consists of values passed directly to the plugin:
 
 ```lua
--- plugins/coding/autopairs.lua
+-- plugins/editing/autopairs.lua
 opts = {
   check_ts = true,
   ts_config = {
@@ -256,7 +286,7 @@ opts = {
 Use when the configuration requires code: autocommands, `pcall` protection, manual API calls, etc.
 
 ```lua
--- plugins/coding/treesitter.lua
+-- plugins/editing/treesitter.lua
 config = function()
   local ok, ts_configs = pcall(require, "nvim-treesitter.configs")
   if not ok then return end
@@ -269,7 +299,7 @@ end
 When a plugin has static options _and_ code to run after initialization, both can coexist. `opts` is then received as the second argument of `config`:
 
 ```lua
--- plugins/coding/blink.lua
+-- plugins/editing/blink.lua
 opts = {
   keymap = { ... },
   completion = { ... },
@@ -313,7 +343,7 @@ map("n", "<leader>ee", ":Neotree<CR>",              { desc = "Ouverture de Neotr
 Keybindings that only make sense in a specific context (_popup_, floating menu) stay in the plugin file:
 
 ```lua
--- plugins/coding/blink.lua
+-- plugins/editing/blink.lua
 opts = {
   keymap = {
     ["<CR>"]    = { "accept", "fallback" },
@@ -393,40 +423,6 @@ This file is the **aggregation point for plugins**. It contains no direct config
 
 ---
 
-## Organization by Domains
-
-### `plugins/ui/`
-
-Plugins related to the user interface:
-
-- status bar ([lualine](https://github.com/nvim-lualine/lualine.nvim))
-- file explorer ([neo-tree](https://github.com/nvim-neo-tree/neo-tree.nvim))
-- welcome screen ([alpha](https://github.com/goolord/alpha-nvim))
-- color theme ([Nord](https://www.nordtheme.com/)) - Yes, I'm a die-hard fan of this theme.
-- Diagnostics visualization ([Trouble](https://github.com/folke/trouble.nvim/tree/main))
-- Viewing the structure of the current file (and navigating) ([aerial](https://github.com/stevearc/aerial.nvim))
-
----
-
-### `plugins/coding/`
-
-Plugins enhancing the code editing experience:
-
-- [auto-pairs](https://github.com/windwp/nvim-autopairs)
-- **Tree-sitter**
-- [Telescope](https://github.com/nvim-telescope/telescope.nvim)
-- formatting ([conform](https://github.com/stevearc/conform.nvim))
-- [Lazydev](https://github.com/folke/lazydev.nvim)
-- [Trouble](https://github.com/folke/trouble.nvim)
-
----
-
-### `plugins/tools/`
-
-Cross-cutting tools (e.g., [which-key](https://github.com/folke/which-key.nvim)) that do not directly fit into UI or coding.
-
----
-
 ## LSP and Tools Management
 
 The **LSP** support and tool installation are structured across four distinct levels.
@@ -477,7 +473,7 @@ Snippets are stored in `~/.config/nvim/snippets/` in JSON format (compatible wit
 Snippets are dynamically loaded using `lazy_load`:
 
 ````lua
--- plugins/coding/blink.lua
+-- plugins/editing/blink.lua
 require("luasnip.loaders.from_vscode").lazy_load({
   paths = { vim.fn.stdpath("config") .. "/snippets" },
 })
