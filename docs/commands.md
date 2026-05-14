@@ -1,34 +1,154 @@
-# Liste de commandes pour **NvCrafted**
+# **Documentation des raccourcis NvCrafted**
 
-Mon souhait est de m'attaquer au _mapping_, de sortir d'une logique d'un _mapping_ définit par _plugin_ (_Quel plugin fait quoi ?_), mais bien d'être dans une logique d'actions (_qu'est-ce que je veux faire ?_). Cela fait plusieurs jours que j'y réfléchis, et voici ci-dessous ce que j'envisage. Mais avant de me lancer dans la réorganisation des _mappings_, vu que vous avez l'habitude d'utiliser des IDE, je voudrais votre avis sur cette possible réorganisation.
+Organisation par fonctionnalité, avec groupes `<leader>` et descriptions.
 
-Fichier à mettre à jour, en tenant compte de l'organisation suivante :
+---
 
-## Hiérarchie envisagée
+## **📌 Table des Matières**
 
-- `<leader>c` -> Actions sur le code : LSP (_rename_, _action_, _hints_, diagnostics flottants), annotations **Neogen**, commentaires
-- `<leader>b` -> Actions sur les _Buffers_ : Navigation, fermeture, épinglage, tri, liste
-- `<leader>f` -> Actions sur les fichiers : Recherche fichiers/texte, TODOs, historique
-- `<leader>n` -> Navigation : **Aerial**, **Neotree**, saut vers erreur suivante/précédente
-- `<leader>d`-> Diagnostics : **Trouble** (liste), saut entre diagnostics
-- `<leader>u` -> UI: Thème, Zen mode, _toggle inlay hints_ global, _nohlsearch_
-- `<leader>l` -> **Lazy** : _Update_, _sync_, _open_
-- `<leader>m` -> Messages : **Noice** (historique, erreurs, stats)
+- `<leader>c` — Code
+- `<leader>b` — Buffers
+- `<leader>f` — Fichiers
+- `<leader>n` — Navigation
+- `<leader>d` — Diagnostics
+- `<leader>u` — UI
+- `<leader>m` — Messages (Noice)
+- `<leader>l` — Lazy
 
-## Prévoir
+---
 
-### Réorganisation des groupes
+## **`<leader>c` — Code**
 
-- `<leader>e` (**Neotree**) → `<leader>n` (Navigation), avec **Aerial**.
-- `<leader>n` (**Noice**) → `<leader>m` (**Messages**).
-- `<leader>t` (thème) et `<leader>h` (_hlsearch_) → `<leader>u` (UI), avec le _toggle hints_ global `<leader>uI`.
+Actions sur le code : LSP, annotations, commentaires.
+Les _mappings_ LSP _buffer-local_ (ex: `<leader>ca`, `<leader>cr`) sont définis dans `on_attach.lua` et apparaissent dans **Which-Key**.
 
-### Fermeture de buffers
+| Raccourci    | Description         | Plugin/Commande |
+| ------------ | ------------------- | --------------- |
+| `<leader>cf` | Annoter la fonction | Neogen          |
+| `<leader>cc` | Annoter la classe   | Neogen          |
+| `<leader>ct` | Annoter le type     | Neogen          |
+| `<leader>cF` | Annoter le fichier  | Neogen          |
 
-Les raccourcis `<leader>bcc`, `<leader>bca`… simplifiés en `<leader>bx` (fermer), `<leader>ba` (tous sauf actuel), etc. (des lettres plus mnémotechniques que des combinaisons avec `c`.
+---
 
-### Diagnostics — deux niveaux
+## `<leader>b` — Buffers
 
-- `<leader>dl` et `<leader>ds` dans `keymaps.lua` pour \*_Trouble_ (global).
-- `<leader>dd`, `<leader>dn`, `<leader>dp` dans `on_attach.lua` pour le flottant et la navigation entre diagnostics (_buffer_-local).
-- **Which-key** doit fusionner les deux dans le même groupe `<leader>d`.
+Navigation, fermeture, épinglage et tri des _buffers_.
+
+### Navigation
+
+| Raccourci      | Description           | Commande Neovim   |
+| -------------- | --------------------- | ----------------- |
+| `<leader>bn`   | Buffer suivant        | `:BufferNext`     |
+| `<leader>bp`   | Buffer précédent      | `:BufferPrevious` |
+| `<leader>b0`   | Dernier buffer ouvert | `:BufferLast`     |
+| `<leader>b1-9` | Aller au buffer 1-9   | `:BufferGoto {n}` |
+
+### Fermeture
+
+| Raccourci    | Description                       | Commande Neovim                     |
+| ------------ | --------------------------------- | ----------------------------------- |
+| `<leader>bx` | Fermer le buffer actuel           | `:BufferClose`                      |
+| `<leader>ba` | Fermer tous sauf le buffer actuel | `:BufferCloseAllButCurrent`         |
+| `<leader>bq` | Fermer sauf actuel/épinglés       | `:BufferCloseAllButCurrentOrPinned` |
+| `<leader>bQ` | Fermer sauf épinglés              | `:BufferCloseAllButPinned`          |
+| `<leader>b<` | Fermer tous les buffers à gauche  | `:BufferCloseBuffersLeft`           |
+| `<leader>b>` | Fermer tous les buffers à droite  | `:BufferCloseBuffersRight`          |
+
+### Épinglage et Tri
+
+| Raccourci    | Description                    | Commande Neovim      |
+| ------------ | ------------------------------ | -------------------- |
+| `<leader>bP` | Épingler/désépingler le buffer | `:BufferPin`         |
+| `<leader>bo` | Trier les buffers par nom      | `:BufferOrderByName` |
+
+### Liste
+
+| Raccourci    | Description                   | Commande Neovim      |
+| ------------ | ----------------------------- | -------------------- |
+| `<leader>bl` | Liste des buffers (Telescope) | `:Telescope buffers` |
+
+---
+
+## `<leader>f` — Fichiers
+
+Recherche et exploration de fichiers et de contenu.
+
+| Raccourci    | Description                | Commande/Plugin          |
+| ------------ | -------------------------- | ------------------------ |
+| `<leader>ff` | Chercher un fichier        | `:Telescope find_files`  |
+| `<leader>fg` | Rechercher du texte (grep) | `:Telescope live_grep`   |
+| `<leader>fr` | Fichiers récents           | `:Telescope oldfiles`    |
+| `<leader>ft` | Rechercher TODOs/FIX/BUG   | `TodoTelescope`          |
+| `<leader>fk` | Explorer les raccourcis    | `:Telescope keymaps`     |
+| `<leader>fh` | Aide Neovim                | `:Telescope help_tags`   |
+| `<leader>fc` | Commandes disponibles      | `:Telescope commands`    |
+| `<leader>fo` | Options Neovim             | `:Telescope vim_options` |
+
+---
+
+## `<leader>n` — Navigation
+
+Déplacement dans la structure du projet et du code.
+
+| Raccourci    | Description                   | Commande/Plugin                   |
+| ------------ | ----------------------------- | --------------------------------- |
+| `<leader>ne` | Ouvrir Neotree                | `:Neotree`                        |
+| `<leader>nb` | Buffers ouverts (Neotree)     | `:Neotree focus buffers float`    |
+| `<leader>ng` | Git status (Neotree)          | `:Neotree focus git_status float` |
+| `<leader>na` | Structure du fichier (Aerial) | `:AerialOpen`                     |
+
+---
+
+## `<leader>d` — Diagnostics
+
+Gestion des diagnostics (erreur, avertissements).
+Les _mappings buffer-local_ (ex: `<leader>dd`, `<leader>dn`) sont dans `on_attach.lua`.
+
+| Raccourci    | Description                   | Commande/Plugin          |
+| ------------ | ----------------------------- | ------------------------ |
+| `<leader>dl` | Liste globale des diagnostics | `:Trouble diagnostics`   |
+| `<leader>ds` | Liste avec aperçu (split)     | `:Trouble preview_split` |
+
+---
+
+## `<leader>u` — UI
+
+Modification de l'apparence ou du comportement de l'éditeur.
+
+| Raccourci    | Description                 | Commande/Plugin                       |
+| ------------ | --------------------------- | ------------------------------------- |
+| `<leader>ut` | Changer de thème            | `core.theme.preview_with_telescope()` |
+| `<leader>uz` | Toggle Zen Mode             | `:ZenMode`                            |
+| `<leader>uh` | Effacer la surbrillance     | `:nohlsearch`                         |
+| `<leader>uI` | Toggle inlay hints (global) | `vim.lsp.inlay_hint`                  |
+
+---
+
+## `<leader>m` — Messages (Noice)
+
+Accès à l'historique et aux outils de notification.
+
+| Raccourci    | Description               | Commande/Plugin   |
+| ------------ | ------------------------- | ----------------- |
+| `<leader>mh` | Historique des messages   | `:NoiceHistory`   |
+| `<leader>ml` | Dernier message           | `:NoiceLast`      |
+| `<leader>me` | Messages d'erreur         | `:NoiceErrors`    |
+| `<leader>ms` | Statistiques de débogage  | `:NoiceStats`     |
+| `<leader>mt` | Historique dans Telescope | `:NoiceTelescope` |
+| `<leader>mc` | Fermer les notifications  | `:NoiceDismiss`   |
+| `<leader>md` | Désactiver Noice          | `:NoiceDisable`   |
+| `<leader>ma` | Réactiver Noice           | `:NoiceEnable`    |
+
+---
+
+## `<leader>l` — Lazy
+
+Gestion des plugins avec Lazy.nvim.
+
+| Raccourci    | Description               | Commande/Plugin |
+| ------------ | ------------------------- | --------------- |
+| `<leader>ll` | Ouvrir Lazy               | `:Lazy`         |
+| `<leader>lu` | Mettre à jour les plugins | `:Lazy update`  |
+| `<leader>ls` | Synchroniser les plugins  | `:Lazy sync`    |
+

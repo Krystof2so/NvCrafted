@@ -137,7 +137,7 @@ api.nvim_create_autocmd("InsertEnter", {
 })
 
 -- Désactivation de relativenumber dans les buffers en mode InsertLeave
-api.nvim_create_autocmd({ "InsertEnter", "WinLeave" }, {
+api.nvim_create_autocmd({ "InsertLeave", "WinLeave" }, {
 	group = number_group,
 	pattern = "*",
 	callback = function()
