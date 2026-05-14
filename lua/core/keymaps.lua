@@ -5,14 +5,15 @@
 -- * Organisation par fonctionnalité, pas par plugin.                   *
 -- *                                                                    *
 -- * Groupes <leader> :                                                 *
+-- *   <leader>h  →  Aide        (Help : Aide et documenatation)        *
 -- *   <leader>c  →  Code        (LSP + annotations + commentaires)     *
 -- *   <leader>b  →  Buffers     (navigation, fermeture, tri)           *
--- *   <leader>f  →  Fichiers    (recherche, grep, TODOs)               *
+-- *   <leader>r  →  Recherche   (fichiers, grep, TODOs)                *
 -- *   <leader>n  →  Navigation  (Neotree, Aerial, structure)           *
 -- *   <leader>d  →  Diagnostics (Trouble, flottant, saut)              *
--- *   <leader>u  →  UI          (thème, zen, hints global, hlsearch)   *
+-- *   <leader>x  →  UI/UX       (thème, zen, hints global, hlsearch)   *
 -- *   <leader>m  →  Messages    (Noice — historique, erreurs, stats)   *
--- *   <leader>l  →  Lazy        (update, sync, open)                   *
+-- *   <leader>p  →  Profil      (Lazy, Mason, Options)                 *
 -- *                                                                    *
 -- * Mappings buffer-local LSP : core/lsp/on_attach.lua                 *
 -- * (nécessitent bufnr, définis à l'attachement LSP)                   *
@@ -20,6 +21,22 @@
 
 vim.g.mapleader = " "
 local map = vim.keymap.set
+
+-- ======================================================================
+-- <leader>h - Aide (<h>elp)
+-- ======================================================================
+map("n", "<leader>hm", ":Telescope keymaps<CR>", {
+	desc = "󰌌 Explorer les raccourcis",
+	silent = true,
+})
+map("n", "<leader>hh", ":Telescope help_tags<CR>", {
+	desc = "󰋖 Aide Neovim",
+	silent = true,
+})
+map("n", "<leader>hc", ":Telescope commands<CR>", {
+	desc = "󰘳 Commandes disponibles",
+	silent = true,
+})
 
 -- ======================================================================
 -- <leader>c — Code
@@ -79,40 +96,24 @@ map("n", "<leader>bo", ":BufferOrderByName<CR>", { desc = "󰒺 Trier par nom", 
 map("n", "<leader>bl", ":Telescope buffers<CR>", { desc = "󰈞 Liste (Telescope)", silent = true })
 
 -- ======================================================================
--- <leader>f — Fichiers
+-- <leader>r — Recherche
 -- Recherche et exploration de fichiers et de contenu.
 -- ======================================================================
-map("n", "<leader>ff", ":Telescope find_files<CR>", {
+map("n", "<leader>rf", ":Telescope find_files<CR>", {
 	desc = "󰈞 Chercher un fichier",
 	silent = true,
 })
-map("n", "<leader>fg", ":Telescope live_grep<CR>", {
+map("n", "<leader>rg", ":Telescope live_grep<CR>", {
 	desc = "󰊄 Rechercher du texte (grep)",
 	silent = true,
 })
-map("n", "<leader>fr", ":Telescope oldfiles<CR>", {
+map("n", "<leader>rr", ":Telescope oldfiles<CR>", {
 	desc = "󰋚 Fichiers récents",
 	silent = true,
 })
-map("n", "<leader>ft", function()
+map("n", "<leader>rt", function()
 	vim.cmd("TodoTelescope cwd=" .. vim.fn.getcwd())
 end, { desc = "󰄲 Rechercher TODOs/FIX/BUG", silent = true })
-map("n", "<leader>fk", ":Telescope keymaps<CR>", {
-	desc = "󰌌 Explorer les raccourcis",
-	silent = true,
-})
-map("n", "<leader>fh", ":Telescope help_tags<CR>", {
-	desc = "󰋖 Aide Neovim",
-	silent = true,
-})
-map("n", "<leader>fc", ":Telescope commands<CR>", {
-	desc = "󰘳 Commandes disponibles",
-	silent = true,
-})
-map("n", "<leader>fo", ":Telescope vim_options<CR>", {
-	desc = "󰒓 Options Neovim",
-	silent = true,
-})
 
 -- ======================================================================
 -- <leader>n — Navigation
@@ -150,18 +151,18 @@ map("n", "<leader>ds", "<cmd>Trouble preview_split<CR>", {
 })
 
 -- ======================================================================
--- <leader>u — UI
+-- <leader>x — UI/UX
 -- Tout ce qui modifie l'apparence ou le comportement de l'éditeur.
 -- ======================================================================
-map("n", "<leader>ut", function()
+map("n", "<leader>xt", function()
 	require("core.theme").preview_with_telescope()
 end, { desc = "󰏘 Changer de thème", silent = true })
-map("n", "<leader>uz", ":ZenMode<CR>", { desc = "󰰶 Toggle Zen Mode", silent = true })
-map("n", "<leader>uh", ":nohlsearch<CR>", {
+map("n", "<leader>xz", ":ZenMode<CR>", { desc = "󰰶 Toggle Zen Mode", silent = true })
+map("n", "<leader>xh", ":nohlsearch<CR>", {
 	desc = "󰹊 Effacer la surbrillance",
 	silent = true,
 })
-map("n", "<leader>uI", function()
+map("n", "<leader>xI", function()
 	-- Toggle global : affecte tous les buffers ouverts
 	local enabled = vim.lsp.inlay_hint.is_enabled()
 	vim.lsp.inlay_hint.enable(not enabled)
@@ -205,14 +206,18 @@ map("n", "<leader>ma", ":NoiceEnable<CR>", {
 })
 
 -- ======================================================================
--- <leader>l — Lazy
+-- <leader>p — Profil
 -- ======================================================================
-map("n", "<leader>ll", ":Lazy<CR>", { desc = "󰒲 Ouvrir Lazy", silent = true })
-map("n", "<leader>lu", ":Lazy update<CR>", {
+map("n", "<leader>po", ":Telescope vim_options<CR>", {
+	desc = "󰒓 Options Neovim",
+	silent = true,
+})
+map("n", "<leader>pl", ":Lazy<CR>", { desc = "󰒲 Ouvrir Lazy", silent = true })
+map("n", "<leader>pu", ":Lazy update<CR>", {
 	desc = "󰒿 Mettre à jour les plugins",
 	silent = true,
 })
-map("n", "<leader>ls", ":Lazy sync<CR>", {
+map("n", "<leader>ps", ":Lazy sync<CR>", {
 	desc = "󰓦 Synchroniser",
 	silent = true,
 })
@@ -234,14 +239,22 @@ vim.api.nvim_create_autocmd("User", {
 			-- ----------------------------------------------------------------
 			-- Groupes de premier niveau
 			-- ----------------------------------------------------------------
+			{ "<leader>h", group = "Aide et documentation ", icon = "󰋖 " },
 			{ "<leader>c", group = "Actions sur le code", icon = "󰅩 " },
 			{ "<leader>b", group = "Buffers", icon = "󰈞 " },
-			{ "<leader>f", group = "Fichiers", icon = "󰈔 " },
+			{ "<leader>r", group = "Rechercher", icon = "󰈔 " },
 			{ "<leader>n", group = "Navigation", icon = "󰋜 " },
 			{ "<leader>d", group = "Diagnostics", icon = "󰋼 " },
-			{ "<leader>u", group = "UI", icon = "󰏘 " },
+			{ "<leader>x", group = "UI/UX", icon = "󰏘 " },
 			{ "<leader>m", group = "Messages", icon = "󰍩 " },
-			{ "<leader>l", group = "Lazy", icon = "󰒲 " },
+			{ "<leader>p", group = "Profil", icon = "󰒓 " },
+
+			-- ----------------------------------------------------------------
+			-- <leader>h — Aide
+			-- ----------------------------------------------------------------
+			{ "<leader>hm", desc = "Explorer les raccourcis", icon = "󰌌 " },
+			{ "<leader>hh", desc = "Aide Neovim", icon = "󰋖 " },
+			{ "<leader>hc", desc = "Commandes disponibles", icon = "󰘳 " },
 
 			-- ----------------------------------------------------------------
 			-- <leader>c — Code
@@ -270,16 +283,12 @@ vim.api.nvim_create_autocmd("User", {
 			{ "<leader>bl", desc = "Liste (Telescope)", icon = "󰈞 " },
 
 			-- ----------------------------------------------------------------
-			-- <leader>f — Fichiers
+			-- <leader>r — Rechercher
 			-- ----------------------------------------------------------------
-			{ "<leader>ff", desc = "Chercher un fichier", icon = "󰈞 " },
-			{ "<leader>fg", desc = "Rechercher du texte (grep)", icon = "󰊄 " },
-			{ "<leader>fr", desc = "Fichiers récents", icon = "󰋚 " },
-			{ "<leader>ft", desc = "Rechercher TODOs/FIX/BUG", icon = "󰄲 " },
-			{ "<leader>fk", desc = "Explorer les raccourcis", icon = "󰌌 " },
-			{ "<leader>fh", desc = "Aide Neovim", icon = "󰋖 " },
-			{ "<leader>fc", desc = "Commandes disponibles", icon = "󰘳 " },
-			{ "<leader>fo", desc = "Options Neovim", icon = "󰒓 " },
+			{ "<leader>rf", desc = "Chercher un fichier", icon = "󰈞 " },
+			{ "<leader>rg", desc = "Rechercher du texte (grep)", icon = "󰊄 " },
+			{ "<leader>rr", desc = "Fichiers récents", icon = "󰋚 " },
+			{ "<leader>rt", desc = "Rechercher TODOs/FIX/BUG", icon = "󰄲 " },
 
 			-- ----------------------------------------------------------------
 			-- <leader>n — Navigation
@@ -297,12 +306,12 @@ vim.api.nvim_create_autocmd("User", {
 			{ "<leader>ds", desc = "Liste avec aperçu (Trouble)", icon = "󰋼 " },
 
 			-- ----------------------------------------------------------------
-			-- <leader>u — UI
+			-- <leader>x — UI/UX
 			-- ----------------------------------------------------------------
-			{ "<leader>ut", desc = "Changer de thème", icon = "󰏘 " },
-			{ "<leader>uz", desc = "Toggle Zen Mode", icon = "󰰶 " },
-			{ "<leader>uh", desc = "Effacer la surbrillance", icon = "󰹊 " },
-			{ "<leader>uI", desc = "Toggle inlay hints (global)", icon = "󰈈 " },
+			{ "<leader>xt", desc = "Changer de thème", icon = "󰏘 " },
+			{ "<leader>xz", desc = "Toggle Zen Mode", icon = "󰰶 " },
+			{ "<leader>xh", desc = "Effacer la surbrillance", icon = "󰹊 " },
+			{ "<leader>xI", desc = "Toggle inlay hints (global)", icon = "󰈈 " },
 
 			-- ----------------------------------------------------------------
 			-- <leader>m — Messages
@@ -317,11 +326,12 @@ vim.api.nvim_create_autocmd("User", {
 			{ "<leader>ma", desc = "Réactiver Noice", icon = "󰒳 " },
 
 			-- ----------------------------------------------------------------
-			-- <leader>l — Lazy
+			-- <leader>p — Profil
 			-- ----------------------------------------------------------------
-			{ "<leader>ll", desc = "Ouvrir Lazy", icon = "󰒲 " },
-			{ "<leader>lu", desc = "Mettre à jour les plugins", icon = "󰒿 " },
-			{ "<leader>ls", desc = "Synchroniser", icon = "󰓦 " },
+			{ "<leader>pl", desc = "Ouvrir Lazy", icon = "󰒲 " },
+			{ "<leader>pu", desc = "Mettre à jour les plugins", icon = "󰒿 " },
+			{ "<leader>ps", desc = "Synchroniser", icon = "󰓦 " },
+			{ "<leader>po", desc = "Options Neovim", icon = "󰒓 " },
 		}, { prefix = "<leader>", mode = "n" })
 	end,
 })

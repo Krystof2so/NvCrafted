@@ -100,7 +100,6 @@ function M.on_attach(client, bufnr)
 	if ok then
 		wk.add({
 			-- Sous-groupe LSP dans <leader>c
-			{ "<leader>ca", buffer = bufnr, desc = "Actions (code action)", icon = "󰌵" },
 			{ "<leader>cr", buffer = bufnr, desc = "Renommer le symbole", icon = "󰑕" },
 			{ "<leader>ci", buffer = bufnr, desc = "Toggle hints (buffer)", icon = "󰈈" },
 			-- Sous-groupe diagnostics dans <leader>d
