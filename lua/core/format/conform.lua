@@ -38,7 +38,7 @@ function M.setup()
 	vim.api.nvim_create_autocmd("BufWritePre", {
 		callback = function(args)
 			local bufnr = args.buf
-			require("conform").format({ bufnr = bufnr })
+			conform.format({ bufnr = bufnr })
 		end,
 	})
 end
