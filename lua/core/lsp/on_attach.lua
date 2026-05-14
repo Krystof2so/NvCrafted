@@ -11,7 +11,7 @@
 
 local M = {}
 
-function M.on_attach(_, bufnr)
+function M.on_attach(client, bufnr)
 	-- Highlights de diagnostics adaptatifs au thème courant.
 	-- Le module détecte automatiquement la famille du thème actif
 	-- (rose-pine, nordic, evergarden, ou fallback).
@@ -22,6 +22,13 @@ function M.on_attach(_, bufnr)
 	-- ------------------------------------------------------------
 	-- Utilisation de l'omnifunc LSP pour la complétion native
 	vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
+
+	-- ------------------------------------------------------------
+	-- Active les inlay hints natifs si le serveur les supporte
+	-- ------------------------------------------------------------
+	if client:supports_method("textDocument/inlayHint") then
+		vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+	end
 
 	-- ------------------------------------------------------------
 	-- Mappings LSP (buffer-local)
@@ -58,6 +65,11 @@ function M.on_attach(_, bufnr)
 			focusable = false,
 		})
 	end, opts)
+
+	-- Activer/désactiver les hints
+	vim.keymap.set("n", "<leader>ci", function()
+		vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
+	end, vim.tbl_extend("force", opts, { desc = "Toggle inlay hints" }))
 end
 
 return M
