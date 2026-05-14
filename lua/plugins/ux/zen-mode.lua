@@ -46,7 +46,9 @@ return {
 			end
 		end,
 		on_close = function()
-			require("twilight").disable()
+            pcall(function()
+                require("twilight").disable()
+            end)
 		end,
 	},
 }
