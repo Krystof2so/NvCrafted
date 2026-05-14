@@ -64,15 +64,9 @@ function M.on_attach(client, bufnr)
 	-- Le groupe complet <leader>c est déclaré dans keymaps.lua.
 	-- Les mappings Neogen (<leader>cf, cc, ct, cF) y sont aussi.
 	-- ----------------------------------------------------------
-	map(
-		"n",
-		"<leader>ca",
-		vim.lsp.buf.code_action,
-		vim.tbl_extend("force", opts, { desc = "󰌵 Actions (code action)" })
-	)
 	map("n", "<leader>cr", vim.lsp.buf.rename, vim.tbl_extend("force", opts, { desc = "󰑕 Renommer le symbole" }))
 	map("n", "<leader>ci", function()
-		vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
+		vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = 0 }), { bufnr = 0 })
 	end, vim.tbl_extend("force", opts, { desc = "󰈈 Toggle hints (buffer)" }))
 
 	-- ----------------------------------------------------------

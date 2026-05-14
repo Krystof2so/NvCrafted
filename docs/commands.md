@@ -22,12 +22,13 @@ Organisation par fonctionnalité, avec groupes `<leader>` et descriptions.
 Actions sur le code : LSP, annotations, commentaires.
 Les _mappings_ LSP _buffer-local_ (ex: `<leader>ca`, `<leader>cr`) sont définis dans `on_attach.lua` et apparaissent dans **Which-Key**.
 
-| Raccourci    | Description         | Plugin/Commande |
-| ------------ | ------------------- | --------------- |
-| `<leader>cf` | Annoter la fonction | Neogen          |
-| `<leader>cc` | Annoter la classe   | Neogen          |
-| `<leader>ct` | Annoter le type     | Neogen          |
-| `<leader>cF` | Annoter le fichier  | Neogen          |
+| Raccourci    | Description         | Plugin/Commande      |
+| ------------ | ------------------- | -------------------- |
+| `<leader>cf` | Annoter la fonction | Neogen               |
+| `<leader>cc` | Annoter la classe   | Neogen               |
+| `<leader>ct` | Annoter le type     | Neogen               |
+| `<leader>cF` | Annoter le fichier  | Neogen               |
+| `<leader>ci` | Toggle hints        | `vim.lsp.inlay_hint` |
 
 ---
 
@@ -151,4 +152,3 @@ Gestion des plugins avec Lazy.nvim.
 | `<leader>ll` | Ouvrir Lazy               | `:Lazy`         |
 | `<leader>lu` | Mettre à jour les plugins | `:Lazy update`  |
 | `<leader>ls` | Synchroniser les plugins  | `:Lazy sync`    |
-
