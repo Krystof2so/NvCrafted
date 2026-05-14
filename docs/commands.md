@@ -1,97 +1,34 @@
 # Liste de commandes pour **NvCrafted**
 
-## Edition
+Mon souhait est de m'attaquer au _mapping_, de sortir d'une logique d'un _mapping_ définit par _plugin_ (_Quel plugin fait quoi ?_), mais bien d'être dans une logique d'actions (_qu'est-ce que je veux faire ?_). Cela fait plusieurs jours que j'y réfléchis, et voici ci-dessous ce que j'envisage. Mais avant de me lancer dans la réorganisation des _mappings_, vu que vous avez l'habitude d'utiliser des IDE, je voudrais votre avis sur cette possible réorganisation.
 
-- `gcc` : Commenter/Décommenter la ligne
+Fichier à mettre à jour, en tenant compte de l'organisation suivante :
 
-## Recherche/remplacement
+## Hiérarchie envisagée
 
-- `/occurrence` puis navigation entre les occurrences : `n` en avant et `N` en arrière.
-- `<leader>h` : efface la surbrillance activée après une recherche.
-- `:s/occurrence/nouvelle occurrence` : remplacer une occurrence (sera remplacée sur toute la ligne)
+- `<leader>c` -> Actions sur le code : LSP (_rename_, _action_, _hints_, diagnostics flottants), annotations **Neogen**, commentaires
+- `<leader>b` -> Actions sur les _Buffers_ : Navigation, fermeture, épinglage, tri, liste
+- `<leader>f` -> Actions sur les fichiers : Recherche fichiers/texte, TODOs, historique
+- `<leader>n` -> Navigation : **Aerial**, **Neotree**, saut vers erreur suivante/précédente
+- `<leader>d`-> Diagnostics : **Trouble** (liste), saut entre diagnostics
+- `<leader>u` -> UI: Thème, Zen mode, _toggle inlay hints_ global, _nohlsearch_
+- `<leader>l` -> **Lazy** : _Update_, _sync_, _open_
+- `<leader>m` -> Messages : **Noice** (historique, erreurs, stats)
 
-## _Spelling_
+## Prévoir
 
-- `zg` : Ajoute un mot au dictionnaire personnalisé
-- `z=` : Suggestions de _spelling_
+### Réorganisation des groupes
 
-## _Folding_
-
-- `za` : Ouverture/fermeture du folding sous le curseur
-- `zR` : Ouvre tous les foldings
-
-## Au niveau des _buffers_
-
-### Navigation entre buffers
-
-- `<leader>b1` à `<leader>b9` : Accéder directement au _buffer_ N°1 à 9
-- `<leader>b0` : Se rendre au dernier _buffer_
-- `<leader>bn` : _Buffer_ suivant
-- `<leader>bp` : _Buffer_ précédent
+- `<leader>e` (**Neotree**) → `<leader>n` (Navigation), avec **Aerial**.
+- `<leader>n` (**Noice**) → `<leader>m` (**Messages**).
+- `<leader>t` (thème) et `<leader>h` (_hlsearch_) → `<leader>u` (UI), avec le _toggle hints_ global `<leader>uI`.
 
 ### Fermeture de buffers
 
-- `<leader>bcc` : Ferme le _buffer_ courant
-- `<leader>bca` : Ferme tous les _buffers_ sauf le courant
-- `<leader>bcp` : Ferme tous les _buffers_ sauf le courant ou les épinglés
-- `<leader>bcP` : Ferme tous les _buffers_ sauf les épinglés
-- `<leader>bcl` : Ferme les _buffers_ à gauche du buffer actuel
-- `<leader>bcr` : Ferme les _buffers_ à droite du buffer actuel
+Les raccourcis `<leader>bcc`, `<leader>bca`… simplifiés en `<leader>bx` (fermer), `<leader>ba` (tous sauf actuel), etc. (des lettres plus mnémotechniques que des combinaisons avec `c`.
 
-### Épinglage et tri
+### Diagnostics — deux niveaux
 
-- `<leader>bP` : Épingler/désépingler un _buffer_
-- `<leader>bo` : Trier les _buffers_ par nom
-
-### Liste des buffers
-
-- `<leader>bl` : Liste des _buffers_ ouverts (via Telescope)
-
-## Recherche au niveau des fichiers
-
-- `<leader>ff` : recherche de fichier
-- `<leader>fg` : recherche de texte au niveau du projet
-- `<leader>ao` : ouvre une fenêtre `aerial` (navigation dans la structure du fichier courant)
-
-## Mapping de LSP:
-
-- `gd` (ou _Go to Definition_) : sur une variable, nom de fonction, etc., permet de se rendre à l'endroit ou cet élément est défini.
-- `gD` (ou _Go to Definition_) : se rendre sur la définition d'un symbole.
-- `gr` (ou _Go to Reference_) : affiche tous les endroits où il est fait référence à l'élément (ouverture d'un menu de navigation avec la liste des lignes où se situe la référence.
-- `K` : affiche une documentation propre à l'élément (_docstring_, signature, type, commentaire associé).
-- ̀̀`<leader>ca` (ou _Code Action_) : affiche un menu contextuel offrant diverses actions réalisables (_quick fixes_, _refactoring_, _imports automatiques_, corrections **LSP**).
-- `<leader>cr` (ou _Code Rename_) : Renomme (de façon intelligente) un élément sur l'ensemble du projet.
-- `<leader>cw` (ou _Code Warning_) : Affiche le _warning_ de la ligne courante
-
-## Diagnostics
-
-- `<leader>ds` : Ouverture de Trouble avec split.
-- `<leader>dd` : Ouverture de Trouble sans split.
-
-## NeoTree
-
-- `?` : Aide pour les commandes
-- `<leader>ee` : Ouvre **Neotree**
-- `<leader>eb` : Liste des buffers ouverts (dans une fenêtre flottante)
-- `<leader>eg` : Liste des buffers modifiés (git status - dans une fenêtre flottante)
-- `<` et `>` : Navigation entre sources (`filesystem`, `buffers`, `git_status`)
-- `.` : Passe le répertoire sélectionné comme répertoire racine
-- `C` : Ferme le noeud
-- `z` : ferme tous les noeuds
-- `S` : Ouvre le fichier sélectionné dans un buffer avec split horizontal
-- `s` : Idem, mais dans un split vertical
-- `[g` et `]g` : Navigation entre les fichiers modifiés (git status)
-- `R` : Rafraîchit la vue
-- `o` : Pour modifier l'ordre d'affichage (menu flottant)
-- `/` : Rechercher un fichier
-- `D` : Recherche un répertoire
-
-## Actions sur les fichiers
-
-- `a` : Ajout d'un fichier
-- `A` : Ajout d'une répertoire
-- `d` : Suppression du répertoire ou du fichier
-- `i` : Affiche des informations sur un fichier ou répertoire
-- `r` : Renomme le fichier ou le répertoire
-- `b` : Renomme le fichier sans l'extension
-- `P` : Prévisualisation d'un fichier
+- `<leader>dl` et `<leader>ds` dans `keymaps.lua` pour \*_Trouble_ (global).
+- `<leader>dd`, `<leader>dn`, `<leader>dp` dans `on_attach.lua` pour le flottant et la navigation entre diagnostics (_buffer_-local).
+- **Which-key** doit fusionner les deux dans le même groupe `<leader>d`.

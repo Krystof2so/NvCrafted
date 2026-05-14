@@ -1,115 +1,327 @@
--- ************************
--- * lua/core/keymaps.lua *
--- ************************
+-- ***********************************************************************
+-- * lua/core/keymaps.lua                                               *
+-- *                                                                    *
+-- * Mappings globaux de NvCrafted.                                     *
+-- * Organisation par fonctionnalité, pas par plugin.                   *
+-- *                                                                    *
+-- * Groupes <leader> :                                                 *
+-- *   <leader>c  →  Code        (LSP + annotations + commentaires)     *
+-- *   <leader>b  →  Buffers     (navigation, fermeture, tri)           *
+-- *   <leader>f  →  Fichiers    (recherche, grep, TODOs)               *
+-- *   <leader>n  →  Navigation  (Neotree, Aerial, structure)           *
+-- *   <leader>d  →  Diagnostics (Trouble, flottant, saut)              *
+-- *   <leader>u  →  UI          (thème, zen, hints global, hlsearch)   *
+-- *   <leader>m  →  Messages    (Noice — historique, erreurs, stats)   *
+-- *   <leader>l  →  Lazy        (update, sync, open)                   *
+-- *                                                                    *
+-- * Mappings buffer-local LSP : core/lsp/on_attach.lua                 *
+-- * (nécessitent bufnr, définis à l'attachement LSP)                   *
+-- ***********************************************************************
 
 vim.g.mapleader = " "
 local map = vim.keymap.set
 
--- **************
--- * Raccourcis *
--- **************
+-- ======================================================================
+-- <leader>c — Code
+-- Actions sur le code : LSP, annotations, commentaires.
+-- Les mappings LSP buffer-local (<leader>ca, cr, ci) sont dans
+-- on_attach.lua car ils nécessitent bufnr. Ils apparaissent néanmoins
+-- dans which-key grâce à leur enregistrement dans on_attach.
+-- ======================================================================
 
--- Raccourcis utilitaires
-map("n", "<leader>h", ":nohlsearch<CR>", { desc = "Suppression surlignage recherche" })
-map("n", "<leader>t", function()
-	require("core.theme").preview_with_telescope()
-end, { desc = "Sélectionner un thème" })
-map("n", "<leader>z", ":ZenMode<CR>", { desc = "Toggle Zen Mode" })
+-- Annotations (Neogen)
+map("n", "<leader>cf", function()
+	require("neogen").generate({ type = "func" })
+end, { desc = "Annoter la fonction", silent = true })
+map("n", "<leader>cc", function()
+	require("neogen").generate({ type = "class" })
+end, { desc = "Annoter la classe", silent = true })
+map("n", "<leader>ct", function()
+	require("neogen").generate({ type = "type" })
+end, { desc = "Annoter le type", silent = true })
+map("n", "<leader>cF", function()
+	require("neogen").generate({ type = "file" })
+end, { desc = "Annoter le fichier", silent = true })
 
--- Gestion des buffers
-map("n", "<leader>b", "", { desc = " Buffers" })
--- Navigation entre buffers
-map("n", "<leader>bn", ":BufferNext<CR>", { desc = "Buffer suivant" })
-map("n", "<leader>bp", ":BufferPrevious<CR>", { desc = "Buffer précédent" })
-map("n", "<leader>b0", ":BufferLast<CR>", { desc = "Dernier buffer" })
-map("n", "<leader>b1", ":BufferGoto 1<CR>", { desc = "Buffer N°1" })
-map("n", "<leader>b2", ":BufferGoto 2<CR>", { desc = "Buffer N°2" })
-map("n", "<leader>b3", ":BufferGoto 3<CR>", { desc = "Buffer N°3" })
-map("n", "<leader>b4", ":BufferGoto 4<CR>", { desc = "Buffer N°4" })
-map("n", "<leader>b5", ":BufferGoto 5<CR>", { desc = "Buffer N°5" })
-map("n", "<leader>b6", ":BufferGoto 6<CR>", { desc = "Buffer N°6" })
-map("n", "<leader>b7", ":BufferGoto 7<CR>", { desc = "Buffer N°7" })
-map("n", "<leader>b8", ":BufferGoto 8<CR>", { desc = "Buffer N°8" })
-map("n", "<leader>b9", ":BufferGoto 9<CR>", { desc = "Buffer N°9" })
--- Fermeture de buffers
-map("n", "<leader>bc", "", { desc = "Fermeture de buffer(s)" })
-map("n", "<leader>bca", ":BufferCloseAllButCurrent<CR>", { desc = "Fermer tous SAUF actuel" })
-map("n", "<leader>bcc", ":BufferClose<CR>", { desc = "Fermer buffer actuel" })
-map("n", "<leader>bcp", ":BufferCloseAllButCurrentOrPinned<CR>", { desc = "Fermer tous SAUF actuel/épinglés" })
-map("n", "<leader>bcP", ":BufferCloseAllButPinned<CR>", { desc = "Fermer tous SAUF épinglés" })
-map("n", "<leader>bcl", ":BufferCloseBuffersLeft<CR>", { desc = "Fermer buffers à GAUCHE" })
-map("n", "<leader>bcr", ":BufferCloseBuffersRight<CR>", { desc = "Fermer buffers à DROITE" })
+-- ======================================================================
+-- <leader>b — Buffers
+-- ======================================================================
+
+-- Navigation
+map("n", "<leader>bn", ":BufferNext<CR>", { desc = "󰒭 Suivant", silent = true })
+map("n", "<leader>bp", ":BufferPrevious<CR>", { desc = "󰒮 Précédent", silent = true })
+map("n", "<leader>b0", ":BufferLast<CR>", { desc = "󰮱 Dernier buffer", silent = true })
+map("n", "<leader>b1", ":BufferGoto 1<CR>", { desc = "Buffer 1", silent = true })
+map("n", "<leader>b2", ":BufferGoto 2<CR>", { desc = "Buffer 2", silent = true })
+map("n", "<leader>b3", ":BufferGoto 3<CR>", { desc = "Buffer 3", silent = true })
+map("n", "<leader>b4", ":BufferGoto 4<CR>", { desc = "Buffer 4", silent = true })
+map("n", "<leader>b5", ":BufferGoto 5<CR>", { desc = "Buffer 5", silent = true })
+map("n", "<leader>b6", ":BufferGoto 6<CR>", { desc = "Buffer 6", silent = true })
+map("n", "<leader>b7", ":BufferGoto 7<CR>", { desc = "Buffer 7", silent = true })
+map("n", "<leader>b8", ":BufferGoto 8<CR>", { desc = "Buffer 8", silent = true })
+map("n", "<leader>b9", ":BufferGoto 9<CR>", { desc = "Buffer 9", silent = true })
+-- Fermeture
+map("n", "<leader>bx", ":BufferClose<CR>", { desc = "󰅖 Fermer actuel", silent = true })
+map("n", "<leader>ba", ":BufferCloseAllButCurrent<CR>", { desc = "󰅖 Fermer tous sauf actuel", silent = true })
+map(
+	"n",
+	"<leader>bq",
+	":BufferCloseAllButCurrentOrPinned<CR>",
+	{ desc = "󰅖 Fermer sauf actuel/épinglés", silent = true }
+)
+map("n", "<leader>bQ", ":BufferCloseAllButPinned<CR>", { desc = "󰅖 Fermer sauf épinglés", silent = true })
+map("n", "<leader>b<", ":BufferCloseBuffersLeft<CR>", { desc = "󰅘 Fermer à gauche", silent = true })
+map("n", "<leader>b>", ":BufferCloseBuffersRight<CR>", { desc = "󰅙 Fermer à droite", silent = true })
 -- Épinglage et tri
-map("n", "<leader>bP", ":BufferPin<CR>", { desc = "Épingler/désépingler buffer" })
-map("n", "<leader>bo", ":BufferOrderByName<CR>", { desc = "Trier buffers par nom" })
--- Liste des buffers (Telescope)
-map("n", "<leader>bl", ":Telescope buffers<CR>", { desc = "Liste des buffers (Telescope)" })
+map("n", "<leader>bP", ":BufferPin<CR>", { desc = "󰐃 Épingler/désépingler", silent = true })
+map("n", "<leader>bo", ":BufferOrderByName<CR>", { desc = "󰒺 Trier par nom", silent = true })
+-- Liste
+map("n", "<leader>bl", ":Telescope buffers<CR>", { desc = "󰈞 Liste (Telescope)", silent = true })
 
--- aerial
-map("n", "<leader>a", "", { desc = "Aerial" })
-map("n", "<leader>ao", ":AerialOpen<CR>", { desc = "Ouvre Aerial" })
+-- ======================================================================
+-- <leader>f — Fichiers
+-- Recherche et exploration de fichiers et de contenu.
+-- ======================================================================
+map("n", "<leader>ff", ":Telescope find_files<CR>", {
+	desc = "󰈞 Chercher un fichier",
+	silent = true,
+})
+map("n", "<leader>fg", ":Telescope live_grep<CR>", {
+	desc = "󰊄 Rechercher du texte (grep)",
+	silent = true,
+})
+map("n", "<leader>fr", ":Telescope oldfiles<CR>", {
+	desc = "󰋚 Fichiers récents",
+	silent = true,
+})
+map("n", "<leader>ft", function()
+	vim.cmd("TodoTelescope cwd=" .. vim.fn.getcwd())
+end, { desc = "󰄲 Rechercher TODOs/FIX/BUG", silent = true })
+map("n", "<leader>fk", ":Telescope keymaps<CR>", {
+	desc = "󰌌 Explorer les raccourcis",
+	silent = true,
+})
+map("n", "<leader>fh", ":Telescope help_tags<CR>", {
+	desc = "󰋖 Aide Neovim",
+	silent = true,
+})
+map("n", "<leader>fc", ":Telescope commands<CR>", {
+	desc = "󰘳 Commandes disponibles",
+	silent = true,
+})
+map("n", "<leader>fo", ":Telescope vim_options<CR>", {
+	desc = "󰒓 Options Neovim",
+	silent = true,
+})
 
--- Lazy.nvim
-map("n", "<leader>l", "", { desc = " Lazy" }) -- mapping “vide” juste pour le groupe
-map("n", "<leader>ll", ":Lazy<CR>", { desc = "Ouverture de Lazy" })
-map("n", "<leader>lu", ":Lazy update<CR>", { desc = "Lazy update" })
-map("n", "<leader>ls", ":Lazy sync<CR>", { desc = "Lazy sync" })
+-- ======================================================================
+-- <leader>n — Navigation
+-- Déplacement dans la structure du projet et du code.
+-- ======================================================================
 
--- Neogen — génération d'annotations
-map("n", "<leader>c", "", { desc = "Neogen"})
-map("n", "<leader>cf", function() require("neogen").generate({ type = "func" })  end, { desc = "Annoter la fonction" })
-map("n", "<leader>cc", function() require("neogen").generate({ type = "class" }) end, { desc = "Annoter la classe"   })
-map("n", "<leader>ct", function() require("neogen").generate({ type = "type" })  end, { desc = "Annoter le type"     })
-map("n", "<leader>cF", function() require("neogen").generate({ type = "file" })  end, { desc = "Annoter le fichier"  })
-
--- Todo-comments
-map("n", "<leader>ft", ":TodoTelescope cwd=" .. vim.fn.getcwd() .. "<CR>", { desc = "Rechercher les TODOs" })
 -- Neotree
-map("n", "<leader>e", "", { desc = " Neotree" })
-map("n", "<leader>ee", ":Neotree<CR>", { desc = "Ouverture de Neotree" })
-map("n", "<leader>eb", ":Neotree focus buffers float<CR>", { desc = "Liste des buffers ouverts" })
-map("n", "<leader>eg", ":Neotree focus git_status float<CR>", { desc = "Liste des buffers modifiés (Git status)" })
+map("n", "<leader>ne", ":Neotree<CR>", { desc = "󰙅 Ouvrir Neotree", silent = true })
+map("n", "<leader>nb", ":Neotree focus buffers float<CR>", {
+	desc = "󰈞 Buffers ouverts (Neotree)",
+	silent = true,
+})
+map("n", "<leader>ng", ":Neotree focus git_status float<CR>", {
+	desc = "󰊢 Git status (Neotree)",
+	silent = true,
+})
+-- Aerial (structure du fichier courant)
+map("n", "<leader>na", ":AerialOpen<CR>", {
+	desc = "󱘎 Structure du fichier (Aerial)",
+	silent = true,
+})
 
--- Noice
-map("n", "<leader>n", "", { desc = "Noice" })
-map("n", "<leader>nd", ":NoiceDisable<CR>", { desc = "Désactive Noice" })
-map("n", "<leader>nc", ":NoiceDismiss<CR>", { desc = "Ferme tous les messages visibles" })
-map("n", "<leader>na", ":NoiceEnable<CR>", { desc = "Réactive Noice" })
-map("n", "<leader>ne", ":NoiceErrors<CR>", { desc = "Affichage des messages d'erreurs" })
-map("n", "<leader>nh", ":NoiceHistory<CR>", { desc = "Historique des messages notifiés" })
-map("n", "<leader>nl", ":NoiceLast<CR>", { desc = "Dernier message notifié" })
-map("n", "<leader>ns", ":NoiceStats<CR>", { desc = "Affiche des statistiques de débogage" })
-map("n", "<Leader>nt", ":NoiceTelescope<CR>", { desc = "Ouvre l'historique dans Telescope" })
+-- ======================================================================
+-- <leader>d — Diagnostics
+-- Les mappings buffer-local (flottant, suivant, précédent) sont dans
+-- on_attach.lua. Seuls les mappings globaux sont ici.
+-- ======================================================================
+map("n", "<leader>dl", "<cmd>Trouble diagnostics<CR>", {
+	desc = "󰋼 Liste globale (Trouble)",
+	silent = true,
+})
+map("n", "<leader>ds", "<cmd>Trouble preview_split<CR>", {
+	desc = "󰋼 Liste avec aperçu (Trouble)",
+	silent = true,
+})
 
--- Telescope
-map("n", "<leader>f", "", { desc = "Telescope" })
-map("n", "<leader>ff", ":Telescope find_files<CR>", { desc = "Chercher fichiers" })
-map("n", "<leader>fg", ":Telescope live_grep<CR>", { desc = "Rechercher texte au niveau du projet" })
-map("n", "<leader>fh", ":Telescope help_tags<CR>", { desc = "Aide Neovim" })
-map("n", "<leader>fk", ":Telescope keymaps<CR>", { desc = "Keymaps" })
-map("n", "<leader>fc", ":Telescope commands<CR>", { desc = "Commandes" })
-map("n", "<leader>fo", ":Telescope vim_options<CR>", { desc = "Options Neovim" })
-map("n", "<leader>ft", ":TodoTelescope cwd=" .. vim.fn.getcwd() .. "<CR>", { desc = "Recherche les TODOs" })
+-- ======================================================================
+-- <leader>u — UI
+-- Tout ce qui modifie l'apparence ou le comportement de l'éditeur.
+-- ======================================================================
+map("n", "<leader>ut", function()
+	require("core.theme").preview_with_telescope()
+end, { desc = "󰏘 Changer de thème", silent = true })
+map("n", "<leader>uz", ":ZenMode<CR>", { desc = "󰰶 Toggle Zen Mode", silent = true })
+map("n", "<leader>uh", ":nohlsearch<CR>", {
+	desc = "󰹊 Effacer la surbrillance",
+	silent = true,
+})
+map("n", "<leader>uI", function()
+	-- Toggle global : affecte tous les buffers ouverts
+	local enabled = vim.lsp.inlay_hint.is_enabled()
+	vim.lsp.inlay_hint.enable(not enabled)
+end, { desc = "󰈈 Toggle inlay hints (global)", silent = true })
 
--- Trouble
-map("n", "<leader>d", "", { desc = " Diagnostics" })
-map("n", "<leader>ds", "<cmd>Trouble preview_split<CR>", { desc = "Trouble avec split" })
-map("n", "<leader>dd", "<cmd>Trouble diagnostics<CR>", { desc = "Trouble sans split" })
+-- ======================================================================
+-- <leader>m — Messages (Noice)
+-- Accès à l'historique et aux outils de notification.
+-- ======================================================================
+map("n", "<leader>mh", ":NoiceHistory<CR>", {
+	desc = "󰋚 Historique des messages",
+	silent = true,
+})
+map("n", "<leader>ml", ":NoiceLast<CR>", {
+	desc = "󰍩 Dernier message",
+	silent = true,
+})
+map("n", "<leader>me", ":NoiceErrors<CR>", {
+	desc = "󰅚 Messages d'erreur",
+	silent = true,
+})
+map("n", "<leader>ms", ":NoiceStats<CR>", {
+	desc = "󰄴 Statistiques de débogage",
+	silent = true,
+})
+map("n", "<leader>mt", ":NoiceTelescope<CR>", {
+	desc = "󰭎 Historique dans Telescope",
+	silent = true,
+})
+map("n", "<leader>mc", ":NoiceDismiss<CR>", {
+	desc = "󰅙 Fermer les notifications",
+	silent = true,
+})
+map("n", "<leader>md", ":NoiceDisable<CR>", {
+	desc = "󰒲 Désactiver Noice",
+	silent = true,
+})
+map("n", "<leader>ma", ":NoiceEnable<CR>", {
+	desc = "󰒳 Réactiver Noice",
+	silent = true,
+})
 
--- *************************************
--- * Groupe de mappings pour Which-key *
--- *************************************
+-- ======================================================================
+-- <leader>l — Lazy
+-- ======================================================================
+map("n", "<leader>ll", ":Lazy<CR>", { desc = "󰒲 Ouvrir Lazy", silent = true })
+map("n", "<leader>lu", ":Lazy update<CR>", {
+	desc = "󰒿 Mettre à jour les plugins",
+	silent = true,
+})
+map("n", "<leader>ls", ":Lazy sync<CR>", {
+	desc = "󰓦 Synchroniser",
+	silent = true,
+})
 
-local ok, wk = pcall(require, "which-key")
-if ok then
-	wk.add({
-		a = { name = "Aerial" },
-		b = { name = "Buffers" },
-        c = { name = "Docstrings"},
-		d = { name = "Diagnostics" },
-		e = { name = "Neotree" },
-		f = { name = "Telescope" },
-		l = { name = "Lazy" },
-		n = { name = "Noice" },
-	}, { prefix = "<leader>", mode = "n" })
-end
+-- ======================================================================
+-- Which-key — Déclaration des groupes et descriptions
+-- ======================================================================
+vim.api.nvim_create_autocmd("User", {
+	pattern = "VeryLazy",
+	once = true,
+	callback = function()
+		local ok, wk = pcall(require, "which-key")
+		if not ok then
+			return
+		end
+
+		wk.add({
+
+			-- ----------------------------------------------------------------
+			-- Groupes de premier niveau
+			-- ----------------------------------------------------------------
+			{ "<leader>c", group = "Actions sur le code", icon = "󰅩 " },
+			{ "<leader>b", group = "Buffers", icon = "󰈞 " },
+			{ "<leader>f", group = "Fichiers", icon = "󰈔 " },
+			{ "<leader>n", group = "Navigation", icon = "󰋜 " },
+			{ "<leader>d", group = "Diagnostics", icon = "󰋼 " },
+			{ "<leader>u", group = "UI", icon = "󰏘 " },
+			{ "<leader>m", group = "Messages", icon = "󰍩 " },
+			{ "<leader>l", group = "Lazy", icon = "󰒲 " },
+
+			-- ----------------------------------------------------------------
+			-- <leader>c — Code
+			-- Les mappings LSP (ca, cr, ci) sont enregistrés dans on_attach
+			-- avec buffer=bufnr. Which-key les fusionne automatiquement ici.
+			-- ----------------------------------------------------------------
+			{ "<leader>cf", desc = "Annoter la fonction", icon = " " },
+			{ "<leader>cc", desc = "Annoter la classe", icon = " " },
+			{ "<leader>ct", desc = "Annoter le type", icon = " " },
+			{ "<leader>cF", desc = "Annoter le fichier", icon = " " },
+
+			-- ----------------------------------------------------------------
+			-- <leader>b — Buffers
+			-- ----------------------------------------------------------------
+			{ "<leader>bn", desc = "Suivant", icon = "󰒭 " },
+			{ "<leader>bp", desc = "Précédent", icon = "󰒮 " },
+			{ "<leader>b0", desc = "Dernier buffer", icon = "󰮱 " },
+			{ "<leader>bx", desc = "Fermer actuel", icon = "󰅖 " },
+			{ "<leader>ba", desc = "Fermer tous sauf actuel", icon = "󰅖 " },
+			{ "<leader>bq", desc = "Fermer sauf actuel/épinglés", icon = "󰅖 " },
+			{ "<leader>bQ", desc = "Fermer sauf épinglés", icon = "󰅖 " },
+			{ "<leader>b<", desc = "Fermer à gauche", icon = "󰅘 " },
+			{ "<leader>b>", desc = "Fermer à droite", icon = "󰅙 " },
+			{ "<leader>bP", desc = "Épingler/désépingler", icon = "󰐃 " },
+			{ "<leader>bo", desc = "Trier par nom", icon = "󰒺 " },
+			{ "<leader>bl", desc = "Liste (Telescope)", icon = "󰈞 " },
+
+			-- ----------------------------------------------------------------
+			-- <leader>f — Fichiers
+			-- ----------------------------------------------------------------
+			{ "<leader>ff", desc = "Chercher un fichier", icon = "󰈞 " },
+			{ "<leader>fg", desc = "Rechercher du texte (grep)", icon = "󰊄 " },
+			{ "<leader>fr", desc = "Fichiers récents", icon = "󰋚 " },
+			{ "<leader>ft", desc = "Rechercher TODOs/FIX/BUG", icon = "󰄲 " },
+			{ "<leader>fk", desc = "Explorer les raccourcis", icon = "󰌌 " },
+			{ "<leader>fh", desc = "Aide Neovim", icon = "󰋖 " },
+			{ "<leader>fc", desc = "Commandes disponibles", icon = "󰘳 " },
+			{ "<leader>fo", desc = "Options Neovim", icon = "󰒓 " },
+
+			-- ----------------------------------------------------------------
+			-- <leader>n — Navigation
+			-- ----------------------------------------------------------------
+			{ "<leader>ne", desc = "Ouvrir Neotree", icon = "󰙅 " },
+			{ "<leader>nb", desc = "Buffers ouverts (Neotree)", icon = "󰈞 " },
+			{ "<leader>ng", desc = "Git status (Neotree)", icon = "󰊢 " },
+			{ "<leader>na", desc = "Structure du fichier (Aerial)", icon = "󱘎 " },
+
+			-- ----------------------------------------------------------------
+			-- <leader>d — Diagnostics (globaux)
+			-- Les mappings buffer-local (dd, dn, dp) sont dans on_attach.
+			-- ----------------------------------------------------------------
+			{ "<leader>dl", desc = "Liste globale (Trouble)", icon = "󰋼 " },
+			{ "<leader>ds", desc = "Liste avec aperçu (Trouble)", icon = "󰋼 " },
+
+			-- ----------------------------------------------------------------
+			-- <leader>u — UI
+			-- ----------------------------------------------------------------
+			{ "<leader>ut", desc = "Changer de thème", icon = "󰏘 " },
+			{ "<leader>uz", desc = "Toggle Zen Mode", icon = "󰰶 " },
+			{ "<leader>uh", desc = "Effacer la surbrillance", icon = "󰹊 " },
+			{ "<leader>uI", desc = "Toggle inlay hints (global)", icon = "󰈈 " },
+
+			-- ----------------------------------------------------------------
+			-- <leader>m — Messages
+			-- ----------------------------------------------------------------
+			{ "<leader>mh", desc = "Historique des messages", icon = "󰋚 " },
+			{ "<leader>ml", desc = "Dernier message", icon = "󰍩 " },
+			{ "<leader>me", desc = "Messages d'erreur", icon = "󰅚 " },
+			{ "<leader>ms", desc = "Statistiques de débogage", icon = "󰄴 " },
+			{ "<leader>mt", desc = "Historique dans Telescope", icon = "󰭎 " },
+			{ "<leader>mc", desc = "Fermer les notifications", icon = "󰅙 " },
+			{ "<leader>md", desc = "Désactiver Noice", icon = "󰒲 " },
+			{ "<leader>ma", desc = "Réactiver Noice", icon = "󰒳 " },
+
+			-- ----------------------------------------------------------------
+			-- <leader>l — Lazy
+			-- ----------------------------------------------------------------
+			{ "<leader>ll", desc = "Ouvrir Lazy", icon = "󰒲 " },
+			{ "<leader>lu", desc = "Mettre à jour les plugins", icon = "󰒿 " },
+			{ "<leader>ls", desc = "Synchroniser", icon = "󰓦 " },
+		}, { prefix = "<leader>", mode = "n" })
+	end,
+})

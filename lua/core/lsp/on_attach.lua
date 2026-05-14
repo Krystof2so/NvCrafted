@@ -5,71 +5,116 @@
 -- * C'est le point de jonction entre :                            *
 -- *    - le serveur LSP (client)                                  *
 -- *    - le buffer courant (bufnr)                                *
--- * Toute logique dépendante du LSP et du buffer doit             *
--- * s'implémenter ici.                                            *
+-- *                                                               *
+-- * Contient uniquement ce qui nécessite bufnr :                  *
+-- * - options buffer-local                                        *
+-- * - inlay hints                                                 *
+-- * - mappings LSP buffer-local                                   *
+-- *                                                               *
+-- * Organisation des mappings : par fonctionnalité, pas par       *
+-- * plugin. Cohérente avec core/keymaps.lua.                      *
+-- *                                                               *
+-- * Groupes which-key déclarés ici pour les mappings buffer-local *
+-- * qui ne peuvent pas l'être dans keymaps.lua (bufnr requis).    *
 -- *****************************************************************
 
 local M = {}
+local map = vim.keymap.set
 
 function M.on_attach(client, bufnr)
-	-- Highlights de diagnostics adaptatifs au thème courant.
-	-- Le module détecte automatiquement la famille du thème actif
-	-- (rose-pine, nordic, evergarden, ou fallback).
+	-- ============================================================
+	-- Highlights adaptatifs au thème courant
+	-- ============================================================
 	require("core.highlights").setup()
 
-	-- ------------------------------------------------------------
-	-- Options buffer-local liées au LSP
-	-- ------------------------------------------------------------
-	-- Utilisation de l'omnifunc LSP pour la complétion native
+	-- ============================================================
+	-- Options buffer-local
+	-- ============================================================
 	vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
 
-	-- ------------------------------------------------------------
-	-- Active les inlay hints natifs si le serveur les supporte
-	-- ------------------------------------------------------------
+	-- ============================================================
+	-- Inlay hints natifs (Neovim 0.10+)
+	-- Activés automatiquement si le serveur les supporte.
+	-- Toggle buffer-local : <leader>ci
+	-- Toggle global       : <leader>uI  (core/keymaps.lua)
+	-- ============================================================
 	if client:supports_method("textDocument/inlayHint") then
 		vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
 	end
 
-	-- ------------------------------------------------------------
-	-- Mappings LSP (buffer-local)
-	-- ------------------------------------------------------------
+	-- ============================================================
+	-- Mappings buffer-local
+	-- ============================================================
 	local opts = { buffer = bufnr, silent = true }
 
-	-- Navigation
-	vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-	vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
-	vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+	-- ----------------------------------------------------------
+	-- Navigation dans le code (sans préfixe <leader>)
+	-- Conventions Neovim standard : g + lettre
+	-- ----------------------------------------------------------
+	map("n", "gd", vim.lsp.buf.definition, vim.tbl_extend("force", opts, { desc = "Aller à la définition" }))
+	map("n", "gD", vim.lsp.buf.declaration, vim.tbl_extend("force", opts, { desc = "Aller à la déclaration" }))
+	map("n", "gr", vim.lsp.buf.references, vim.tbl_extend("force", opts, { desc = "Références du symbole" }))
+	map("n", "gi", vim.lsp.buf.implementation, vim.tbl_extend("force", opts, { desc = "Aller à l'implémentation" }))
+	map("n", "K", function()
+		vim.lsp.buf.hover({ border = "rounded", max_width = 80, max_height = 20 })
+	end, vim.tbl_extend("force", opts, { desc = "Documentation (hover)" }))
 
-	-- Documentation
-	vim.keymap.set("n", "K", function()
-		vim.lsp.buf.hover({
-			border = "rounded",
-			max_width = 80,
-			max_height = 20,
-		})
-	end, opts)
+	-- ----------------------------------------------------------
+	-- <leader>c — Actions sur le code (LSP)
+	-- Le groupe complet <leader>c est déclaré dans keymaps.lua.
+	-- Les mappings Neogen (<leader>cf, cc, ct, cF) y sont aussi.
+	-- ----------------------------------------------------------
+	map(
+		"n",
+		"<leader>ca",
+		vim.lsp.buf.code_action,
+		vim.tbl_extend("force", opts, { desc = "󰌵 Actions (code action)" })
+	)
+	map("n", "<leader>cr", vim.lsp.buf.rename, vim.tbl_extend("force", opts, { desc = "󰑕 Renommer le symbole" }))
+	map("n", "<leader>ci", function()
+		vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
+	end, vim.tbl_extend("force", opts, { desc = "󰈈 Toggle hints (buffer)" }))
 
-	-- Actions au niveau du code
-	vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, opts)
-	vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
-
-	-- Diagnostics flottants
-	vim.keymap.set("n", "<leader>cw", function()
+	-- ----------------------------------------------------------
+	-- <leader>d — Diagnostics (buffer-local)
+	-- Le diagnostic flottant est buffer-local (bufnr requis).
+	-- La liste globale (Trouble) est dans keymaps.lua.
+	-- ----------------------------------------------------------
+	map("n", "<leader>dd", function()
 		vim.diagnostic.open_float(nil, {
-			bufnr = bufnr, -- buffer local
+			bufnr = bufnr,
 			border = "rounded",
 			max_width = 80,
 			max_height = 20,
-			title = "Diagnostics",
+			title = " Diagnostics",
 			title_pos = "center",
 			focusable = false,
 		})
-	end, opts)
+	end, vim.tbl_extend("force", opts, { desc = "󰙨 Diagnostic flottant" }))
+	map("n", "<leader>dn", function()
+		vim.diagnostic.jump({ count = 1, float = { border = "rounded" } })
+	end, vim.tbl_extend("force", opts, { desc = "󰼧 Diagnostic suivant" }))
+	map("n", "<leader>dp", function()
+		vim.diagnostic.jump({ count = -1, float = { border = "rounded" } })
+	end, vim.tbl_extend("force", opts, { desc = "󰼨 Diagnostic précédent" }))
 
-	-- Activer/désactiver les hints
-	vim.keymap.set("n", "<leader>ci", function()
-		vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
-	end, vim.tbl_extend("force", opts, { desc = "Toggle inlay hints" }))
+	-- ----------------------------------------------------------
+	-- Enregistrement which-key des mappings buffer-local
+	-- Déclaré ici car which-key doit connaître le buffer.
+	-- ----------------------------------------------------------
+	local ok, wk = pcall(require, "which-key")
+	if ok then
+		wk.add({
+			-- Sous-groupe LSP dans <leader>c
+			{ "<leader>ca", buffer = bufnr, desc = "Actions (code action)", icon = "󰌵" },
+			{ "<leader>cr", buffer = bufnr, desc = "Renommer le symbole", icon = "󰑕" },
+			{ "<leader>ci", buffer = bufnr, desc = "Toggle hints (buffer)", icon = "󰈈" },
+			-- Sous-groupe diagnostics dans <leader>d
+			{ "<leader>dd", buffer = bufnr, desc = "Diagnostic flottant", icon = "󰙨" },
+			{ "<leader>dn", buffer = bufnr, desc = "Diagnostic suivant", icon = "󰼧" },
+			{ "<leader>dp", buffer = bufnr, desc = "Diagnostic précédent", icon = "󰼨" },
+		})
+	end
 end
 
 return M
