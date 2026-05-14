@@ -37,10 +37,35 @@ api.nvim_create_autocmd("BufReadPost", {
 	end,
 })
 
+-- Ouvre les buffers d'aide des plugins en split vertical
+--api.nvim_create_autocmd("BufEnter", {
+--	group = general_group,
+--	pattern = "*",
+--	callback = function()
+--		local bufname = vim.api.nvim_buf_get_name(0)
+		-- Vérifier que c'est un buffer d'aide ET qu'il est dans un dossier /doc/ (typique des plugins)
+--		if vim.bo.buftype == "help" and bufname:match("/doc/") then
+--			local win = vim.api.nvim_get_current_win()
+--			local config = vim.api.nvim_win_get_config(win)
+			-- Si la fenêtre n'est PAS déjà un split vertical
+--			if not config.vertical then
+				-- Fermer la fenêtre actuelle (split horizontal)
+--				vim.cmd("close!")
+				-- Rouvrir le buffer dans un split vertical à droite
+--				vim.cmd("vert rightbelow split " .. vim.fn.fnameescape(bufname))
+--				vim.api.nvim_win_set_width(0, 85)
+--			else
+				-- Si déjà vertical, juste ajuster la largeur
+--				vim.api.nvim_win_set_width(0, 85)
+--			end
+--		end
+--	end,
+--})
+
 -- Ouvre les buffers d'aide en split vertical à droite
 api.nvim_create_autocmd("FileType", {
 	group = general_group,
-	pattern = "help", -- Spécifique aux buffers d'aide
+	pattern = { "help", "markdown" }, -- Spécifique aux buffers d'aide
 	callback = function()
 		vim.cmd("wincmd L") -- déplace le split en vertical à droite
 		vim.api.nvim_win_set_width(0, 85) -- largeur fixe, lisible sans être envahissante
@@ -110,7 +135,7 @@ api.nvim_create_autocmd("VimResized", {
 -- Fermeture rapide des buffers utilitaires ('q' au lieu de ':q')
 api.nvim_create_autocmd("FileType", {
 	group = ui_group,
-	pattern = { "man", "qf", "lspinfo", "checkhealth", "help*" },
+	pattern = { "man", "qf", "lspinfo", "checkhealth", "help", "markdown" },
 	callback = function()
 		vim.keymap.set("n", "q", "<cmd>close<CR>", {
 			buffer = true,
