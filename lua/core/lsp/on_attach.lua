@@ -28,11 +28,6 @@ function M.on_attach(client, bufnr)
 	require("core.highlights").setup()
 
 	-- ============================================================
-	-- Options buffer-local
-	-- ============================================================
-	vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
-
-	-- ============================================================
 	-- Inlay hints natifs (Neovim 0.10+)
 	-- Activés automatiquement si le serveur les supporte.
 	-- Toggle buffer-local : <leader>ci
