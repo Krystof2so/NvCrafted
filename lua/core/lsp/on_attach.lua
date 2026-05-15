@@ -38,6 +38,7 @@ function M.on_attach(client, bufnr)
 	-- Toggle buffer-local : <leader>ci
 	-- Toggle global       : <leader>uI  (core/keymaps.lua)
 	-- ============================================================
+	-- Tester si le client existe avant de l'activer :
 	if client and client:supports_method("textDocument/inlayHint") then
 		vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
 	end
@@ -65,9 +66,14 @@ function M.on_attach(client, bufnr)
 	-- Les mappings Neogen (<leader>cf, cc, ct, cF) y sont aussi.
 	-- ----------------------------------------------------------
 	map("n", "<leader>cr", vim.lsp.buf.rename, vim.tbl_extend("force", opts, { desc = "󰑕 Renommer le symbole" }))
+	-- Toggle buffer-local : uniquement disponible si LSP attaché
 	map("n", "<leader>ci", function()
 		vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = 0 }), { bufnr = 0 })
 	end, vim.tbl_extend("force", opts, { desc = "󰈈 Toggle hints (buffer)" }))
+	map("n", "<leader>xI", function()
+		local enabled = vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr })
+		vim.lsp.inlay_hint.enable(not enabled, { bufnr = bufnr })
+	end, vim.tbl_extend("force", opts, { desc = "󰈈 Toggle inlay hints" }))
 
 	-- ----------------------------------------------------------
 	-- <leader>d — Diagnostics (buffer-local)
@@ -106,6 +112,8 @@ function M.on_attach(client, bufnr)
 			{ "<leader>dd", buffer = bufnr, desc = "Diagnostic flottant", icon = "󰙨" },
 			{ "<leader>dn", buffer = bufnr, desc = "Diagnostic suivant", icon = "󰼧" },
 			{ "<leader>dp", buffer = bufnr, desc = "Diagnostic précédent", icon = "󰼨" },
+			-- Sous-groupe LSP dans <leader>x
+			{ "<leader>xI", desc = "Toggle inlay hints (global)", icon = "󰈈 " },
 		})
 	end
 end

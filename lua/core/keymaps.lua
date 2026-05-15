@@ -162,11 +162,6 @@ map("n", "<leader>xh", ":nohlsearch<CR>", {
 	desc = "󰹊 Effacer la surbrillance",
 	silent = true,
 })
-map("n", "<leader>xI", function()
-	-- Toggle global : affecte tous les buffers ouverts
-	local enabled = vim.lsp.inlay_hint.is_enabled()
-	vim.lsp.inlay_hint.enable(not enabled)
-end, { desc = "󰈈 Toggle inlay hints (global)", silent = true })
 
 -- ======================================================================
 -- <leader>m — Messages (Noice)
@@ -311,7 +306,6 @@ vim.api.nvim_create_autocmd("User", {
 			{ "<leader>xt", desc = "Changer de thème", icon = "󰏘 " },
 			{ "<leader>xz", desc = "Toggle Zen Mode", icon = "󰰶 " },
 			{ "<leader>xh", desc = "Effacer la surbrillance", icon = "󰹊 " },
-			{ "<leader>xI", desc = "Toggle inlay hints (global)", icon = "󰈈 " },
 
 			-- ----------------------------------------------------------------
 			-- <leader>m — Messages
