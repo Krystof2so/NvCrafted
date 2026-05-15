@@ -22,7 +22,13 @@ return {
 			local servers = require("core.lsp.servers")
 			-- Récupération des capabilities propres à NvCrafted
 			local capabilities = require("core.lsp.capabilities").get()
-			local on_attach = require("core.lsp.on_attach").on_attach
+            local on_attach = require("core.lsp.on_attach").on_attach
+
+            -- Configuration globale appliquée à tous les serveurs LSP
+            vim.lsp.config("*", {
+                capabilities = capabilities,
+                on_attach = on_attach,
+            })
 
 			-- Parcours de chaque serveur déclaré pour qu'il reconnaisse les mappings (on_attach) et les capabilities
 			for _, server in pairs(servers) do
