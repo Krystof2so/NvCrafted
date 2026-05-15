@@ -17,10 +17,21 @@
 -- *                                                                    *
 -- * Mappings buffer-local LSP : core/lsp/on_attach.lua                 *
 -- * (nécessitent bufnr, définis à l'attachement LSP)                   *
--- ***********************************************************************
+-- *                                                                    *
+-- * + Mapping généraux avec fonctionnalités spécifiques                *
+-- **********************************************************************
 
 vim.g.mapleader = " "
 local map = vim.keymap.set
+
+-- ======================================================================
+-- Mapping généraux avec fonctionnalités spécifiques (hors which-key)
+-- ======================================================================
+-- Sélection complète du fichier : <Alt-s>
+map("n", "<M-s>", "ggVG", {
+	desc = "󰒉 Sélectionner tout le fichier",
+	silent = true,
+})
 
 -- ======================================================================
 -- <leader>h - Aide (<h>elp)

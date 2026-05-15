@@ -14,6 +14,7 @@ Organisation par fonctionnalité, avec groupes `<leader>` et descriptions.
 - `<leader>u` — UI
 - `<leader>m` — Messages (Noice)
 - `<leader>l` — Lazy
+- Raccourcis pour des fonctionnalités spécifiques (hors `which-key`)
 
 ---
 
@@ -152,3 +153,11 @@ Gestion des plugins avec Lazy.nvim.
 | `<leader>ll` | Ouvrir Lazy               | `:Lazy`         |
 | `<leader>lu` | Mettre à jour les plugins | `:Lazy update`  |
 | `<leader>ls` | Synchroniser les plugins  | `:Lazy sync`    |
+
+---
+
+## Raccourcis pour des fonctionnalités spécifiques (hors `which-key`)
+
+| Raccourci | Description                   | Commande/Plugin |
+| --------- | ----------------------------- | --------------- |
+| `<Alt>s`  | Sélection complète du fichier | **N** : `ggVG`  |
