@@ -38,7 +38,7 @@ function M.on_attach(client, bufnr)
 	-- Toggle buffer-local : <leader>ci
 	-- Toggle global       : <leader>uI  (core/keymaps.lua)
 	-- ============================================================
-	if client:supports_method("textDocument/inlayHint") then
+	if client and client:supports_method("textDocument/inlayHint") then
 		vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
 	end
 
