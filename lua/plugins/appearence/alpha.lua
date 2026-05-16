@@ -6,15 +6,7 @@ return {
 			local alpha = require("alpha")
 			local dashboard = require("alpha.themes.dashboard")
 
-			-- ===========================
-			-- Configuration des couleurs
-			-- ===========================
-			vim.api.nvim_set_hl(0, "NvCraftedHeader", { fg = "#D08770" }) -- Couleur du header (orange clair)
-			vim.api.nvim_set_hl(0, "NvCraftedWelcome", { fg = "#EBCB8B" }) -- Message de bienvenue (jaune)
-			vim.api.nvim_set_hl(0, "NvCraftedButton", { fg = "#EBCB8B", bg = "#282A36" }) -- Boutons (jaune sur fond sombre)
-			vim.api.nvim_set_hl(0, "NvCraftedButtonShortcut", { fg = "#88C0D0", bold = true }) -- Raccourcis (bleu clair)
-			vim.api.nvim_set_hl(0, "NvCraftedFooter", { fg = "#5E81AC" }) -- Footer (bleu grisâtre)
-			vim.api.nvim_set_hl(0, "MyAsciiHeader", { fg = "#D08770" }) -- highlight header
+			-- Gestion des couleurs déléguée à 'lua/core/highlights/alpha_hl.lua'
 
 			-- =======================================
 			-- Header : Ascii Art + Message d'accueil
@@ -54,12 +46,12 @@ return {
 			-- Boutons : Actions principales
 			-- ==============================
 			dashboard.section.buttons.val = {
-				dashboard.button("h", "✅ Vérifier la configuration", ":checkhealth<CR>"),
+				dashboard.button("c", "✅ Vérifier la configuration", ":checkhealth<CR>"),
 				dashboard.button("u", "🔄 Mettre à jour les plugins", ":Lazy update<CR>"),
-				dashboard.button("m", "🔧  Gérer les LSP/Tools", ":Mason<CR>"),
-				dashboard.button("e", "🗃️  Ouvrir l'explorateur", ":Neotree<CR>"),
+				dashboard.button("t", "🔧 Gérer les LSP/Tools", ":Mason<CR>"),
+				dashboard.button("h", "📚 Documentation NvCrafted", ":NvCraftedDocs<CR>"),
+				dashboard.button("e", "🗃️ Ouvrir l'explorateur", ":Neotree<CR>"),
 				dashboard.button("n", "📄 Nouveau fichier", ":ene <BAR> startinsert <CR>"),
-				dashboard.button("f", "🔍 Rechercher des fichiers", ":Telescope find_files<CR>"),
 				dashboard.button("r", "⌛ Fichiers récents", ":Telescope oldfiles<CR>"),
 				dashboard.button("t", "🔍 Rechercher TODO, FIX, BUG, etc.", ":TodoTelescope<CR>"),
 				dashboard.button("q", "❌ Quitter NvCrafted", ":qa<CR>"),
