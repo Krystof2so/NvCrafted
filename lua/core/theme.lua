@@ -20,7 +20,7 @@ local M = {}
 -- ================================================================
 M.available = {
 	-- Variantes Rosé Pine
-	"rose-pine-main", -- main  (thème par défaut)
+	"rose-pine-main",      -- main  (thème par défaut)
 	"rose-pine-moon", -- moon
 	"rose-pine-dawn", -- dawn (clair)
 	-- Autres thèmes
@@ -31,7 +31,7 @@ M.available = {
 -- ================================================================
 -- = Thème appliqué au démarrage de NvCrafted                     =
 -- ================================================================
-M.default = "rose-pine"
+M.default = "rose-pine-main"
 
 -- ================================================================
 -- = Application d'un thème                                       =
@@ -39,11 +39,24 @@ M.default = "rose-pine"
 function M.apply(theme)
 	vim.cmd.colorscheme(theme)
 	-- Rafraîchit les highlights adaptatifs après chaque changement de thème.
-	-- pcall évite un crash si le module n'est pas encore chargé.
+    -- ColorScheme autocmd déclenche core.highlights.setup() automatiquement.
+	-- L'appel explicite ci-dessous couvre les cas où l'autocmd ne suffit pas
 	pcall(function()
 		require("core.highlights").setup()
 	end)
 end
+
+-- ================================================================
+-- = Auto-commande pour bénéficier des Highlights au démarrage    =
+-- ================================================================
+vim.api.nvim_create_autocmd("ColorScheme", {
+	pattern = "*",
+	callback = function()
+		pcall(function()
+			require("core.highlights").setup()
+		end)
+	end,
+})
 
 -- ================================================================
 -- = Picker Telescope avec prévisualisation temps réel            =
