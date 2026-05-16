@@ -1,4 +1,4 @@
-## Auto-commandes — Comportements automatiques (core.autocmds)
+# Comportements automatiques (core.autocmds)
 
 **NvCrafted** centralise les réactions automatiques de **Neovim** dans le fichier `lua/core/autocmds.lua`.
 

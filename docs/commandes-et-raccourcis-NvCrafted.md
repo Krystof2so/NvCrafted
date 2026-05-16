@@ -1,4 +1,4 @@
-# **Documentation des raccourcis NvCrafted**
+# Documentation des commandes et raccourcis propres à NvCrafted
 
 Organisation par fonctionnalité, avec groupes `<leader>` et descriptions.
 

@@ -27,10 +27,10 @@ local map = vim.keymap.set
 -- ======================================================================
 -- Mapping généraux avec fonctionnalités spécifiques (hors which-key)
 -- ======================================================================
--- Sélection complète du fichier : <Alt-s>
+-- Sélection complète du fichier
 map("n", "<M-s>", "ggVG", {
-	desc = "󰒉 Sélectionner tout le fichier",
-	silent = true,
+    desc = "󰒉 Sélectionner tout le fichier",
+    silent = true
 })
 
 -- ======================================================================

@@ -24,6 +24,9 @@ function M.setup()
 	pcall(function()
 		require("core.highlights.neo_tree_ls").setup()
 	end)
+	pcall(function()
+		require("core.highlights.telescope_hl").setup()
+	end)
 end
 
 return M

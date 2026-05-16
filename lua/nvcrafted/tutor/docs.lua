@@ -64,17 +64,33 @@ local function list_docs()
 	return files
 end
 
---- Formate un chemin en label lisible : "lsp-nvcrafted.md" → "LSP NvCrafted"
+--- Formate un chemin en label lisible : "commandes-et-raccourcis-NvCrafted.md" → "Commandes et raccourcis NvCrafted"
 local function to_label(path)
 	local name = vim.fn.fnamemodify(path, ":t:r") -- nom sans extension
-	-- Remplace les tirets/underscores par des espaces, met en Title Case
+	-- Remplace les tirets/underscores par des espaces
 	name = name:gsub("[-_]", " ")
-	name = name:gsub("(%a)([%w_']*)", function(first, rest)
-		return first:upper() .. rest
-	end)
+	-- Première lettre en majuscule
+	name = string.upper(string.sub(name, 1, 1)) .. string.sub(name, 2)
 	return name
 end
 
+-- Lire la première ligne du fichier .md et retourner une string : "# Titre du fichier" -> "Titre du fichier"
+local function first_heading(path)
+	local f = io.open(path, "r")
+	if not f then
+		return nil
+	end
+	local line = f:read("*l")
+	f:close()
+	if not line then
+		return nil
+	end
+	-- Supprime le préfixe "# " du titre Markdown
+	line = line:gsub("^#+%s*", "")
+	-- Remplace les tirets longs par des tirets simples
+	line = line:gsub("—", "-")
+	return line
+end
 -- ---------------------------------------------------------------------------
 -- Keymaps locaux au buffer docs
 -- ---------------------------------------------------------------------------
@@ -171,15 +187,36 @@ local function pick_with_telescope(files, labels, callback)
 		return false
 	end
 
-	local entries = {}
+	-- Tri alphabétique sur les labels
+	local indexed = {}
 	for i, path in ipairs(files) do
-		table.insert(entries, { label = labels[i], path = path })
+		table.insert(indexed, { label = labels[i], path = path })
+	end
+	table.sort(indexed, function(a, b)
+		return a.label < b.label
+	end)
+
+	-- Génère la table des entrées
+	local entries = {}
+	for i, item in ipairs(indexed) do
+		local heading = first_heading(item.path)
+		local label
+		if heading and heading ~= item.label then
+			label = string.format("%d. %s : %s ", i, item.label, heading)
+		else
+			label = string.format("%d. %s", i, item.label)
+		end
+		table.insert(entries, {
+			label = label,
+			short = string.format("%d. %s", i, item.label), -- partie à coloriser
+			path = item.path,
+		})
 	end
 
 	pickers
 		.new({}, {
-			prompt_title = "NvCrafted — Documentation",
-			sorting_strategy = "ascending", -- entrées dans l'ordre normal
+			prompt_title = "NvCrafted — 󰈙 Documentation",
+			sorting_strategy = "ascending", -- Conserve l'ordre trié précédemment
 			layout_config = {
 				prompt_position = "top", -- prompt en haut, curseur sur la première entrée
 			},
@@ -189,8 +226,16 @@ local function pick_with_telescope(files, labels, callback)
 				entry_maker = function(entry)
 					return {
 						value = entry.path,
-						display = entry.label,
+						--display = entry.label,
 						ordinal = entry.label,
+						display = function(_)
+							local short_len = vim.fn.strchars(entry.short) -- Nombre de caractères visuels dans entry.short
+							local byte_pos = vim.fn.byteidx(entry.label, short_len) -- Position en octets dans entry.label
+							return entry.label,
+								{
+									{ { 0, byte_pos }, "DiagnosticError" }, -- Applique le highlight de 0 à byte_pos
+								}
+						end,
 					}
 				end,
 			}),
@@ -227,6 +272,7 @@ function M.pick()
 		if not path then
 			return
 		end
+		M._create_win()
 		if is_open() then
 			render(path)
 		else
@@ -258,54 +304,54 @@ function M.open(path)
 		vim.api.nvim_set_current_win(state.win)
 		return
 	end
-
-	-- Crée le buffer si nécessaire
-	if not is_open() then
-		state.buf = vim.api.nvim_create_buf(false, true)
-		vim.bo[state.buf].buftype = "nofile"
-		vim.bo[state.buf].bufhidden = "wipe"
-		vim.bo[state.buf].swapfile = false
-		vim.bo[state.buf].filetype = "markdown"
-		vim.api.nvim_buf_set_name(state.buf, "NvCrafted Docs")
-
-		-- Split vertical à droite
-		vim.cmd("botright vsplit")
-		state.win = vim.api.nvim_get_current_win()
-		vim.api.nvim_win_set_buf(state.win, state.buf)
-		vim.api.nvim_win_set_width(state.win, 90)
-
-		-- Options fenêtre
-		vim.wo[state.win].number = false
-		vim.wo[state.win].relativenumber = false
-		vim.wo[state.win].signcolumn = "no"
-		vim.wo[state.win].wrap = true
-		vim.wo[state.win].linebreak = true
-		vim.wo[state.win].conceallevel = 2
-		vim.wo[state.win].winbar = " 󰈙  NvCrafted Docs"
-
-		setup_keymaps()
-
-		-- Nettoyage quand le buffer est fermé
-		vim.api.nvim_create_autocmd("BufWipeout", {
-			buffer = state.buf,
-			once = true,
-			callback = function()
-				state.buf = nil
-				state.win = nil
-				state.path = nil
-			end,
-		})
-	end
-
-	-- Si un chemin est fourni, l'afficher directement ; sinon ouvrir le picker
+	-- Si un chemin est fourni directement, créer le buffer et afficher
 	if path then
+		M._create_win()
 		render(path)
-	else
-		-- Petit defer pour laisser le split s'initialiser avant d'ouvrir Telescope
-		vim.defer_fn(function()
-			M.pick()
-		end, 10)
+		return
 	end
+	-- Sinon ouvrir le picker d'abord, créer le buffer seulement après sélection
+	M.pick()
+end
+
+--- Crée le buffer et la fenêtre du viewer (appelé après sélection)
+function M._create_win()
+	if is_open() then
+		vim.api.nvim_set_current_win(state.win)
+		return
+	end
+
+	state.buf = vim.api.nvim_create_buf(false, true)
+	vim.bo[state.buf].buftype = "nofile"
+	vim.bo[state.buf].bufhidden = "wipe"
+	vim.bo[state.buf].swapfile = false
+	vim.bo[state.buf].filetype = "markdown"
+	vim.api.nvim_buf_set_name(state.buf, "NvCrafted Docs")
+
+	vim.cmd("botright vsplit")
+	state.win = vim.api.nvim_get_current_win()
+	vim.api.nvim_win_set_buf(state.win, state.buf)
+	vim.api.nvim_win_set_width(state.win, 90)
+
+	vim.wo[state.win].number = false
+	vim.wo[state.win].relativenumber = false
+	vim.wo[state.win].signcolumn = "no"
+	vim.wo[state.win].wrap = true
+	vim.wo[state.win].linebreak = true
+	vim.wo[state.win].conceallevel = 2
+	vim.wo[state.win].winbar = " 󰈙  NvCrafted Docs"
+
+	setup_keymaps()
+
+	vim.api.nvim_create_autocmd("BufWipeout", {
+		buffer = state.buf,
+		once = true,
+		callback = function()
+			state.buf = nil
+			state.win = nil
+			state.path = nil
+		end,
+	})
 end
 
 --- Ferme le viewer de documentation

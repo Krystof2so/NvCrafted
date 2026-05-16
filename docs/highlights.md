@@ -1,4 +1,4 @@
-# Gestion des _highlights_ dans NvCrafted
+# Gestion des highlights dans NvCrafted
 
 **NvCrafted** centralise la gestion des couleurs et des _highlights_ dans le module `core/highlights/`. L'objectif est de garantir qu'à chaque changement de thème, l'ensemble des _plugins_ s'adaptent automatiquement sans aucune intervention manuelle.
 
