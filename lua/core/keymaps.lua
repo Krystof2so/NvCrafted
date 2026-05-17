@@ -174,7 +174,7 @@ map("n", "<leader>xh", ":nohlsearch<CR>", {
 	silent = true,
 })
 map("n", "<leader>xa", function()
-	require("core.map_actions.open_alpha").open()
+	require("core.map_actions.open_dashboard").open()
 end, { desc = "󰋜 Retour à l'écran d'accueil", silent = true })
 
 -- ======================================================================

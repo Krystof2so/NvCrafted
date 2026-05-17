@@ -115,17 +115,17 @@ Les _mappings buffer-local_ (ex: `<leader>dd`, `<leader>dn`) sont dans `on_attac
 
 ---
 
-## `<leader>u` — UI
+## `<leader>x` — UI
 
 Modification de l'apparence ou du comportement de l'éditeur.
 
-| Raccourci    | Description                               | Commande/Plugin/Fichier               |
-| ------------ | ----------------------------------------- | ------------------------------------- |
-| `<leader>xt` | Changer de thème                          | `core.theme.preview_with_telescope()` |
-| `<leader>xz` | Toggle Zen Mode                           | `:ZenMode`                            |
-| `<leader>xh` | Effacer la surbrillance                   | `:nohlsearch`                         |
-| `<leader>xI` | Toggle inlay hints (global)               | `vim.lsp.inlay_hint`                  |
-| `<leader>xa` | Ouvre **Alpha** et ferme tous les buffers | `open_alpha.lua`                      |
+| Raccourci    | Description                                  | Commande/Plugin/Fichier               |
+| ------------ | -------------------------------------------- | ------------------------------------- |
+| `<leader>xt` | Changer de thème                             | `core.theme.preview_with_telescope()` |
+| `<leader>xz` | Toggle Zen Mode                              | `:ZenMode`                            |
+| `<leader>xh` | Effacer la surbrillance                      | `:nohlsearch`                         |
+| `<leader>xI` | Toggle inlay hints (global)                  | `vim.lsp.inlay_hint`                  |
+| `<leader>xa` | Ouvre le dashboard et ferme tous les buffers | `open_dashboard.lua`                  |
 
 ---
 
@@ -150,12 +150,12 @@ Accès à l'historique et aux outils de notification.
 
 Profil **NvCrafted**.
 
-| Raccourci    | Description               | Commande/Plugin/Fichier |
-| ------------ | ------------------------- | --------------- |
-| `<leader>pl` | Ouvrir Lazy               | `:Lazy`         |
-| `<leader>pu` | Mettre à jour les plugins | `:Lazy update`  |
-| `<leader>ps` | Synchroniser les plugins  | `:Lazy sync`    |
-| `<leader>pi` | Fournit des informations système          | `info_system.lua`|
+| Raccourci    | Description                      | Commande/Plugin/Fichier |
+| ------------ | -------------------------------- | ----------------------- |
+| `<leader>pl` | Ouvrir Lazy                      | `:Lazy`                 |
+| `<leader>pu` | Mettre à jour les plugins        | `:Lazy update`          |
+| `<leader>ps` | Synchroniser les plugins         | `:Lazy sync`            |
+| `<leader>pi` | Fournit des informations système | `info_system.lua`       |
 
 ---
 
@@ -171,8 +171,7 @@ Profil **NvCrafted**.
 
 Fonctionnalités spécifiques implémentées dans des fichiers propres, déclenchées par des mappings, trop volumineuses pour vivre directement dans `keymaps.lua`.
 
-| Raccourci    | Description                               | Fichier          |
-| ------------ | ----------------------------------------- | ---------------- |
-| `<leader>xa` | Ouvre **Alpha** et ferme tous les buffers | `open_alpha.lua` |
-| `<leader>pi` | Fournit des informations système          | `info_system.lua`|
-
+| Raccourci    | Description                                  | Fichier              |
+| ------------ | -------------------------------------------- | -------------------- |
+| `<leader>xa` | Ouvre le dashboard et ferme tous les buffers | `open_dashboard.lua` |
+| `<leader>pi` | Fournit des informations système             | `info_system.lua`    |

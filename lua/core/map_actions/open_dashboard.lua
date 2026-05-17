@@ -1,7 +1,7 @@
 -- *************************************************************
--- * lua/core/map_actions/open_alpha.lua                       *
+-- * lua/core/map_actions/open_dashboard.lua                   *
 -- *                                                           *
--- * Retour à l'écran d'accueil Alpha depuis n'importe où.     *
+-- * Retour à l'écran d'accueil Snacks depuis n'importe où.    *
 -- * Ferme tous les buffers ouverts en proposant               *
 -- * d'enregistrer les modifications non sauvegardées.         *
 -- * Ferme également Neo-tree s'il est ouvert.                 *
@@ -19,7 +19,7 @@ function M.open()
 	-- =========================================================
 	-- Lancement d'alpha.nvim
 	-- =========================================================
-	local function launch_alpha()
+	local function launch_snacks()
 		-- Ferme Neo-tree s'il est ouvert
 		pcall(function()
 			require("neo-tree.command").execute({ action = "close" })
@@ -29,8 +29,8 @@ function M.open()
 		for _, buf in ipairs(buffers_list) do
 			pcall(vim.api.nvim_buf_delete, buf, { force = true })
 		end
-		-- Lancement d'alpha.nvim
-		require("alpha").start(true)
+		-- Lancement de snacks.dashboard
+		require("snacks").dashboard.open()
 	end
 
 	-- =========================================================
@@ -39,7 +39,7 @@ function M.open()
 	local function buffer_processing()
 		index_buf_list = index_buf_list + 1
 		if index_buf_list > #buffers_modified then
-			launch_alpha()
+			launch_snacks()
 			return
 		end
 		local buf = buffers_modified[index_buf_list]
@@ -101,7 +101,7 @@ function M.open()
 	-- Logique de lancement d'alpha.nvim
 	-- =========================================================
 	if #buffers_modified == 0 then -- Aucun buffer à modifier
-		launch_alpha()
+		launch_snacks()
 		return
 	end
 	-- Sinon, traitement séquentiel des buffers pour enregistrement ou non
