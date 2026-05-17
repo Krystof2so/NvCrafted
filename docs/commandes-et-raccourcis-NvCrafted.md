@@ -11,10 +11,11 @@ Organisation par fonctionnalité, avec groupes `<leader>` et descriptions.
 - `<leader>f` — Fichiers
 - `<leader>n` — Navigation
 - `<leader>d` — Diagnostics
-- `<leader>u` — UI
+- `<leader>x` — UI
 - `<leader>m` — Messages (Noice)
-- `<leader>l` — Lazy
+- `<leader>p` — Lazy
 - Raccourcis pour des fonctionnalités spécifiques (hors `which-key`)
+- `lua/core/map_keymaps` - Fonctions pour mappings spécifiques
 
 ---
 
@@ -118,12 +119,13 @@ Les _mappings buffer-local_ (ex: `<leader>dd`, `<leader>dn`) sont dans `on_attac
 
 Modification de l'apparence ou du comportement de l'éditeur.
 
-| Raccourci    | Description                 | Commande/Plugin                       |
-| ------------ | --------------------------- | ------------------------------------- |
-| `<leader>ut` | Changer de thème            | `core.theme.preview_with_telescope()` |
-| `<leader>uz` | Toggle Zen Mode             | `:ZenMode`                            |
-| `<leader>uh` | Effacer la surbrillance     | `:nohlsearch`                         |
-| `<leader>uI` | Toggle inlay hints (global) | `vim.lsp.inlay_hint`                  |
+| Raccourci    | Description                               | Commande/Plugin/Fichier               |
+| ------------ | ----------------------------------------- | ------------------------------------- |
+| `<leader>xt` | Changer de thème                          | `core.theme.preview_with_telescope()` |
+| `<leader>xz` | Toggle Zen Mode                           | `:ZenMode`                            |
+| `<leader>xh` | Effacer la surbrillance                   | `:nohlsearch`                         |
+| `<leader>xI` | Toggle inlay hints (global)               | `vim.lsp.inlay_hint`                  |
+| `<leader>xa` | Ouvre **Alpha** et ferme tous les buffers | `open_alpha.lua`                      |
 
 ---
 
@@ -144,15 +146,16 @@ Accès à l'historique et aux outils de notification.
 
 ---
 
-## `<leader>l` — Lazy
+## `<leader>p` — Profil
 
-Gestion des plugins avec Lazy.nvim.
+Profil **NvCrafted**.
 
-| Raccourci    | Description               | Commande/Plugin |
+| Raccourci    | Description               | Commande/Plugin/Fichier |
 | ------------ | ------------------------- | --------------- |
-| `<leader>ll` | Ouvrir Lazy               | `:Lazy`         |
-| `<leader>lu` | Mettre à jour les plugins | `:Lazy update`  |
-| `<leader>ls` | Synchroniser les plugins  | `:Lazy sync`    |
+| `<leader>pl` | Ouvrir Lazy               | `:Lazy`         |
+| `<leader>pu` | Mettre à jour les plugins | `:Lazy update`  |
+| `<leader>ps` | Synchroniser les plugins  | `:Lazy sync`    |
+| `<leader>pi` | Fournit des informations système          | `info_system.lua`|
 
 ---
 
@@ -161,3 +164,15 @@ Gestion des plugins avec Lazy.nvim.
 | Raccourci | Description                   | Commande/Plugin |
 | --------- | ----------------------------- | --------------- |
 | `<Alt>s`  | Sélection complète du fichier | **N** : `ggVG`  |
+
+---
+
+## `lua/core/map_actions` - Fonctions de mappings
+
+Fonctionnalités spécifiques implémentées dans des fichiers propres, déclenchées par des mappings, trop volumineuses pour vivre directement dans `keymaps.lua`.
+
+| Raccourci    | Description                               | Fichier          |
+| ------------ | ----------------------------------------- | ---------------- |
+| `<leader>xa` | Ouvre **Alpha** et ferme tous les buffers | `open_alpha.lua` |
+| `<leader>pi` | Fournit des informations système          | `info_system.lua`|
+

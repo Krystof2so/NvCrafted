@@ -174,7 +174,7 @@ map("n", "<leader>xh", ":nohlsearch<CR>", {
 	silent = true,
 })
 map("n", "<leader>xa", function()
-	require("core.open_alpha").open()
+	require("core.map_actions.open_alpha").open()
 end, { desc = "󰋜 Retour à l'écran d'accueil", silent = true })
 
 -- ======================================================================
@@ -217,6 +217,9 @@ map("n", "<leader>ma", ":NoiceEnable<CR>", {
 -- ======================================================================
 -- <leader>p — Profil
 -- ======================================================================
+map("n", "<leader>pi", function()
+	require("core.map_actions.system_info").open()
+end, { desc = " Informations système", silent = true })
 map("n", "<leader>po", ":Telescope vim_options<CR>", {
 	desc = "󰒓 Options Neovim",
 	silent = true,
@@ -337,6 +340,7 @@ vim.api.nvim_create_autocmd("User", {
 			-- ----------------------------------------------------------------
 			-- <leader>p — Profil
 			-- ----------------------------------------------------------------
+			{ "<leader>pi", desc = "Informations NvCrafted", icon = "󰋼 " },
 			{ "<leader>pl", desc = "Ouvrir Lazy", icon = "󰒲 " },
 			{ "<leader>pu", desc = "Mettre à jour les plugins", icon = "󰒿 " },
 			{ "<leader>ps", desc = "Synchroniser", icon = "󰓦 " },

@@ -1,5 +1,5 @@
 -- *************************************************************
--- * lua/core/open_alpha.lua                                   *
+-- * lua/core/map_actions/open_alpha.lua                       *
 -- *                                                           *
 -- * Retour à l'écran d'accueil Alpha depuis n'importe où.     *
 -- * Ferme tous les buffers ouverts en proposant               *
