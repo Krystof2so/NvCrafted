@@ -22,7 +22,7 @@ local M = {}
 -- ==============================================================
 -- Utilitaire : date et heure en français
 -- ==============================================================
-local function datetime_fr()
+local function datetime_fr(date)
 	local fr_days = { "Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi" }
 	local fr_months = {
 		"janvier",
@@ -38,15 +38,14 @@ local function datetime_fr()
 		"novembre",
 		"décembre",
 	}
-	local d = os.date("*t")
 	return string.format(
 		"📅  %s %d %s %d  🕒  %02d:%02d",
-		fr_days[d.wday],
-		d.day,
-		fr_months[d.month],
-		d.year,
-		d.hour,
-		d.min
+		fr_days[date.wday],
+		date.day,
+		fr_months[date.month],
+		date.year,
+		date.hour,
+		date.min
 	)
 end
 
@@ -173,10 +172,13 @@ function M.config()
 				padding = 1,
 			},
 
-			-- 4. Date et heure en français
+			-- 4. Date et heure
 			{
-				text = { datetime_fr(), hl = "Function", align = "center" },
+			    text = datetime_fr(os.date("*t")),
+				hl = "Function",
+				align = "center",
 				padding = 1,
+				ttl = 0,
 			},
 
 			-- 5. Temps de démarrage (lazy.nvim)

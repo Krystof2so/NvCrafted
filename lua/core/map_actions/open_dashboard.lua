@@ -29,8 +29,10 @@ function M.open()
 		for _, buf in ipairs(buffers_list) do
 			pcall(vim.api.nvim_buf_delete, buf, { force = true })
 		end
-		-- Lancement de snacks.dashboard
-		require("snacks").dashboard.open()
+		Snacks.dashboard.open()
+        vim.defer_fn(function()
+            Snacks.dashboard.update()
+        end, 100)
 	end
 
 	-- =========================================================
