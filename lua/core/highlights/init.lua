@@ -30,6 +30,9 @@ function M.setup()
 	pcall(function()
 		require("core.highlights.alpha_hl").setup()
 	end)
+	pcall(function()
+		require("core.highlights.snacks_hl").setup()
+	end)
 end
 
 return M

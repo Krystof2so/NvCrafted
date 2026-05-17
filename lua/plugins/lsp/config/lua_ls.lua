@@ -28,8 +28,8 @@ return {
 			-- Diagnostics
 			-- ===========
 			diagnostics = {
-				-- Pour que le serveur de langage reconnaisse la variable globale 'vim'
-				globals = { "vim" },
+				-- Pour que le serveur de langage reconnaisse certaines variables globales 
+				globals = { "vim", "Snacks" },
 				unusedLocalExclude = { "_*" }, -- exclut les variables préfixées _ (convention)
 				disable = {}, -- rien de désactivé (tout voir)
 			},

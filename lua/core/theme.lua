@@ -20,7 +20,7 @@ local M = {}
 -- ================================================================
 M.available = {
 	-- Variantes Rosé Pine
-	"rose-pine-main",      -- main  (thème par défaut)
+	"rose-pine-main", -- main  (thème par défaut)
 	"rose-pine-moon", -- moon
 	"rose-pine-dawn", -- dawn (clair)
 	-- Autres thèmes
@@ -39,7 +39,7 @@ M.default = "rose-pine-main"
 function M.apply(theme)
 	vim.cmd.colorscheme(theme)
 	-- Rafraîchit les highlights adaptatifs après chaque changement de thème.
-    -- ColorScheme autocmd déclenche core.highlights.setup() automatiquement.
+	-- ColorScheme autocmd déclenche core.highlights.setup() automatiquement.
 	-- L'appel explicite ci-dessous couvre les cas où l'autocmd ne suffit pas
 	pcall(function()
 		require("core.highlights").setup()

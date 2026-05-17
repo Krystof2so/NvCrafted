@@ -29,8 +29,8 @@ local map = vim.keymap.set
 -- ======================================================================
 -- Sélection complète du fichier
 map("n", "<M-s>", "ggVG", {
-    desc = "󰒉 Sélectionner tout le fichier",
-    silent = true
+	desc = "󰒉 Sélectionner tout le fichier",
+	silent = true,
 })
 
 -- ======================================================================
@@ -173,6 +173,9 @@ map("n", "<leader>xh", ":nohlsearch<CR>", {
 	desc = "󰹊 Effacer la surbrillance",
 	silent = true,
 })
+map("n", "<leader>xa", function()
+	require("core.open_alpha").open()
+end, { desc = "󰋜 Retour à l'écran d'accueil", silent = true })
 
 -- ======================================================================
 -- <leader>m — Messages (Noice)
@@ -314,6 +317,7 @@ vim.api.nvim_create_autocmd("User", {
 			-- ----------------------------------------------------------------
 			-- <leader>x — UI/UX
 			-- ----------------------------------------------------------------
+			{ "<leader>xa", desc = "Retour au menu principal (ferme les buffers)", icon = "󰋜 " },
 			{ "<leader>xt", desc = "Changer de thème", icon = "󰏘 " },
 			{ "<leader>xz", desc = "Toggle Zen Mode", icon = "󰰶 " },
 			{ "<leader>xh", desc = "Effacer la surbrillance", icon = "󰹊 " },
