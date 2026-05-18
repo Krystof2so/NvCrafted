@@ -160,7 +160,7 @@ function M.config()
 			-- 2. Message de bienvenue
 			{
 				text = {
-					{ "✨  Framework IDE-like pour Neovim  ✨", hl = "NvCraftedWelcome", align = "center" },
+					{ "✨  Un Neovim prêt à l'emploi, pensé pour être compris et maîtrisé.  ✨", hl = "NvCraftedWelcome", align = "center" },
 				},
 				padding = 1,
 			},
