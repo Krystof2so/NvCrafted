@@ -129,6 +129,16 @@
 | `u`       | Annuler la modification           |
 | `<Ctrl>r` | Rétablir la dernière modification |
 
+### Commentaires
+
+Commentaires adaptés selon le LSP appliqué au *buffer*.
+
+| Commande              | Description                                       |
+| --------------------- | ------------------------------------------------- |
+| `gcc` (mode `Normal`) | *Toggle* commentaire (au niveau du curseur)       |
+| `gc` (mode `visual`)  | *Toggle* commentaire (toute la ligne)             |
+| `gc` (mode `V-Line`)  | *Toggle* commentaire (après sélection des lignes) |
+
 ## Recherche et remplacement
 
 ## Gestion des *buffers*, fenêtres et onglets
