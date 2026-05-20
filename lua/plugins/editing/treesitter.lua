@@ -19,6 +19,7 @@ return {
 			-- de tout réinstaller à chaque lancement
 			-- ================================================================
 			local ensure_installed = {
+				"latex",
 				"python",
 				"rust",
 				"toml",
