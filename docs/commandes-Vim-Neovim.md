@@ -7,8 +7,8 @@
 | `i`      | Passe en mode `insert`             |
 | `v`      | Passe en mode `visual`             |
 | `V`      | Passe en mode `visual` (par ligne) |
- 
-## Naviguer dans le *buffer*
+
+## Naviguer dans le _buffer_
 
 ### Déplacements de base
 
@@ -63,18 +63,18 @@
 
 | Commande  | Description                                        |
 | --------- | -------------------------------------------------- |
-| `H`       | Aller en haut de l'écran visible (*Hight*)         |
-| `M`       | Aller au milieu de l'écran visible (*Middle*)      |
-| `L`       | Aller en bas de l'écran visible (*Low*)            |
-| `<Ctrl>u` | Faire défiler vers le haut (demi-écran) (*up*)     |
-| `<Ctrl>d` | Faire défiler vers le bas (demi-écran) (*down*)    |
+| `H`       | Aller en haut de l'écran visible (_Hight_)         |
+| `M`       | Aller au milieu de l'écran visible (_Middle_)      |
+| `L`       | Aller en bas de l'écran visible (_Low_)            |
+| `<Ctrl>u` | Faire défiler vers le haut (demi-écran) (_up_)     |
+| `<Ctrl>d` | Faire défiler vers le bas (demi-écran) (_down_)    |
 | `<Ctrl>b` | Faire défiler une page vers le haut                |
 | `<Ctrl>f` | Faire défiler une page vers le bas                 |
 | `zz`      | Centrer la ligne courante dans l'écran             |
-| `zt`      | Déplacer la ligne courante vers le haut (*top*)    |
-| `zb`      | Déplacer la ligne courante vers le bas (*bottown*) |
+| `zt`      | Déplacer la ligne courante vers le haut (_top_)    |
+| `zb`      | Déplacer la ligne courante vers le bas (_bottown_) |
 
- ## Edition
+## Edition
 
 ### Passer en mode `insert`
 
@@ -89,12 +89,16 @@
 
 ### Suppression
 
-| Commande    | Description                               |
-| ----------- | ----------------------------------------- |
-| `d$` ou `D` | Supprimer du curseur à la fin de la ligne |
-| `dd`        | Supprime la ligne entière                 |
-| `x`         | Supprime le caractère sous le curseur     |
-| `X`         | Supprime le caractère avant le curseur    |
+| Commande    | Description                                               |
+| ----------- | --------------------------------------------------------- |
+| `d$` ou `D` | Supprimer du curseur à la fin de la ligne                 |
+| `dd`        | Supprime la ligne entière                                 |
+| `dwi`       | Supprime le mot entier (en préservant les délimiteurs`*`) |
+| `dwa`       | Supprime le mot entier (en supprimant les délimiteurs`*`) |
+| `x`         | Supprime le caractère sous le curseur                     |
+| `X`         | Supprime le caractère avant le curseur                    |
+
+(`*`) `i` (_inner_) et `a` (_around_) sont des délimiteurs. La commande est alors : `action-objet-délimiteur`.
 
 ### Copier/Couper/Coller
 
@@ -131,17 +135,17 @@
 
 ### Commentaires
 
-Commentaires adaptés selon le LSP appliqué au *buffer*.
+Commentaires adaptés selon le LSP appliqué au _buffer_.
 
 | Commande              | Description                                       |
 | --------------------- | ------------------------------------------------- |
-| `gcc` (mode `Normal`) | *Toggle* commentaire (au niveau du curseur)       |
-| `gc` (mode `visual`)  | *Toggle* commentaire (toute la ligne)             |
-| `gc` (mode `V-Line`)  | *Toggle* commentaire (après sélection des lignes) |
+| `gcc` (mode `Normal`) | _Toggle_ commentaire (au niveau du curseur)       |
+| `gc` (mode `visual`)  | _Toggle_ commentaire (toute la ligne)             |
+| `gc` (mode `V-Line`)  | _Toggle_ commentaire (après sélection des lignes) |
 
 ## Recherche et remplacement
 
-## Gestion des *buffers*, fenêtres et onglets
+## Gestion des _buffers_, fenêtres et onglets
 
 ## Fichiers et sauvegarde
 
@@ -156,6 +160,3 @@ Commentaires adaptés selon le LSP appliqué au *buffer*.
 ## Outils externes et intégration
 
 ## Divers
-
-
-
