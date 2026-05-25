@@ -40,7 +40,9 @@ return {
 		},
 		on_open = function(_)
             local ft = vim.bo.filetype  -- Récupère le type du fichier ("" si pas de type)
-			local ok = ft ~= "" and pcall(vim.treesitter.get_parser, 0)
+            if ft == "" then return end
+            -- Vérifie que le parser Tree-sitter existe pour ce filetype
+			local ok = pcall(vim.treesitter.language.inspect, ft)
 			if ok then
 				require("twilight").enable()
 			end
