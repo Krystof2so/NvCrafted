@@ -29,17 +29,28 @@ local map = vim.keymap.set
 -- ======================================================================
 -- Sélection complète du fichier
 map("n", "<M-s>", "ggVG", {
-	desc = "󰒉 Sélectionner tout le fichier",
+	desc = "Sélectionner tout le fichier | Ce raccourci permet de sélectionner tout le contenu d'un fichier. Presser les deux touches simultanément ( <M> = <Alt> )",
 	silent = true,
 })
 
 -- ======================================================================
 -- <leader>h - Aide (<h>elp)
 -- ======================================================================
-map("n", "<leader>hm", ":Telescope keymaps<CR>", {
-	desc = "󰌌 Explorer les raccourcis",
-	silent = true,
-})
+map(
+	"n",
+	"<leader>hm",
+	function()
+		require("core.map_actions.keymaps_picker").open()
+	end,
+	{
+		desc = "Explorer les raccourcis | Ouvre Telescope et permet de rechercher un mapping via sa description ou via les touches de mapping. Offre un descriptif plus détaillé dans le visualiseur. Ne réalise aucune action, il est seulement une aide pour ceux qui oublient leurs mappings...   Ce mmapping appelle la fonction 'core.map_actions.keymaps.picker'",
+		silent = true,
+	}
+)
+-- map("n", "<leader>hm", ":Telescope keymaps<CR>", {
+-- 	desc = "󰌌 Explorer les raccourcis",
+-- 	silent = true,
+-- })
 map("n", "<leader>hh", ":Telescope help_tags<CR>", {
 	desc = "󰋖 Aide Neovim",
 	silent = true,
@@ -167,15 +178,31 @@ map("n", "<leader>ds", "<cmd>Trouble preview_split<CR>", {
 -- ======================================================================
 map("n", "<leader>xt", function()
 	require("core.theme").preview_with_telescope()
-end, { desc = "󰏘 Changer de thème", silent = true })
-map("n", "<leader>xz", ":ZenMode<CR>", { desc = "󰰶 Toggle Zen Mode", silent = true })
-map("n", "<leader>xh", ":nohlsearch<CR>", {
-	desc = "󰹊 Effacer la surbrillance",
+end, {
+	desc = "Changer de thème | Ouvre Telescope afin de sélectionner un des thèmes installés (avec un mode de prévisualisation). Ce mapping appelle la fonction 'core.theme.preview_with_telescope'.",
 	silent = true,
 })
-map("n", "<leader>xa", function()
-	require("core.map_actions.open_dashboard").open()
-end, { desc = "󰋜 Retour à l'écran d'accueil", silent = true })
+map(
+	"n",
+	"<leader>xz",
+	":ZenMode<CR>",
+	{ desc = "Toggle Zen Mode | Permet de basculer en mode 'Zen' et de revenir ensuite en mode normal.", silent = true }
+)
+map("n", "<leader>xh", ":nohlsearch<CR>", {
+	desc = "Effacer la surbrillance | Quand on lance une recherche ('/'), le motif recherché demeure en surbrillance. Ce mapping permet d'enlever la surbrillance.",
+	silent = true,
+})
+map(
+	"n",
+	"<leader>xa",
+	function()
+		require("core.map_actions.open_dashboard").open()
+	end,
+	{
+		desc = "Retour à l'écran d'accueil | Permet de revenir à la page d'accueil. Les buffers ouverts seront fermés, et si certains buffers ont des modifications non eregistrées il sera demandé pour chacun d'eux si l'utilisateur souhaite ou pas les enregistrer.",
+		silent = true,
+	}
+)
 
 -- ======================================================================
 -- <leader>m — Messages (Noice)

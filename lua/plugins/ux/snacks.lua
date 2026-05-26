@@ -19,9 +19,9 @@ return {
 	opts = function()
 		return {
 			-- Tous les modules sont désactivés par défaut, sauf :
+			dashboard = require("core.snacks_config.dashboard").config(),
 			input = { enabled = true },
 			win = { enabled = true },
-			dashboard = require("core.snacks_config.dashboard").config(),
 		}
 	end,
 }
