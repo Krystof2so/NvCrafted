@@ -79,10 +79,16 @@ function M.config()
 			keys = {
 				{
 					icon = "✅",
-					key = "c",
+					key = "s",
 					desc = "Vérifier la configuration",
 					action = ":checkhealth",
 				},
+                {
+                    icon = "👨‍🔧",
+                    key = "c",
+                    desc = "Accès à la configuration de NvCrafted",
+                    action = ":exe 'edit' stdpath('config')",
+                },
 				{
 					icon = "🔄",
 					key = "u",
