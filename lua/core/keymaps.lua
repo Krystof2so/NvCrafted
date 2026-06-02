@@ -36,17 +36,12 @@ map("n", "<M-s>", "ggVG", {
 -- ======================================================================
 -- <leader>h - Aide (<h>elp)
 -- ======================================================================
-map(
-	"n",
-	"<leader>hm",
-	function()
-		require("core.map_actions.keymaps_picker").open()
-	end,
-	{
-		desc = "Explorer les raccourcis | Ouvre Telescope et permet de rechercher un mapping via sa description ou via les touches de mapping. Offre un descriptif plus détaillé dans le visualiseur. Ne réalise aucune action, il est seulement une aide pour ceux qui oublient leurs mappings...   Ce mmapping appelle la fonction 'core.map_actions.keymaps.picker'",
-		silent = true,
-	}
-)
+map("n", "<leader>hm", function()
+	require("core.map_actions.keymaps_picker").open()
+end, {
+	desc = "Explorer les raccourcis | Ouvre Telescope et permet de rechercher un mapping via sa description ou via les touches de mapping. Offre un descriptif plus détaillé dans le visualiseur. Ne réalise aucune action, il est seulement une aide pour ceux qui oublient leurs mappings...   Ce mmapping appelle la fonction 'core.map_actions.keymaps.picker'",
+	silent = true,
+})
 -- map("n", "<leader>hm", ":Telescope keymaps<CR>", {
 -- 	desc = "󰌌 Explorer les raccourcis",
 -- 	silent = true,
@@ -177,9 +172,9 @@ map("n", "<leader>ds", "<cmd>Trouble preview_split<CR>", {
 -- Tout ce qui modifie l'apparence ou le comportement de l'éditeur.
 -- ======================================================================
 map("n", "<leader>xt", function()
-	require("core.theme").preview_with_telescope()
+	require("core.theme").preview_with_snacks()
 end, {
-	desc = "Changer de thème | Ouvre Telescope afin de sélectionner un des thèmes installés (avec un mode de prévisualisation). Ce mapping appelle la fonction 'core.theme.preview_with_telescope'.",
+	desc = "Changer de thème | Ouvre Snacks afin de sélectionner un des thèmes installés (avec un mode de prévisualisation). Ce mapping appelle la fonction 'core.theme.preview_with_snacks'.",
 	silent = true,
 })
 map(
@@ -192,17 +187,12 @@ map("n", "<leader>xh", ":nohlsearch<CR>", {
 	desc = "Effacer la surbrillance | Quand on lance une recherche ('/'), le motif recherché demeure en surbrillance. Ce mapping permet d'enlever la surbrillance.",
 	silent = true,
 })
-map(
-	"n",
-	"<leader>xa",
-	function()
-		require("core.map_actions.open_dashboard").open()
-	end,
-	{
-		desc = "Retour à l'écran d'accueil | Permet de revenir à la page d'accueil. Les buffers ouverts seront fermés, et si certains buffers ont des modifications non eregistrées il sera demandé pour chacun d'eux si l'utilisateur souhaite ou pas les enregistrer.",
-		silent = true,
-	}
-)
+map("n", "<leader>xa", function()
+	require("core.map_actions.open_dashboard").open()
+end, {
+	desc = "Retour à l'écran d'accueil | Permet de revenir à la page d'accueil. Les buffers ouverts seront fermés, et si certains buffers ont des modifications non eregistrées il sera demandé pour chacun d'eux si l'utilisateur souhaite ou pas les enregistrer.",
+	silent = true,
+})
 
 -- ======================================================================
 -- <leader>m — Messages (Noice)

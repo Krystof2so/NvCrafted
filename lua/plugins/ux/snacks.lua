@@ -22,6 +22,7 @@ return {
 			dashboard = require("core.snacks_config.dashboard").config(),
 			input = { enabled = true },
 			win = { enabled = true },
+			pickers = { enabled = true },
 		}
 	end,
 }
