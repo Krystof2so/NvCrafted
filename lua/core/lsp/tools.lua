@@ -17,7 +17,7 @@ return {
 	-- Python
 	"black", -- Formateur
 	"isort", -- Tri des imports
-	"ruff", -- Linter / formateur moderne Python (complément à Pyright)
+	"ruff", -- Linter / formateur moderne Python (complément à Pyright) - uniquement ici, pas dans 'servers.lua'
 	-- Lua :
 	"stylua",
 	-- Multi-langage :
