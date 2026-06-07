@@ -5,7 +5,7 @@
 -- * Appelé depuis core/theme.lua à chaque changement de thème.*
 -- * Orchestre l'application de tous les modules de highlights. *
 -- *************************************************************
-
+-- FIX: Incohérences de nommage avec les fichiers appelés
 local M = {}
 
 function M.setup()

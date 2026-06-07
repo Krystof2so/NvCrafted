@@ -17,7 +17,7 @@
 -- * Groupes which-key déclarés ici pour les mappings buffer-local *
 -- * qui ne peuvent pas l'être dans keymaps.lua (bufnr requis).    *
 -- *****************************************************************
-
+-- FIX: les appels à highlights.setup()
 local M = {}
 local map = vim.keymap.set
 

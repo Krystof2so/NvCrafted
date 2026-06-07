@@ -9,7 +9,8 @@
 -- * Ce fichier ne contient *aucune configuration spécifique* à un serveur, il   *
 -- * se contente d'orchestrer proprement l'ensemble.                             *
 -- *******************************************************************************
-
+-- FIX: Le fichier applique on_attach et capabilities deux fois,
+-- ce qui déclenche les mappings en double et appelle highlights.setup()
 return {
 	{
 		"neovim/nvim-lspconfig",

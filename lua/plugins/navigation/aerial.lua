@@ -1,3 +1,5 @@
+-- TODO: Configuration
+
 return {
 	"stevearc/aerial.nvim",
 	cmd = "AerialOpen",

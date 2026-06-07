@@ -20,7 +20,8 @@
 -- *                                                                    *
 -- * + Mapping généraux avec fonctionnalités spécifiques                *
 -- **********************************************************************
-
+-- TODO : Réorganiser avec redécoucage en plusieurs fichiers
+-- + Mise à jour 'docs/commandes-et-raccourcis-'
 vim.g.mapleader = " "
 local map = vim.keymap.set
 

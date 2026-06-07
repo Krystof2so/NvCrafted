@@ -22,7 +22,7 @@ function M.setup()
 		formatters_by_ft = {
 			lua = { "stylua" },
 			rust = { lsp_format = "fallback" }, -- Rust : fallback LSP
-
+			-- FIX: Formateurs Python redondants
 			python = { "ruff", "isort", "black" }, -- Python : dynamique avec Ruff
 			markdown = { "prettier" },
 			json = { "prettier" },

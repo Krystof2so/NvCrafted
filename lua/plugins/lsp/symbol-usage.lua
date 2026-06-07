@@ -1,3 +1,4 @@
+-- FIX: Vérifier appel du fichier
 return {
 	{
 		"Wansmer/symbol-usage.nvim",

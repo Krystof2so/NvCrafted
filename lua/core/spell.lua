@@ -49,7 +49,7 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
 		end)
 	end,
 })
-
+-- FIX : Gestion de l'évènement SpellGood
 -- 5️⃣ Autocommand pour ajouter automatiquement les mots validés au dictionnaire code
 vim.api.nvim_create_autocmd("User", {
 	pattern = "SpellGood",

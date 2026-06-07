@@ -17,6 +17,9 @@
 -- * - une excellente lisibilité                                            *
 -- * - une scalabilité propre au framework NvCrafted                        *
 -- **************************************************************************
+-- FIX: ruff déclaré dans les deux sources de vérité
+-- ruff apparaît à la fois dans core/lsp/servers.lua (comme serveur LSP) et dans core/lsp/tools.lua (comme outil Mason).
+-- FIX: Conflit rust_analyzer + rustaceanvim
 
 return {
 	-- HTML/CSS

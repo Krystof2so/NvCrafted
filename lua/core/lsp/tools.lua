@@ -12,7 +12,7 @@
 -- * Pour ajouter un outil : ajouter son nom Mason ici.       *
 -- * Les noms exacts sont disponibles via :Mason              *
 -- ************************************************************
-
+-- TODO: mise à jour de 'docs/lsp-nvcrafted.md'
 return {
 	-- Python
 	"black", -- Formateur
