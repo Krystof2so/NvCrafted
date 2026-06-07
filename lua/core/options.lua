@@ -64,6 +64,7 @@ if vim.fn.has("termguicolors") == 1 then
 	opt.termguicolors = true -- bool : Activer si le terminal supporte les couleurs UI
 end
 -- ------------------------------------------------------------------------------------
+opt.guicursor = "n-v-c:block-Cursor,i-ci-ve:ver25-CursorIM,r-cr:hor20-Cursor" -- Apparence curseur selon le thème
 
 -- *********************************
 -- * 6. Navigation dans le fichier *

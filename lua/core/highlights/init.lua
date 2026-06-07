@@ -7,7 +7,6 @@
 -- *************************************************************
 -- FIX: Incohérences de nommage avec les fichiers appelés
 local M = {}
-
 function M.setup()
 	pcall(function()
 		require("core.highlights.diagnostics").setup()
@@ -33,6 +32,10 @@ function M.setup()
 	pcall(function()
 		require("core.highlights.snacks_hl").setup()
 	end)
+	-- Highlights pour le curseur
+	local p = require("core/highlights/palettes").get()
+	vim.api.nvim_set_hl(0, "Cursor", { bg = p.error.hex })
+	vim.api.nvim_set_hl(0, "CursorIM", { bg = p.error.hex })
 end
 
 return M
