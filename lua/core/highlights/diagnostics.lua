@@ -10,9 +10,11 @@
 -- ************************************************************
 
 local M = {}
+local diagnostic = vim.diagnostic
+local api = vim.api
 
 local function apply_diagnostic_config()
-	vim.diagnostic.config({
+	diagnostic.config({
 		signs = {
 			active = true,
 			values = {
@@ -22,10 +24,42 @@ local function apply_diagnostic_config()
 				Info = { text = "●", texthl = "DiagnosticSignInfo" },
 			},
 		},
-		virtual_text = { prefix = "●", spacing = 2 },
+		virtual_text = true,
+		virtual_lines = { current_line = true },
 		underline = true,
-		update_in_insert = false,
+		update_in_insert = true,
 		severity_sort = true,
+	})
+	local og_virt_text
+	local og_virt_line
+	-- Affichage des erreurs en mode arborescence sur la ligne courante en mode normal
+	api.nvim_create_autocmd({ "CursorMoved", "DiagnosticChanged" }, {
+		group = api.nvim_create_augroup("diagnostic_only_virtlines", { clear = true }),
+		callback = function()
+			if og_virt_line == nil then
+				og_virt_line = diagnostic.config().virtual_lines
+			end
+
+			if not (og_virt_line and og_virt_line.current_line) then
+				if og_virt_text then
+					diagnostic.config({ virtual_text = og_virt_text })
+					og_virt_text = nil
+				end
+				return
+			end
+
+			if og_virt_text == nil then
+				og_virt_text = diagnostic.config().virtual_text
+			end
+
+			local lnum = api.nvim_win_get_cursor(0)[1] - 1
+
+			if vim.tbl_isempty(diagnostic.get(0, { lnum = lnum })) then
+				diagnostic.config({ virtual_text = og_virt_text })
+			else
+				diagnostic.config({ virtual_text = false })
+			end
+		end,
 	})
 end
 
