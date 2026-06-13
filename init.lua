@@ -20,7 +20,11 @@ require("core.bootstrap")
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_ruby_provider = 0
 -- Python dédié Neovim
-vim.g.python3_host_prog = vim.fn.expand("~/.venvs/neovim/bin/python")
+if vim.fn.has("win32") == 1 then
+    vim.g.python3_host_prog = vim.fn.expand("~/.venvs/neovim/Scripts/python.exe")
+else
+    vim.g.python3_host_prog = vim.fn.expand("~/.venvs/neovim/bin/python")
+end
 -- Ajouter Mason au PATH pour que les binaires soient trouvables
 vim.env.PATH = vim.env.PATH .. ":" .. vim.fn.stdpath("data") .. "/mason/bin"
 -- Leader keys
