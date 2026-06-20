@@ -106,7 +106,7 @@ opt.virtualedit = "block" -- str : Permet au curseur de se déplacer là où il 
 -- *************************
 opt.splitright = true -- bool : Placer la nouvelle fenêtre à droite de l'actuelle
 opt.splitbelow = true -- bool : Placer la nouvelle fenêtre en dessous de l'actuelle
-opt.equalalways = true -- bool : Maintenir les splits égaux quand on les redéfinit
+opt.equalalways = true -- bool : Rééquilibrage des splits quand on les redéfinit
 
 -- *******************************
 -- * 11. Souris et Presse-papier *

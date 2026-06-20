@@ -44,4 +44,9 @@ require("core.autocmds")
 -- 4. setup de lazy.nvim avec la configuration des plugins
 -- ========================================================
 -- Lit la spec de lazy dans 'lua/plugins/init.lua'
-require("lazy").setup("plugins")
+require("lazy").setup("plugins", {
+    ui = { -- Aspect de l'interface de Lazy
+        size = { width = 0.85, height = 0.85 }, -- Dimensions fixes, proportionnelles à l'écran
+        border = "rounded",
+    },
+})

@@ -146,3 +146,20 @@ api.nvim_create_autocmd({ "InsertLeave", "WinLeave" }, {
 		end
 	end,
 })
+
+-- ================================================================
+-- = GROUPE : Lazy.nvim
+-- ================================================================
+local lazy_group = api.nvim_create_augroup("NvCraftedLazy", { clear = true })
+
+-- Désactive la signcolumn dans les fenêtres internes de Lazy
+-- pour éviter l'affichage parasite des signes LSP (W, I)
+-- et le tremblement causé par leur rendu différé
+api.nvim_create_autocmd("FileType", {
+	group = lazy_group,
+	pattern = "lazy",
+	callback = function()
+		local win = vim.api.nvim_get_current_win()
+		vim.wo[win].signcolumn = "no"
+	end,
+})

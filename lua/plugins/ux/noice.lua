@@ -50,8 +50,6 @@ return {
 			},
 		},
 	},
-    ---@module 'noice'
-    ---@type NoiceConfig
 	opts = {
 		-- Application de la vue personnalisée aux commandes Noice
 		commands = {
