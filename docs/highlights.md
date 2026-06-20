@@ -8,7 +8,7 @@
 
 La gestion des _highlights_ repose sur trois principes :
 
-- **Une source de vérité unique** : toutes les couleurs sont définies dans `core/highlights/palettes.lua`. Aucun fichier _plugin_ ne contient de couleur codée en dur.
+- **Une source de vérité pour chaque thème** : toutes les couleurs sont définies dans `core/highlights/themes/<nom_du_theme>.lua`. Aucun fichier _plugin_ ne contient de couleur codée en dur.
 - **Une responsabilité = un fichier** : chaque _plugin_ disposant de _highlights_ spécifiques possède son propre module dans `core/highlights/`.
 - **Un point d'entrée unique** : `core/highlights/init.lua` orchestre l'application de tous les _highlights_. C'est le seul fichier appelé depuis l'extérieur.
 
@@ -18,20 +18,18 @@ La gestion des _highlights_ repose sur trois principes :
 
 ```text
 core/highlights/
-├── palettes.lua           ← source de vérité des couleurs par famille de thème
+├── themes/                ← sources de vérité des couleurs par famille de thème (un fichier par thème)
 ├── init.lua               ← point d'entrée : orchestre tous les modules
 ├── diagnostics.lua        ← highlights LSP (erreurs, avertissements, hints)
 ├── blink_hl.lua           ← highlights blink.cmp et fenêtres flottantes LSP
-├── todo_comments_hl.lua   ← highlights todo-comments.nvim
-├── which_key_hl.lua       ← highlights which-key.nvim
-└── neo_tree_hl.lua        ← highlights neo-tree.nvim
+├── etc...                 ← highlights des autres plugins...
 ```
 
 ---
 
-## La source de vérité : `palettes.lua`
+## Les sources de vérité des couleurs
 
-Ce fichier définit une palette par famille de thème. Chaque entrée expose deux valeurs :
+Chaque fichier portant le nom du thème définit une palette par famille de thème. Chaque entrée expose deux valeurs :
 
 | Clé     | `group`                   | `hex`       |
 | ------- | ------------------------- | ----------- |
@@ -64,16 +62,16 @@ Les clés sémantiques disponibles dans chaque palette :
 ### API publique
 
 ```lua
-local palettes = require("core.highlights.palettes")
+local palettes = require("core.highlights.themes").get()
 
 -- Retourne la palette complète du thème actif
-local p = palettes.get()
+local p = palettes
 
 -- Retourne la famille du thème actif
-local family = palettes.current_family()  -- ex: "rose-pine"
+local family = p.current_family()  -- ex: "rose-pine"
 
 -- Retourne une couleur spécifique
-local color = palettes.get_color("error") -- { group = "...", hex = "..." }
+local color = p.get_color("error") -- { group = "...", hex = "..." }
 ```
 
 ---
@@ -189,7 +187,7 @@ L'ajout d'un _plugin_ nécessitant des _highlights_ adaptatifs suit toujours le 
 local M = {}
 
 function M.setup()
-    local p  = require("core.highlights.palettes").get()
+    local p  = require("core.highlights.themes").get()
     local hl = vim.api.nvim_set_hl
 
     hl(0, "MonPluginBorder", { fg = p.info.hex, bg = p.surface.hex })
@@ -220,7 +218,7 @@ pcall(function() require("core.highlights.mon_plugin").setup() end)
 
 | Fichier                          | Rôle                                       |
 | -------------------------------- | ------------------------------------------ |
-| `core/highlights/palettes.lua`   | Données pures — aucune logique             |
+| `core/highlights/themes/<nom_thems>.lua`   | Données pures — aucune logique             |
 | `core/highlights/init.lua`       | Orchestration — aucune couleur             |
 | `core/highlights/<plugin>.lua`   | Application des highlights d'un plugin     |
 | `plugins/<domaine>/<plugin>.lua` | Déclaration Lazy — aucune couleur codée    |
