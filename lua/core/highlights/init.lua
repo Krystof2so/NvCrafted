@@ -5,7 +5,7 @@
 -- * Appelé depuis core/theme.lua à chaque changement de thème.*
 -- * Orchestre l'application de tous les modules de highlights. *
 -- *************************************************************
--- FIX: Incohérences de nommage avec les fichiers appelés
+
 local M = {}
 function M.setup()
 	pcall(function()
@@ -33,7 +33,7 @@ function M.setup()
 		require("core.highlights.snacks_hl").setup()
 	end)
 	-- Highlights pour le curseur
-	local p = require("core/highlights/palettes").get()
+	local p = require("core/highlights/themes").get()
 	vim.api.nvim_set_hl(0, "Cursor", { bg = p.error.hex })
 	vim.api.nvim_set_hl(0, "CursorIM", { bg = p.error.hex })
 end

@@ -11,7 +11,7 @@
 local M = {}
 
 function M.setup()
-	local p = require("core.highlights.palettes").get()
+	local p = require("core.highlights.themes").get()
 	local hl = vim.api.nvim_set_hl
 
 	-- Fond du popup de prévisualisation

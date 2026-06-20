@@ -66,7 +66,7 @@ end
 function M.setup()
 	apply_diagnostic_config()
 
-	local palettes = require("core.highlights.palettes")
+	local palettes = require("core.highlights.themes").get()
 	local family = palettes.current_family()
 	local hl = vim.api.nvim_set_hl
 

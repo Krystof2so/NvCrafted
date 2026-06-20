@@ -10,7 +10,7 @@
 local M = {}
 
 function M.setup()
-	local palettes = require("core.highlights.palettes")
+	local palettes = require("core.highlights.themes")
 	local p = palettes.get()
 
 	require("todo-comments").setup({
