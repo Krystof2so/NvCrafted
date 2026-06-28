@@ -21,9 +21,9 @@ vim.g.loaded_perl_provider = 0
 vim.g.loaded_ruby_provider = 0
 -- Python dédié Neovim
 if vim.fn.has("win32") == 1 then
-    vim.g.python3_host_prog = vim.fn.expand("~/.venvs/neovim/Scripts/python.exe")
+	vim.g.python3_host_prog = vim.fn.expand("~/.venvs/neovim/Scripts/python.exe")
 else
-    vim.g.python3_host_prog = vim.fn.expand("~/.venvs/neovim/bin/python")
+	vim.g.python3_host_prog = vim.fn.expand("~/.venvs/neovim/bin/python")
 end
 -- Ajouter Mason au PATH pour que les binaires soient trouvables
 vim.env.PATH = vim.env.PATH .. ":" .. vim.fn.stdpath("data") .. "/mason/bin"
@@ -45,8 +45,13 @@ require("core.autocmds")
 -- ========================================================
 -- Lit la spec de lazy dans 'lua/plugins/init.lua'
 require("lazy").setup("plugins", {
-    ui = { -- Aspect de l'interface de Lazy
-        size = { width = 0.85, height = 0.85 }, -- Dimensions fixes, proportionnelles à l'écran
-        border = "rounded",
-    },
+	ui = { -- Aspect de l'interface de Lazy
+		size = { width = 0.85, height = 0.85 }, -- Dimensions fixes, proportionnelles à l'écran
+		border = "rounded",
+	},
 })
+
+-- ========================================================
+-- 5. Vérification des mises à jour des plugins
+-- ========================================================
+require("core.updates").setup()

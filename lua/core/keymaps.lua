@@ -243,9 +243,10 @@ map("n", "<leader>po", ":Telescope vim_options<CR>", {
 	silent = true,
 })
 map("n", "<leader>pl", ":Lazy<CR>", { desc = "󰒲 Ouvrir Lazy", silent = true })
-map("n", "<leader>pu", ":Lazy update<CR>", {
-	desc = "󰒿 Mettre à jour les plugins",
-	silent = true,
+map("n", "<leader>pu", function()
+	require("core.updates").check(false, 3000)
+end, {
+	desc = "󰒿 Vérifier la mise à jour des plugins | Permet de lancer une vérification de la mise à jour des plugins, avec un délai de quelques secondes.",
 })
 map("n", "<leader>ps", ":Lazy sync<CR>", {
 	desc = "󰓦 Synchroniser",
@@ -360,7 +361,7 @@ vim.api.nvim_create_autocmd("User", {
 			-- ----------------------------------------------------------------
 			{ "<leader>pi", desc = "Informations NvCrafted", icon = "󰋼 " },
 			{ "<leader>pl", desc = "Ouvrir Lazy", icon = "󰒲 " },
-			{ "<leader>pu", desc = "Mettre à jour les plugins", icon = "󰒿 " },
+			{ "<leader>pu", desc = "Vérifier la mise à jour des plugins", icon = "󰒿 " },
 			{ "<leader>ps", desc = "Synchroniser", icon = "󰓦 " },
 			{ "<leader>po", desc = "Options Neovim", icon = "󰒓 " },
 		}, { prefix = "<leader>", mode = "n" })
