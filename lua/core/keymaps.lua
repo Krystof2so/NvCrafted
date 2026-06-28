@@ -167,6 +167,10 @@ map("n", "<leader>ds", "<cmd>Trouble preview_split<CR>", {
 	desc = "󰋼 Liste avec aperçu (Trouble)",
 	silent = true,
 })
+map("n", "<leader>dh", ":Telescope notify<CR>", {
+	desc = "󰭎 Historique des notifications | Ouvre Telescope pour visualiser l'histotique des notifications",
+	silent = true,
+})
 
 -- ======================================================================
 -- <leader>x — UI/UX
@@ -192,43 +196,6 @@ map("n", "<leader>xa", function()
 	require("core.map_actions.open_dashboard").open()
 end, {
 	desc = "Retour à l'écran d'accueil | Permet de revenir à la page d'accueil. Les buffers ouverts seront fermés, et si certains buffers ont des modifications non eregistrées il sera demandé pour chacun d'eux si l'utilisateur souhaite ou pas les enregistrer.",
-	silent = true,
-})
-
--- ======================================================================
--- <leader>m — Messages (Noice)
--- Accès à l'historique et aux outils de notification.
--- ======================================================================
-map("n", "<leader>mh", ":NoiceHistory<CR>", {
-	desc = "󰋚 Historique des messages",
-	silent = true,
-})
-map("n", "<leader>ml", ":NoiceLast<CR>", {
-	desc = "󰍩 Dernier message",
-	silent = true,
-})
-map("n", "<leader>me", ":NoiceErrors<CR>", {
-	desc = "󰅚 Messages d'erreur",
-	silent = true,
-})
-map("n", "<leader>ms", ":NoiceStats<CR>", {
-	desc = "󰄴 Statistiques de débogage",
-	silent = true,
-})
-map("n", "<leader>mt", ":NoiceTelescope<CR>", {
-	desc = "󰭎 Historique dans Telescope",
-	silent = true,
-})
-map("n", "<leader>mc", ":NoiceDismiss<CR>", {
-	desc = "󰅙 Fermer les notifications",
-	silent = true,
-})
-map("n", "<leader>md", ":NoiceDisable<CR>", {
-	desc = "󰒲 Désactiver Noice",
-	silent = true,
-})
-map("n", "<leader>ma", ":NoiceEnable<CR>", {
-	desc = "󰒳 Réactiver Noice",
 	silent = true,
 })
 
@@ -335,6 +302,7 @@ vim.api.nvim_create_autocmd("User", {
 			-- ----------------------------------------------------------------
 			{ "<leader>dl", desc = "Liste globale (Trouble)", icon = "󰋼 " },
 			{ "<leader>ds", desc = "Liste avec aperçu (Trouble)", icon = "󰋼 " },
+			{ "<leader>dh", desc = "Historique des notifications", icon = "󰭎 " },
 
 			-- ----------------------------------------------------------------
 			-- <leader>x — UI/UX
@@ -343,18 +311,6 @@ vim.api.nvim_create_autocmd("User", {
 			{ "<leader>xt", desc = "Changer de thème", icon = "󰏘 " },
 			{ "<leader>xz", desc = "Toggle Zen Mode", icon = "󰰶 " },
 			{ "<leader>xh", desc = "Effacer la surbrillance", icon = "󰹊 " },
-
-			-- ----------------------------------------------------------------
-			-- <leader>m — Messages
-			-- ----------------------------------------------------------------
-			{ "<leader>mh", desc = "Historique des messages", icon = "󰋚 " },
-			{ "<leader>ml", desc = "Dernier message", icon = "󰍩 " },
-			{ "<leader>me", desc = "Messages d'erreur", icon = "󰅚 " },
-			{ "<leader>ms", desc = "Statistiques de débogage", icon = "󰄴 " },
-			{ "<leader>mt", desc = "Historique dans Telescope", icon = "󰭎 " },
-			{ "<leader>mc", desc = "Fermer les notifications", icon = "󰅙 " },
-			{ "<leader>md", desc = "Désactiver Noice", icon = "󰒲 " },
-			{ "<leader>ma", desc = "Réactiver Noice", icon = "󰒳 " },
 
 			-- ----------------------------------------------------------------
 			-- <leader>p — Profil

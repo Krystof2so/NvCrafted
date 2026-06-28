@@ -1,35 +1,20 @@
 -- *************************************************************
 -- * plugins/ui/noice.lua                                      *
 -- *                                                           *
--- * Configuration de Noice.nvim pour :                        *
--- * - Remplacer l'UI par défaut de Neovim pour :              *
--- *   - la cmdline (popup centré avec icônes)                 *
--- *   - les messages (affichage dans des popups)              *
--- *   - le popupmenu                                          *
--- *   - la progression LSP                                    *
--- * - Utiliser nvim-notify pour les notifications sobres      *
+-- * Noice.nvim dans NvCrafted :                               *
+-- *   - Cmdline (popup centré avec icônes)                    *
+-- *   - Popupmenu stylisé                                     *
+-- *   - Routing des messages système vers nvim-notify         *
+-- *                                                           *
+-- * Historique des notifications :                            *
+-- * - :Telescope notify                                       *
 -- * - Rediriger les commandes Noice (history, last, etc.)     *
 -- *   vers des popups avec détails                            *
 -- *                                                           *
 -- * Dépendances :                                             *
--- * - nui.nvim (déjà présent via neo-tree)                    *
--- * - nvim-notify (pour les notifications)                    *
+-- * - nui.nvim (requis)                                       *
+-- * - nvim-notify (installé par ailleurs. Cf. notify.lua)     *
 -- *************************************************************
-
--- Pour un affichage des sorties de commandes dans un popup
-local joint_instruction = {
-	view = "popup",
-	opts = {
-		enter = false,
-		format = "details",
-		border = "double",
-		style = "rounded",
-		size = {
-			width = "50%",
-			height = "50%",
-		},
-	},
-}
 
 return {
 	"folke/noice.nvim",
@@ -37,16 +22,41 @@ return {
 	dependencies = {
 		"MunifTanjim/nui.nvim",
 	},
+	---@module 'noice'
+	---@type NoiceConfig
 	opts = {
-		-- Application de la vue personnalisée aux commandes Noice
-		commands = {
-			history = joint_instruction,
-			last = joint_instruction,
-			errors = joint_instruction,
-			stats = joint_instruction,
+		-- ================================================================
+		-- Messages : interceptés par Noice, routés vers nvim-notify
+		-- l'historique est délégué à Telescope notify
+		-- ================================================================
+		messages = {
+			enabled = true,
+			view = "notify", -- messages courants → popup notify
+			view_error = "notify", -- erreurs           → popup notify
+			view_warn = "notify", -- warnings          → popup notify
+			view_history = "messages", -- :messages         → buffer normal
+			view_search = false, -- compteur /search  → désactivé
 		},
-		-- Configuration de la cmdline avec icône de stylo
+		-- ================================================================
+		-- Notify : Noice délègue à nvim-notify
+		-- ================================================================
+		notify = {
+			enabled = true,
+			view = "notify",
+		},
+		-- ================================================================
+		-- LSP : aucun override — rendu markdown natif Neovim 0.11+
+		-- lsp_doc_border géré via presets ci-dessous
+		-- ================================================================
+		lsp = {
+			override = {},
+		},
+		-- ================================================================
+		-- Cmdline : popup centré avec icônes par type de commande
+		-- ================================================================
 		cmdline = {
+			enabled = true,
+			view = "cmdline_popup",
 			format = {
 				cmdline = { icon = "" }, -- Stylo (U+F040)
 				search_down = { icon = " " },
@@ -54,21 +64,27 @@ return {
 				lua = { icon = "" },
 			},
 		},
-		lsp = {
-			override = {
-				-- Rendu markdown enrichi via Tree-sitter pour les docs LSP
-				["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-				["vim.lsp.util.stylize_markdown"] = true,
-				-- Ne pas activer : en raison de l'absence nvim-cmp, NvCrafted utilise blink.cmp
-				["cmp.entry.get_documentation"] = false,
-			},
+		-- ================================================================
+		-- Popupmenu : stylisé, centré sous la cmdline popup
+		-- ================================================================
+		popupmenu = {
+			enabled = true,
+			backend = "nui",
 		},
+		-- ================================================================
+		-- Presets
+		-- bottom_search   : / et ? restent en bas (convention Vim)
+		-- command_palette : false — position gérée manuellement via views
+		-- lsp_doc_border  : bordures arrondies sur hover et signature
+		-- ================================================================
 		presets = {
-			bottom_search = true, -- Recherche (/ et ?) en bas, classique
-			command_palette = false, -- Géré manuellement via views
-			long_message_to_split = true, -- Longs messages dans un split plutôt qu'un popup
-			lsp_doc_border = true, -- Bordure sur hover et signature (cohérent avec blink.cmp)
+			bottom_search = true,
+			command_palette = false,
+			lsp_doc_border = true,
 		},
+		-- ================================================================
+		-- Vues : position et dimensions de la cmdline popup et du menu
+		-- ================================================================
 		views = {
 			cmdline_popup = {
 				position = {
