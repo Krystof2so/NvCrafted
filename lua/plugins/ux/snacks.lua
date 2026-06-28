@@ -23,6 +23,7 @@ return {
 			input = { enabled = true },
 			win = { enabled = true },
 			pickers = { enabled = true },
+            notify = {enabled = true },
 		}
 	end,
 }
