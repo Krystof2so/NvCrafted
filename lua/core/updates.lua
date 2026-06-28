@@ -3,7 +3,7 @@
 -- * Notification des mises à jour de plugins   *
 -- **********************************************
 
-TITLE_NOTIFY = " NvCrafted · Plugins"
+TITLE_NOTIFY = " NvCrafted - plugins"
 LONG_DELAY = 10000 -- 10s
 SHORT_DELAY = 3000 -- 3s
 
@@ -19,7 +19,7 @@ local function _fetch()
 	-- Avec vérification du chargement
 	local ok, lazy = pcall(require, "lazy")
 	if not ok then
-		Snacks.notify.error("Module 'lazy' non chargé...", {title = TITLE_NOTIFY })
+		vim.notify("Module 'lazy' non chargé...", vim.log.levels.ERROR, { title = TITLE_NOTIFY })
 	end
 	-- Appelle lazy.check() avec show = false pour éviter d'ouvrir l'interface
 	lazy.check({ show = false })
@@ -36,7 +36,7 @@ end
 local function _read_results()
 	local ok, lazy_config = pcall(require, "lazy.core.config")
 	if not ok then
-		Snacks.notify.error("Impossible de lire la configuration lazy", { title = TITLE_NOTIFY } )
+		vim.notify("Impossible de lire la configuration lazy", vim.log.levels.ERROR, { title = TITLE_NOTIFY })
 		return 0
 	end
 	local plugins = lazy_config.plugins
@@ -77,9 +77,9 @@ end
 -- @param silent boolean  si true, pas de notification "tout est à jour"
 local function _notify(count, silent)
 	if count > 0 then
-		Snacks.notify.warn(count .. " mises à jour disponibles", { title = TITLE_NOTIFY } )
+		vim.notify(count .. " mises à jour disponibles", vim.log.levels.WARN, { title = TITLE_NOTIFY })
 	elseif not silent then
-		Snacks.notify.info("Tous les plugins sont à jour", { title = TITLE_NOTIFY } )
+		vim.notify("Tous les plugins sont à jour", vim.log.levels.INFO, { title = TITLE_NOTIFY })
 	end
 end
 

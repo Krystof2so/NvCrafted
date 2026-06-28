@@ -5,6 +5,8 @@
 -- * Modules activés :                                         *
 -- *    - dashboard                                            *
 -- *    - input                                                *
+-- *    - notify                                               *
+-- *    - pickers                                              *
 -- *    - win                                                  *
 -- *                                                           *
 -- * Convention spécification / déclaration :                  *
@@ -21,9 +23,8 @@ return {
 			-- Tous les modules sont désactivés par défaut, sauf :
 			dashboard = require("core.snacks_config.dashboard").config(),
 			input = { enabled = true },
-			win = { enabled = true },
 			pickers = { enabled = true },
-            notify = {enabled = true },
+			win = { enabled = true },
 		}
 	end,
 }
