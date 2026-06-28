@@ -36,19 +36,6 @@ return {
 	event = "VeryLazy",
 	dependencies = {
 		"MunifTanjim/nui.nvim",
-		{
-			"rcarriga/nvim-notify",
-			opts = { -- Pour des notifications sobres
-				render = "default", -- juste le texte, sans encadré
-				stages = "fade", -- animation de fondu
-				timeout = 3000,
-				top_down = false, -- notifications empilées depuis le bas à droite
-				time_formats = {
-					notification = "", -- supprime l'heure dans les notifications
-					notification_history = "%H:%M", -- conserve l'heure dans l'historique
-				},
-			},
-		},
 	},
 	opts = {
 		-- Application de la vue personnalisée aux commandes Noice
