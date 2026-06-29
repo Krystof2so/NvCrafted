@@ -66,8 +66,8 @@ end
 function M.setup()
 	apply_diagnostic_config()
 
-	local palettes = require("core.highlights.themes").get()
-	local family = palettes.current_family()
+	local p = require("core.highlights.themes").get()
+	local family = p.current_family()
 	local hl = vim.api.nvim_set_hl
 
 	-- Rosé Pine : délègue à la palette officielle du plugin
@@ -78,8 +78,6 @@ function M.setup()
 		hl(0, "DiagnosticVirtualTextHint", { italic = true })
 		return
 	end
-
-	local p = palettes.get()
 
 	hl(0, "DiagnosticError", { fg = p.error.hex, bold = true })
 	hl(0, "DiagnosticWarn", { fg = p.warning.hex, bold = true })
