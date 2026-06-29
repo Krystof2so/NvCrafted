@@ -171,6 +171,12 @@ map("n", "<leader>dh", ":Telescope notify<CR>", {
 	desc = "󰭎 Historique des notifications | Ouvre Telescope pour visualiser l'histotique des notifications",
 	silent = true,
 })
+map("n", "<leader>dc", function ()
+    require("notify").clear_history()
+end, {
+	desc = " Suppression historique des notifications | Supprime l'historique des notifications de la session en cours",
+	silent = true,
+})
 
 -- ======================================================================
 -- <leader>x — UI/UX
@@ -303,6 +309,7 @@ vim.api.nvim_create_autocmd("User", {
 			{ "<leader>dl", desc = "Liste globale (Trouble)", icon = "󰋼 " },
 			{ "<leader>ds", desc = "Liste avec aperçu (Trouble)", icon = "󰋼 " },
 			{ "<leader>dh", desc = "Historique des notifications", icon = "󰭎 " },
+			{ "<leader>dc", desc = "Suppression de l'historique des notifications", icon = " " },
 
 			-- ----------------------------------------------------------------
 			-- <leader>x — UI/UX
