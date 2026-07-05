@@ -12,7 +12,7 @@
 return {
 	"romgrk/barbar.nvim",
 	dependencies = {
-		"lewis6991/gitsigns.nvim", -- statut Git dans les onglets
+		-- "lewis6991/gitsigns.nvim", -- statut Git dans les onglets (Installé indépendamment)
 		"nvim-tree/nvim-web-devicons", -- icônes de types de fichiers
 	},
 	init = function()

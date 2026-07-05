@@ -379,6 +379,7 @@ vim.api.nvim_create_autocmd("User", {
 			-- ----------------------------------------------------------------
 			-- <leader>g - Git/Github
 			-- ----------------------------------------------------------------
+			{ "<leader>gc", desc = "Affiche le dernier commmit", icon = " " },
 			{ "<leader>gs", desc = "Recherche les fichiers modifiés", icon = " " },
 		}, { prefix = "<leader>", mode = "n" })
 	end,
