@@ -112,10 +112,11 @@ map("n", "<leader>b>", ":BufferCloseBuffersRight<CR>", { desc = "󰅙 Fermer à 
 map("n", "<leader>bP", ":BufferPin<CR>", { desc = "󰐃 Épingler/désépingler", silent = true })
 map("n", "<leader>bo", ":BufferOrderByName<CR>", { desc = "󰒺 Trier par nom", silent = true })
 -- Liste
-map("n", "<leader>bl", function ()
-    require("telescope.builtin").buffers({
-        preview_title = title_preview,
-}) end, {
+map("n", "<leader>bl", function()
+	require("telescope.builtin").buffers({
+		preview_title = title_preview,
+	})
+end, {
 	desc = "󰈞 Liste (Telescope) | Liste tous les buffers ouverts via Telescope, et permet ainsi de se rendre directement au buffer sélectionné",
 	silent = true,
 })
@@ -216,9 +217,9 @@ end, {
 -- Tout ce qui modifie l'apparence ou le comportement de l'éditeur.
 -- ======================================================================
 map("n", "<leader>xt", function()
-	require("core.theme").preview_with_snacks()
+	require("core.theme").preview_with_telescope()
 end, {
-	desc = "Changer de thème | Ouvre Snacks afin de sélectionner un des thèmes installés (avec un mode de prévisualisation). Ce mapping appelle la fonction 'core.theme.preview_with_snacks'.",
+	desc = "Changer de thème | Ouvre Telescope afin de sélectionner un des thèmes installés (avec un mode de prévisualisation). Ce mapping appelle la fonction 'core.theme.preview_with_telescope'.",
 	silent = true,
 })
 map(

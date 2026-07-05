@@ -5,7 +5,7 @@
 -- * Thème principal : Rosé Pine (variante "main" par défaut). *
 -- *                                                           *
 -- * Variantes Rosé Pine disponibles via le toggle :           *
--- *   rose-pine       →  main  (sombre, tons chauds)          *
+-- *   rose-pine-main  →  main  (sombre, tons chauds)          *
 -- *   rose-pine-moon  →  moon  (sombre, tons froids)          *
 -- *   rose-pine-dawn  →  dawn  (clair)                        *
 -- *                                                           *
@@ -48,6 +48,11 @@ end
 
 -- ================================================================
 -- = Auto-commande pour bénéficier des Highlights au démarrage    =
+-- =                                                              =
+-- = Déclenché par l'événement ColorScheme, émis par le plugin    =
+-- = rose-pine quand il appelle vim.cmd.colorscheme() dans son    =
+-- = config. À ce moment, vim.g.colors_name est déjà défini,     =
+-- = tous les highlights sont donc appliqués avec le bon thème.   =
 -- ================================================================
 vim.api.nvim_create_autocmd("ColorScheme", {
 	pattern = "*",
@@ -58,118 +63,137 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 	end,
 })
 
-function M.preview_with_snacks()
-    local current_theme = vim.g.colors_name
+-- ================================================================
+-- = Picker Telescope avec prévisualisation temps réel            =
+-- =                                                              =
+-- = Chaque thème est préfixé de son numéro d'ordre.             =
+-- = Saisir un numéro dans le prompt filtre instantanément        =
+-- = la liste pour une sélection rapide au clavier.               =
+-- = Navigation : j / k  ou  <C-n> / <C-p>                       =
+-- = Prévisualisation : temps réel à chaque déplacement           =
+-- = Annulation : <Esc> ou q  →  restaure le thème précédent      =
+-- = Confirmation : <CR>  →  applique définitivement              =
+-- ================================================================
+function M.preview_with_telescope()
+	local pickers      = require("telescope.pickers")
+	local finders      = require("telescope.finders")
+	local conf         = require("telescope.config").values
+	local actions      = require("telescope.actions")
+	local action_state = require("telescope.actions.state")
 
-    Snacks.picker.pick({
-        title = "Sélection du thème",
-        items = vim.tbl_map(function(name)
-            return { text = name }
-        end, M.available),
-        format = "text",
-        layout = {
-            preview = false,   -- ← supprime le volet de prévisualisation
-            layout = {
-                height = 0.4,  -- 40% de la hauteur de l'écran
-            },
-        },
-        confirm = function(picker, item)
-            picker:close()
-            if item then
-                M.apply(item.text)
-            else
-                M.apply(current_theme)
-            end
-        end,
-        on_change = function(_, item)
-            if item then
-                M.apply(item.text)
-            end
-        end,
-        on_close = function()
-            if vim.g.colors_name ~= current_theme then
-                M.apply(current_theme)
-            end
-        end,
-    })
+	-- Thème actif avant l'ouverture du picker — restauré sur annulation
+	local current_theme = vim.g.colors_name
+
+	-- -------------------------------------------------------
+	-- Construction des entrées numérotées
+	-- Chaque entrée expose :
+	--   display  → ce qui est affiché  : "1. rose-pine-main"
+	--   ordinal  → ce sur quoi Telescope filtre (idem)
+	--   value    → le nom du colorscheme à passer à M.apply()
+	-- -------------------------------------------------------
+	local entries = {}
+	for i, name in ipairs(M.available) do
+		table.insert(entries, {
+			display = string.format("%d. %s", i, name),
+			ordinal = string.format("%d. %s", i, name),
+			value   = name,
+		})
+	end
+
+	-- -------------------------------------------------------
+	-- Applique le thème de l'entrée courante (prévisualisation)
+	-- -------------------------------------------------------
+	local function preview_selected()
+		local entry = action_state.get_selected_entry()
+		if entry then
+			M.apply(entry.value)
+		end
+	end
+
+	-- -------------------------------------------------------
+	-- Ferme le picker et restaure le thème d'origine
+	-- -------------------------------------------------------
+	local function close_and_restore(prompt_bufnr)
+		actions.close(prompt_bufnr)
+		M.apply(current_theme)
+	end
+
+	pickers.new({}, {
+		prompt_title     = "Sélection du thème",
+		results_title    = "Thèmes disponibles",
+		sorting_strategy = "ascending",
+		initial_mode     = "normal",
+		layout_config    = { prompt_position = "top" },
+
+		finder = finders.new_table({
+			results = entries,
+			entry_maker = function(entry)
+				return {
+					value   = entry.value,
+					display = entry.display,
+					ordinal = entry.ordinal,
+				}
+			end,
+		}),
+
+		-- Tri générique : filtre sur ordinal (numéro + nom)
+		sorter = conf.generic_sorter({}),
+
+		attach_mappings = function(prompt_bufnr, map)
+			-- --------------------------------------------------
+			-- Navigation avec prévisualisation temps réel
+			-- --------------------------------------------------
+			map({ "n", "i" }, "<C-n>", function()
+				actions.move_selection_next(prompt_bufnr)
+				preview_selected()
+			end)
+			map({ "n", "i" }, "<C-p>", function()
+				actions.move_selection_previous(prompt_bufnr)
+				preview_selected()
+			end)
+			map("n", "j", function()
+				actions.move_selection_next(prompt_bufnr)
+				preview_selected()
+			end)
+			map("n", "k", function()
+				actions.move_selection_previous(prompt_bufnr)
+				preview_selected()
+			end)
+
+			-- --------------------------------------------------
+			-- Passage en mode insertion pour saisir un numéro
+			-- sans fermer le picker
+			-- --------------------------------------------------
+			map("i", "<Esc>", function()
+				vim.cmd("stopinsert")
+			end)
+
+			-- --------------------------------------------------
+			-- Annulation avec restauration du thème précédent
+			-- --------------------------------------------------
+			map("n", "<Esc>", function()
+				close_and_restore(prompt_bufnr)
+			end)
+			map("n", "q", function()
+				close_and_restore(prompt_bufnr)
+			end)
+
+			-- --------------------------------------------------
+			-- Confirmation : applique définitivement le thème
+			-- --------------------------------------------------
+			actions.select_default:replace(function()
+				local entry = action_state.get_selected_entry()
+				actions.close(prompt_bufnr)
+				if entry then
+					M.apply(entry.value)
+				else
+					M.apply(current_theme)
+				end
+			end)
+
+			return true
+		end,
+	}):find()
 end
-
--- -- ================================================================
--- -- = Picker Telescope avec prévisualisation temps réel            =
--- -- ================================================================
--- function M.preview_with_telescope()
--- 	local pickers = require("telescope.pickers")
--- 	local finders = require("telescope.finders")
--- 	local conf = require("telescope.config").values
--- 	local actions = require("telescope.actions")
--- 	local action_state = require("telescope.actions.state")
---
--- 	local current_theme = vim.g.colors_name
---
--- 	local function preview_selected()
--- 		local entry = action_state.get_selected_entry()
--- 		if entry then
--- 			M.apply(entry[1])
--- 		end
--- 	end
---
--- 	local function close_and_restore(bufnr)
--- 		actions.close(bufnr)
--- 		M.apply(current_theme)
--- 	end
---
--- 	pickers
--- 		.new({}, {
--- 			prompt_title = "Sélection du thème",
--- 			initial_mode = "normal",
--- 			finder = finders.new_table({
--- 				results = M.available,
--- 			}),
--- 			sorter = conf.generic_sorter({}),
--- 			attach_mappings = function(prompt_bufnr, map)
--- 				-- Navigation mode insertion avec prévisualisation
--- 				map("i", "<C-n>", function()
--- 					actions.move_selection_next(prompt_bufnr)
--- 					preview_selected()
--- 				end)
--- 				map("i", "<C-p>", function()
--- 					actions.move_selection_previous(prompt_bufnr)
--- 					preview_selected()
--- 				end)
--- 				-- Navigation mode normal avec prévisualisation
--- 				map("n", "j", function()
--- 					actions.move_selection_next(prompt_bufnr)
--- 					preview_selected()
--- 				end)
--- 				map("n", "k", function()
--- 					actions.move_selection_previous(prompt_bufnr)
--- 					preview_selected()
--- 				end)
--- 				-- Echap : passe en mode normal sans fermer
--- 				map("i", "<Esc>", function()
--- 					vim.cmd("stopinsert")
--- 				end)
--- 				-- Fermeture avec restauration
--- 				map("n", "<Esc>", function()
--- 					close_and_restore(prompt_bufnr)
--- 				end)
--- 				map("n", "q", function()
--- 					close_and_restore(prompt_bufnr)
--- 				end)
--- 				-- Confirmation : applique définitivement le thème sélectionné
--- 				actions.select_default:replace(function()
--- 					local entry = action_state.get_selected_entry()
--- 					actions.close(prompt_bufnr)
--- 					if entry then
--- 						M.apply(entry[1])
--- 					else
--- 						M.apply(current_theme)
--- 					end
--- 				end)
--- 				return true
--- 			end,
--- 		})
--- 		:find()
--- end
 
 return M
