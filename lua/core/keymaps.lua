@@ -12,8 +12,8 @@
 -- *   <leader>n  →  Navigation  (Neotree, Aerial, structure)           *
 -- *   <leader>d  →  Diagnostics (Trouble, flottant, saut)              *
 -- *   <leader>x  →  UI/UX       (thème, zen, hints global, hlsearch)   *
--- *   <leader>m  →  Messages    (Noice — historique, erreurs, stats)   *
 -- *   <leader>p  →  Profil      (Lazy, Mason, Options)                 *
+-- *   <leader>g  →  Git         (Tout ce qui concerne Git/Github)      *
 -- *                                                                    *
 -- * Mappings buffer-local LSP : core/lsp/on_attach.lua                 *
 -- * (nécessitent bufnr, définis à l'attachement LSP)                   *
@@ -24,6 +24,7 @@
 -- + Mise à jour 'docs/commandes-et-raccourcis-'
 vim.g.mapleader = " "
 local map = vim.keymap.set
+local title_preview = "Aperçu du fichier"
 
 -- ======================================================================
 -- Mapping généraux avec fonctionnalités spécifiques (hors which-key)
@@ -48,7 +49,7 @@ end, {
 -- 	silent = true,
 -- })
 map("n", "<leader>hh", ":Telescope help_tags<CR>", {
-	desc = "󰋖 Aide Neovim",
+	desc = "󰋖 Aide Neovim | Navigation dans l'aide de Neovim et ainsi que dans l'aide des plugins, via l'interface de Telescope.",
 	silent = true,
 })
 map("n", "<leader>hc", ":Telescope commands<CR>", {
@@ -111,27 +112,59 @@ map("n", "<leader>b>", ":BufferCloseBuffersRight<CR>", { desc = "󰅙 Fermer à 
 map("n", "<leader>bP", ":BufferPin<CR>", { desc = "󰐃 Épingler/désépingler", silent = true })
 map("n", "<leader>bo", ":BufferOrderByName<CR>", { desc = "󰒺 Trier par nom", silent = true })
 -- Liste
-map("n", "<leader>bl", ":Telescope buffers<CR>", { desc = "󰈞 Liste (Telescope)", silent = true })
+map("n", "<leader>bl", function ()
+    require("telescope.builtin").buffers({
+        preview_title = title_preview,
+}) end, {
+	desc = "󰈞 Liste (Telescope) | Liste tous les buffers ouverts via Telescope, et permet ainsi de se rendre directement au buffer sélectionné",
+	silent = true,
+})
 
 -- ======================================================================
 -- <leader>r — Recherche
 -- Recherche et exploration de fichiers et de contenu.
 -- ======================================================================
-map("n", "<leader>rf", ":Telescope find_files<CR>", {
-	desc = "󰈞 Chercher un fichier",
+map("n", "<leader>rf", function()
+	require("telescope.builtin").find_files({
+		prompt_title = "Fichier recherché",
+		preview_title = title_preview,
+	})
+end, {
+	desc = "󰈞 Chercher un fichier | Rechercher un fichier via Telescope à partir de son nom",
 	silent = true,
 })
-map("n", "<leader>rg", ":Telescope live_grep<CR>", {
-	desc = "󰊄 Rechercher du texte (grep)",
+map("n", "<leader>rg", function()
+	require("telescope.builtin").live_grep({
+		prompt_title = "Occurence recherchée",
+		preview_title = title_preview,
+	})
+end, {
+	desc = "󰊄 Rechercher du texte (grep) | Ouvre Telescope en vue de rechercher des fichiers du répertoire courant à partir d'une occurence",
 	silent = true,
 })
-map("n", "<leader>rr", ":Telescope oldfiles<CR>", {
-	desc = "󰋚 Fichiers récents",
+map("n", "<leader>rr", function()
+	require("telescope.builtin").oldfiles({
+		prompt_title = "Fichiers récemments ouverts",
+		preview_title = title_preview,
+	})
+end, {
+	desc = "󰋚 Fichiers récents | Ouvre Telescope en vue d'effectuer une recherche sur les fihciers récemments ouverts",
 	silent = true,
 })
 map("n", "<leader>rt", function()
 	vim.cmd("TodoTelescope cwd=" .. vim.fn.getcwd())
 end, { desc = "󰄲 Rechercher TODOs/FIX/BUG", silent = true })
+map({ "n", "x" }, "<leader>rw", function()
+	-- Récupère la chaîne sous le curseur
+	local current_word = vim.fn.expand("<cword>")
+	require("telescope.builtin").grep_string({
+		prompt_title = "Recherche de l'occurence : " .. current_word,
+		preview_title = title_preview,
+	})
+end, {
+	desc = "  Recherche de l'occurence sous le curseur | Permet de rechercher, via Telescope, l'occurence située sous le curseur dans l'ensemble du répertoire courant (à la fois en mode normal et en mode visuel).",
+	silent = true,
+})
 
 -- ======================================================================
 -- <leader>n — Navigation
@@ -171,8 +204,8 @@ map("n", "<leader>dh", ":Telescope notify<CR>", {
 	desc = "󰭎 Historique des notifications | Ouvre Telescope pour visualiser l'histotique des notifications",
 	silent = true,
 })
-map("n", "<leader>dc", function ()
-    require("notify").clear_history()
+map("n", "<leader>dc", function()
+	require("notify").clear_history()
 end, {
 	desc = " Suppression historique des notifications | Supprime l'historique des notifications de la session en cours",
 	silent = true,
@@ -227,6 +260,18 @@ map("n", "<leader>ps", ":Lazy sync<CR>", {
 })
 
 -- ======================================================================
+-- <leader>g — Git
+-- ======================================================================
+map("n", "<leader>gs", function()
+	require("telescope.builtin").git_status({
+		preview_title = "Aperçu des diffs",
+	})
+end, {
+	desc = " Recherche fichiers modifiés | Ouvre telescope et permet de visualisr les fichiers modifiées avec les différences.",
+	silent = true,
+})
+
+-- ======================================================================
 -- Which-key — Déclaration des groupes et descriptions
 -- ======================================================================
 vim.api.nvim_create_autocmd("User", {
@@ -252,6 +297,7 @@ vim.api.nvim_create_autocmd("User", {
 			{ "<leader>x", group = "UI/UX", icon = "󰏘 " },
 			{ "<leader>m", group = "Messages", icon = "󰍩 " },
 			{ "<leader>p", group = "Profil", icon = "󰒓 " },
+			{ "<leader>g", group = "Git/Github", icon = "󰊢 " },
 
 			-- ----------------------------------------------------------------
 			-- <leader>h — Aide
@@ -293,6 +339,7 @@ vim.api.nvim_create_autocmd("User", {
 			{ "<leader>rg", desc = "Rechercher du texte (grep)", icon = "󰊄 " },
 			{ "<leader>rr", desc = "Fichiers récents", icon = "󰋚 " },
 			{ "<leader>rt", desc = "Rechercher TODOs/FIX/BUG", icon = "󰄲 " },
+			{ "<leader>rw", desc = "Rechercher l'occurence sous le curseur", icon = " " },
 
 			-- ----------------------------------------------------------------
 			-- <leader>n — Navigation
@@ -327,6 +374,11 @@ vim.api.nvim_create_autocmd("User", {
 			{ "<leader>pu", desc = "Vérifier la mise à jour des plugins", icon = "󰒿 " },
 			{ "<leader>ps", desc = "Synchroniser", icon = "󰓦 " },
 			{ "<leader>po", desc = "Options Neovim", icon = "󰒓 " },
+
+			-- ----------------------------------------------------------------
+			-- <leader>g - Git/Github
+			-- ----------------------------------------------------------------
+			{ "<leader>gs", desc = "Recherche les fichiers modifiés", icon = " " },
 		}, { prefix = "<leader>", mode = "n" })
 	end,
 })

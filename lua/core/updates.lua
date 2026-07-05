@@ -32,15 +32,15 @@ end
 -- 'plugins' est un dictionnaire { nom_plugin = table_plugin, ... }
 -- Chaque entrée contient toutes les métadonnées du plugin.
 
--- @return integer  nombre de plugins avec une mise à jour disponible
+-- @return table  liste des plugins à mettre à jour
 local function _read_results()
 	local ok, lazy_config = pcall(require, "lazy.core.config")
 	if not ok then
 		vim.notify("Impossible de lire la configuration lazy", vim.log.levels.ERROR, { title = TITLE_NOTIFY })
-		return 0
+		return {}
 	end
 	local plugins = lazy_config.plugins
-	local count = 0
+	local outdated = {}
 
 	-- Parcours de chaque plugin déclaré dans Lazy.
 	-- '_' est le nom du plugin (clé du dictionnaire), non utilisé ici.
@@ -49,19 +49,16 @@ local function _read_results()
 		-- Lazy stocke ses données internes dans le champ '_' de chaque plugin.
 		-- On vérifie son existence avant d'y accéder.
 		if plugin._ then
-			-- 'plugin._.updates' est une table de commits disponibles en amont.
-			-- Elle est peuplée par lazy.check() après la vérification réseau.
-			-- nil  = vérification pas encore effectuée ou plugin épinglé
 			-- {}   = aucune mise à jour disponible
 			-- {..} = commits disponibles → mise à jour possible
-			if plugin._.updates and #plugin._.updates > 0 then
-				count = count + 1
+			if type(plugin._.updates) == "table" then
+				table.insert(outdated, plugin.name)
 			end
 		end
 	end
 	-- Retourne le nombre total de plugins avec une mise à jour disponible.
 	-- 0 = tout est à jour.
-	return count
+	return outdated
 end
 
 -- ================================================================
@@ -73,11 +70,19 @@ end
 --   - WARN  si count > 0  →  mises à jour disponibles
 --   - INFO  si count == 0 →  tout est à jour (mode non-silencieux)
 --
--- @param count  integer  nombre de mises à jour disponibles
+-- @param outdated table  liste des mises à jour disponibles
 -- @param silent boolean  si true, pas de notification "tout est à jour"
-local function _notify(count, silent)
+local function _notify(outdated, silent)
+    local count = #outdated
 	if count > 0 then
-		vim.notify(count .. " mises à jour disponibles", vim.log.levels.WARN, { title = TITLE_NOTIFY })
+        -- Construction de la liste des plugins à mettre à jour
+        local lines = {}
+        for _, name in ipairs(outdated) do
+            table.insert(lines, "- " .. name)
+        end
+        local update = count == 1 and " mise à jour disponible :\n" or " mises à jour disponibles :\n"
+        local message = count .. update .. table.concat(lines, "\n")
+		vim.notify(message, vim.log.levels.WARN, { title = TITLE_NOTIFY })
 	elseif not silent then
 		vim.notify("Tous les plugins sont à jour", vim.log.levels.INFO, { title = TITLE_NOTIFY })
 	end
@@ -93,10 +98,17 @@ end
 --- @param silent boolean  transmis à _notify()
 --- @param delay  integer  délai en ms avant lecture des résultats (défaut : 10000)
 function M.check(silent, delay)
-	_fetch()
+	delay = delay or SHORT_DELAY
 	vim.defer_fn(function()
-		local count = _read_results()
-		_notify(count, silent)
+		vim.api.nvim_create_autocmd("User", {
+			pattern = "LazyCheck",
+			once = true,
+			callback = function()
+				local outdated = _read_results()
+				_notify(outdated, silent)
+			end,
+		})
+		_fetch()
 	end, delay)
 end
 
@@ -111,7 +123,17 @@ function M.setup()
 		callback = function()
 			-- Code qui sera exécuté au démarrage, après 3 secondes
 			vim.defer_fn(function()
-				M.check(true, LONG_DELAY) -- 'false' si nous voulons une notification systématique après le démarrage
+				-- Écoute la fin de la vérification avant de lire les résultats
+				vim.api.nvim_create_autocmd("User", {
+					pattern = "LazyCheck",
+					once = true,
+					callback = function()
+						local count = _read_results()
+						_notify(count, true)
+					end,
+				})
+				-- Lance la vérification
+				_fetch()
 			end, SHORT_DELAY)
 		end,
 	})

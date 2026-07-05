@@ -211,6 +211,7 @@ local function open_picker(items)
 			prompt_title = PROMPT_TITLE,
 			sorting_strategy = "ascending",
 			layout_config = { prompt_position = "top" },
+            results_title = "  - Liste des commandes",
 			finder = finders.new_table({
 				results = items,
 				entry_maker = function(entry)

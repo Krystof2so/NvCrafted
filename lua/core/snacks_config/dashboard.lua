@@ -123,7 +123,12 @@ function M.config()
 					icon = "⌛",
 					key = "r",
 					desc = "Fichiers récents",
-					action = ":lua Snacks.dashboard.pick('oldfiles')",
+                    action = function()
+                        require("telescope.builtin").oldfiles({
+                            prompt_title = "Fichiers récemment ouverts",
+                            preview_title = "Aperçu du fichier",
+                        })
+                    end,
 				},
 				{
 					icon = "🔍",

@@ -220,6 +220,7 @@ local function pick_with_telescope(files, labels, callback)
 			layout_config = {
 				prompt_position = "top", -- prompt en haut, curseur sur la première entrée
 			},
+			initial_mode = "normal",
 
 			finder = finders.new_table({
 				results = entries,
