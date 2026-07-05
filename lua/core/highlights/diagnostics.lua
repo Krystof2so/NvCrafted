@@ -65,13 +65,13 @@ end
 
 function M.setup()
 	apply_diagnostic_config()
-
-	local p = require("core.highlights.themes").get()
-	local family = p.current_family()
+	local themes = require("core.highlights.themes")
+	local family = themes.current_family()
+	local p = themes.get()
 	local hl = vim.api.nvim_set_hl
 
 	-- Rosé Pine : délègue à la palette officielle du plugin
-	if family == "rose-pine" then
+	if family == "rose_pine" then
 		hl(0, "DiagnosticVirtualTextError", { fg = nil })
 		hl(0, "DiagnosticVirtualTextWarn", { fg = nil })
 		hl(0, "DiagnosticVirtualTextInfo", { fg = nil })
