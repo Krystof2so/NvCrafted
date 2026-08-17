@@ -35,9 +35,14 @@ end
 function M.check_version()
 	local latest_version = get_latest_version_from_github()
     local current_nvim = current_version()
-	if latest_version and latest_version ~= current_nvim then
-		print(" Une nouvelle version stable de Neovim est actuellement disponible : "..current_nvim.." 󰜴 "..latest_version.." Source GitHub")
-	end
+    if latest_version then
+        -- Nettoyage des versions (suppression des espaces, sauts de ligne, etc.)
+        latest_version = latest_version:gsub("v", ""):gsub("%s+", ""):gsub("\n", "")
+        current_nvim = current_nvim:gsub("v", ""):gsub("%s+", ""):gsub("\n", "")
+	    if latest_version ~= current_nvim then
+		    print(" Une nouvelle version stable de Neovim est actuellement disponible : "..current_nvim.." 󰜴 "..latest_version.." Source GitHub")
+	    end
+    end
 end
 
 return M
