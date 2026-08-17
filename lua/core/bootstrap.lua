@@ -14,7 +14,7 @@ local api = vim.api
 -- 1. Vérification de la version de Neovim
 -- ========================================
 -- FIX: Décalage de version avec README
-local required_neovim_version = "0.12.2"
+local required_neovim_version = "0.12.0"
 if fn.has("nvim-" .. required_neovim_version) ~= 1 then
 	api.nvim_echo({
 		{ "NvCrafted nécessite Neovim >= " .. required_neovim_version .. "\n", "ErrorMsg" },

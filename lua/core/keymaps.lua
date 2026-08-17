@@ -251,7 +251,7 @@ map("n", "<leader>po", ":Telescope vim_options<CR>", {
 })
 map("n", "<leader>pl", ":Lazy<CR>", { desc = "󰒲 Ouvrir Lazy", silent = true })
 map("n", "<leader>pu", function()
-	require("core.updates").check(false, 3000)
+	require("core.update_plugins").check(false, 3000)
 end, {
 	desc = "󰒿 Vérifier la mise à jour des plugins | Permet de lancer une vérification de la mise à jour des plugins, avec un délai de quelques secondes.",
 })
@@ -263,6 +263,29 @@ map("n", "<leader>ps", ":Lazy sync<CR>", {
 -- ======================================================================
 -- <leader>g — Git
 -- ======================================================================
+map("n", "<leader>ge", ":NeogitCommit<CR>", {
+	desc = " Visualiser le dernier commit | Permet de visualiser dans un buffer séparé toutes les informations relatives au dernier commit",
+	silent = true,
+})
+map("n", "<leader>gf", function()
+	pcall(function()
+		vim.cmd("DiffviewClose")
+	end)
+	pcall(function()
+		vim.cmd("tabclose")
+	end)
+end, {
+	desc = " Fermer Diffview | Ferme la vue de diff (Diffview) ainsi que l'onglet dans lequel elle s'est ouverte.",
+	silent = true,
+})
+map("n", "<leader>gh", ":DiffviewFileHistory<CR>", {
+	desc = " Historique Diffview | Ouvre un historique Diffview avec tous les commits et les fichiers affectés par des modifications.",
+	silent = true,
+})
+map("n", "<leader>go", ":DiffviewOpen<CR>", {
+	desc = " Ouvre une diffview | Pour ouvrir une vue Diffview qui compare par rapport à l'index.",
+	silent = true,
+})
 map("n", "<leader>gs", function()
 	require("telescope.builtin").git_status({
 		preview_title = "Aperçu des diffs",
@@ -379,7 +402,10 @@ vim.api.nvim_create_autocmd("User", {
 			-- ----------------------------------------------------------------
 			-- <leader>g - Git/Github
 			-- ----------------------------------------------------------------
-			{ "<leader>gc", desc = "Affiche le dernier commmit", icon = " " },
+			{ "<leader>ge", desc = "Visualiser le dernier commit", icon = " " },
+			{ "<leader>gf", desc = "Fermer Diffview", icon = " " },
+			{ "<leader>gh", desc = "Historique Diffview", icon = " " },
+			{ "<leader>go", desc = "Ouvrir une diffview", icon = " " },
 			{ "<leader>gs", desc = "Recherche les fichiers modifiés", icon = " " },
 		}, { prefix = "<leader>", mode = "n" })
 	end,
