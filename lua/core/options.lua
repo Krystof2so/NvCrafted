@@ -20,6 +20,7 @@ opt.signcolumn = "auto" -- str: Afficher la colonne des signes si des signes son
 opt.cursorline = true -- bool : Mettre en surbrillance la ligne du curseur
 opt.updatetime = 300 -- int: Temps en millisecondes avant que le CursorHold s'active (LSP/diagnostics)
 opt.history = 1000 -- int : Nombre de commandes dans l'historique
+opt.helplang = "fr,en" -- str : Langues de l'aide intégrée
 
 -- ------------------------------------------------------------------------------------
 -- Créer le répertoire pour l'undo persistant : mkdir -p ~/.local/share/nvim/undo
