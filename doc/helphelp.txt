@@ -1,0 +1,591 @@
+*helphelp.txt*	Nvim
+
+
+		  MANUEL DE RÉFÉRENCE VIM	  par Bram Moolenaar
+
+
+Aide sur les fichiers d'aide					*helphelp*
+
+                                      Tapez |gO| pour voir la table des matières.
+
+==============================================================================
+Conventions des balises d'aide				*help-context*
+
+Obtenir une aide spécifique : Il est possible d'aller directement à ce sur quoi
+vous voulez de l'aide, en donnant un argument à la commande |:help|. Ajoutez un
+préfixe pour spécifier le contexte : >
+
+	  QUOI				PRÉFIXE    EXEMPLE
+      Mode Normal		   :help x
+      Mode Visuel		  v_	   :help v_u
+      Mode Insertion		  i_	   :help i_<Esc>
+      Ligne de commande		  :	   :help :quit
+      Édition de la ligne de commande c_	   :help c_<Del>
+      Argument de Vim		  -	   :help -r
+      Option			  '	   :help 'textwidth'
+      Expression régulière	  /	   :help /[
+
+Voir |help-summary| pour plus de contextes et une explication.
+Voir |notation| pour une explication de la syntaxe de l'aide.
+
+RECHERCHE DANS L'AIDE
+
+Tapez ":help mot", puis CTRL-D pour voir les entrées d'aide correspondant à "mot".
+Ou utilisez ":helpgrep mot". |:helpgrep|
+
+==============================================================================
+Notation						*notation*
+
+Quand la coloration syntaxique est utilisée pour lire ceci, le texte qui n'est
+pas tapé littéralement est souvent mis en évidence avec le groupe Special. Ce
+sont les éléments entre [], {} et <>, et CTRL-X.
+
+Notez que Vim utilise tous les caractères possibles dans les commandes.
+Parfois, les [], {} et <> font partie de ce que vous tapez, le contexte devrait
+rendre cela clair.
+
+
+- []            Les caractères entre crochets sont facultatifs.
+
+                                                    *count* *[count]*
+- [count]       Un nombre facultatif qui peut précéder la commande pour
+                multiplier ou itérer la commande. Si aucun nombre n'est donné,
+                un compte de un est utilisé, sauf indication contraire. Notez
+                que dans ce manuel, le [count] n'est pas mentionné dans la
+                description de la commande, mais seulement dans l'explication.
+                Cela a été fait pour rendre les commandes plus faciles à
+                trouver. Si l'option 'showcmd' est activée, le nombre (partiel)
+                saisi est affiché en bas de la fenêtre. Vous pouvez utiliser
+                <Del> pour effacer le dernier chiffre (|N<Del>|).
+
+                                                        *[quotex]*
+- ["x]          Une désignation facultative de registre où le texte peut être
+                stocké. Voir |registers|. Le x est un caractère unique entre
+                'a' et 'z' ou 'A' et 'Z' ou '"', et dans certains cas (avec la
+                commande put) entre '0' et '9', '%', '#', ou autres. Les
+                lettres majuscules et minuscules désignent le même registre,
+                mais la lettre minuscule est utilisée pour écraser le contenu
+                précédent du registre, tandis que la lettre majuscule est
+                utilisée pour ajouter au contenu précédent du registre. Sans
+                le ""x" ou avec """" le texte stocké est placé dans le registre
+                anonyme.
+
+                                                        *{}*
+- {}            Les accolades dénotent des parties de la commande qui doivent
+                apparaître, mais qui peuvent prendre plusieurs valeurs
+                différentes. Les différences entre Vim et Vi sont également
+                données entre accolades (cela sera clair d'après le contexte).
+
+                                                        *{char1-char2}*
+- {char1-char2} Un caractère unique dans la plage char1 à char2. Par exemple :
+                {a-z} est une lettre minuscule. Plusieurs plages peuvent être
+                concaténées. Par exemple, {a-zA-Z0-9} est tout caractère
+                alphanumérique.
+
+                                                *{motion}* *movement*
+- {motion}      Une commande qui déplace le curseur. Elles sont expliquées dans
+                |motion.txt|.
+                - Exemples :
+                  - `w`           au début du mot suivant
+                  - `b`           au début du mot courant
+                  - `4j`          quatre lignes vers le bas
+                  - `/The<CR>`    à la prochaine occurrence de "The"
+                - Ceci est utilisé après une commande |operator| pour se
+                  déplacer sur le texte sur lequel l'opération doit être
+                  effectuée.
+                  - Si le mouvement inclut un compte et que l'opérateur a aussi
+                    un compte, les deux comptes sont multipliés. Par exemple :
+                    "2d3w" supprime six mots.
+                  - Le mouvement peut être vers l'arrière, par exemple "db"
+                    pour supprimer jusqu'au début du mot.
+                  - Le mouvement peut aussi être un clic de souris. La souris
+                    n'est pas supportée dans tous les terminaux cependant.
+                  - La commande ":omap" peut être utilisée pour mapper des
+                    caractères pendant qu'un opérateur est en attente.
+                  - Les commandes Ex peuvent être utilisées pour déplacer le
+                    curseur. Cela peut être utilisé pour appeler une fonction
+                    qui effectue un mouvement compliqué. Le mouvement est
+                    toujours charwise exclusif, peu importe la commande ":"
+                    utilisée. Cela signifie qu'il est impossible d'inclure le
+                    dernier caractère d'une ligne sans le saut de ligne (sauf
+                    si 'virtualedit' est défini). Si la commande Ex modifie le
+                    texte avant l'endroit où l'opérateur commence ou saute vers
+                    un autre buffer, le résultat est imprévisible. Il est
+                    possible de modifier le texte plus bas. Sauter vers un autre
+                    buffer est possible si le buffer courant n'est pas déchargé.
+
+                                                        *{Visual}*
+- {Visual}      Une zone de texte sélectionnée. Elle est démarrée avec la
+                commande "v", "V" ou CTRL-V, puis n'importe quelle commande de
+                mouvement du curseur peut être utilisée pour changer la fin du
+                texte sélectionné.
+                Ceci est utilisé avant une commande |operator| pour surligner le
+                texte sur lequel l'opération doit être effectuée.
+                Voir |Visual-mode|.
+
+                                                        *<character>*
+- <character>   Un caractère spécial du tableau ci-dessous, éventuellement avec
+                des modificateurs, ou un caractère ASCII simple avec des
+                modificateurs.
+
+                                                        *'character'*
+- 'c'           Un caractère ASCII simple.
+
+                                                        *CTRL-{char}*
+- CTRL-{char}   {char} tapé comme caractère de contrôle ; c'est-à-dire en
+                tapant {char} tout en maintenant la touche CTRL enfoncée. La
+                casse de {char} est ignorée ; ainsi CTRL-A et CTRL-a sont
+                équivalents. Mais dans certains terminaux et environnements,
+                l'utilisation de la touche MAJ produira un code distinct (par
+                exemple CTRL-MAJ-a) ; dans ces environnements, l'utilisation de
+                la touche MAJ ne déclenchera pas les commandes telles que
+                CTRL-A.
+
+                                                        *'option'*
+- 'option'      Une option, ou paramètre, qui peut être définie à une valeur,
+                est entourée de guillemets simples. Voir |options|.
+
+                                                        *quotecommandquote*
+- "commande"    Une référence à une commande que vous pouvez taper est entourée
+                de guillemets doubles.
+- `commande`    Style de commande nouveau, cela la distingue des autres textes
+                entre guillemets et des chaînes.
+
+==============================================================================
+Commandes d'aide						*online-help*
+
+			*help* *<Help>* *:h* *:help* *<F1>* *i_<F1>* *i_<Help>*
+<Help>		ou
+:h[elp]			Ouvrir une fenêtre et afficher le fichier d'aide en mode
+			lecture seule. S'il y a déjà une fenêtre d'aide ouverte,
+			utilisez celle-là. Sinon, si la fenêtre courante utilise
+			la largeur totale de l'écran ou fait au moins 80
+			caractères de large, la fenêtre d'aide apparaîtra juste
+			au-dessus de la fenêtre courante. Sinon, la nouvelle
+			fenêtre est placée tout en haut.
+			L'option 'helplang' est utilisée pour sélectionner une
+			langue, si le fichier d'aide principal est disponible en
+			plusieurs langues.
+
+			Tapez |gO| pour voir la table des matières.
+
+							*:help!*
+:h[elp]!		Devine une balise d'aide à partir du |WORD| sous le
+			curseur, à la manière DWIM ("Do What I Mean") : supprime
+			la ponctuation en utilisant diverses heuristiques jusqu'à
+			ce qu'une balise d'aide valide soit trouvée.
+
+			Par exemple, déplacez le curseur n'importe où dans ce
+			code, puis exécutez `:help!` : >
+
+				local v = vim.version.parse(vim.system({'foo'}):wait().stdout)
+<
+			Puis comparez avec `:exe 'help' expand('<cword>')`.
+
+						*{subject}* *E149* *E661*
+:h[elp] {sujet}		Comme ":help", et en plus saute vers la balise {sujet}.
+			Par exemple :  >
+				:help options
+
+<			{sujet} peut inclure des caractères génériques tels que
+			"*", "?" et "[a-z]" :
+			   :help z?	saute à l'aide pour n'importe quelle commande "z"
+			   :help z.	saute à l'aide pour "z."
+			Mais lorsqu'une balise existe, elle est prise littéralement :
+			   :help :?	saute à l'aide pour ":?"
+
+			S'il n'y a pas de correspondance exacte pour le motif, ou
+			s'il y a plusieurs correspondances, la "meilleure"
+			correspondance sera utilisée. Un algorithme sophistiqué
+			est utilisé pour décider quelle correspondance est
+			meilleure qu'une autre. Ces éléments sont pris en compte
+			dans le calcul :
+			- Une correspondance avec la même casse est bien meilleure
+			  qu'une correspondance avec une casse différente.
+			- Une correspondance qui commence après un caractère
+			  non-alphanumérique est meilleure qu'une correspondance
+			  au milieu d'un mot.
+			- Une correspondance au début ou près du début de la
+			  balise est meilleure qu'une correspondance plus loin.
+			- Plus il y a de caractères alphanumériques qui
+			  correspondent, meilleure est la correspondance.
+			- Plus la longueur de la correspondance est courte,
+			  meilleure elle est.
+
+			L'option 'helplang' est utilisée pour sélectionner une
+			langue, si le {sujet} est disponible en plusieurs
+			langues. Pour trouver une balise dans une langue
+			spécifique, ajoutez "@ab", où "ab" est le code de langue
+			à deux lettres. Voir |help-translated|.
+
+			Notez que plus le {sujet} que vous donnez est long, moins
+			il y aura de correspondances trouvées. Vous pouvez avoir
+			une idée de comment cela fonctionne en utilisant la
+			complétion en ligne de commande (tapez CTRL-D après
+			":help sujet" |c_CTRL-D|).
+			S'il y a plusieurs correspondances, vous pouvez les
+			lister en appuyant sur CTRL-D. Exemple : >
+				:help cont<Ctrl-D>
+
+<			Au lieu de taper ":help CTRL-V" pour chercher de l'aide
+			pour CTRL-V, vous pouvez taper : >
+				:help ^V
+<			Cela fonctionne également avec d'autres caractères, par
+			exemple pour trouver de l'aide pour CTRL-V en mode
+			Insertion : >
+				:help i^V
+<
+			Il est également possible de faire d'abord ":help", puis
+			d'utiliser ":tag {motif}" dans la fenêtre d'aide. La
+			commande ":tnext" peut alors être utilisée pour sauter
+			vers d'autres correspondances, "tselect" pour lister les
+			correspondances et en choisir une. >
+				:help index
+				:tselect /.*mode
+
+<			Lorsqu'il n'y a pas d'argument, vous verrez des
+			correspondances pour "help", pour éviter de lister
+			toutes les correspondances possibles (ce serait très
+			lent).
+			Le nombre de correspondances affichées est limité à 300.
+
+			La commande `:help` peut être suivie de '|' et d'une
+			autre commande, mais vous n'avez pas besoin d'échapper le
+			'|' à l'intérieur d'une commande d'aide. Donc les deux
+			fonctionnent : >
+				:help |
+				:help k| only
+<			Notez qu'un espace avant le '|' est considéré comme
+			faisant partie de l'argument de ":help".
+			Vous pouvez également utiliser <NL> ou <CR> pour séparer
+			la commande d'aide d'une commande suivante. Vous devez
+			d'abord taper CTRL-V pour insérer <NL> ou <CR>.
+			Exemple : >
+				:help so<C-V><CR>only
+<
+
+:h[elp]! {sujet}	Comme ":help", mais préfère les balises avec la même
+			langue |help-translated| que le fichier courant.
+
+			Sans rapport avec |:help!| (sans {sujet}).
+
+							*:helpc* *:helpclose*
+:helpc[lose]		Fermer une fenêtre d'aide, s'il y en a une.
+			Vim essaiera de restaurer la disposition des fenêtres
+			(y compris la position du curseur) à la même disposition
+			qu'avant l'ouverture initiale de la fenêtre d'aide. Cela
+			peut déclencher plusieurs autocommandes.
+
+							*:helpg* *:helpgrep*
+:helpg[rep] {motif}[@xx]
+			Rechercher dans tous les fichiers d'aide et faire une
+			liste des lignes dans lesquelles {motif} correspond. Saute
+			à la première correspondance.
+			Le [@xx] facultatif spécifie que seules les
+			correspondances dans la langue "xx" doivent être
+			trouvées.
+			Vous pouvez naviguer parmi les correspondances avec les
+			commandes |quickfix|, par exemple |:cnext| pour sauter à
+			la suivante. Ou utilisez |:cwindow| pour obtenir la
+			liste des correspondances dans la fenêtre quickfix.
+			{motif} est utilisé comme une regexp Vim |pattern|.
+			'ignorecase' n'est pas utilisé, ajoutez "\c" pour
+			ignorer la casse.
+			Exemple de recherche sensible à la casse : >
+				:helpgrep Uganda
+<			Exemple de recherche ignorant la casse : >
+				:helpgrep uganda\c
+<			Exemple de recherche dans l'aide française : >
+				:helpgrep backspace@fr
+<			Le motif ne supporte pas les sauts de ligne, il doit
+			correspondre à l'intérieur d'une seule ligne. Vous pouvez
+			utiliser |:grep| à la place, mais alors vous devez
+			obtenir la liste des fichiers d'aide d'une manière
+			compliquée.
+			Ne peut pas être suivi d'une autre commande, tout est
+			utilisé comme partie du motif. Mais vous pouvez utiliser
+			|:execute| si nécessaire.
+			Les fichiers d'aide compressés ne seront pas recherchés
+			(Fedora compresse les fichiers d'aide).
+
+							*:lh* *:lhelpgrep*
+:lh[elpgrep] {motif}[@xx]
+			Identique à ":helpgrep", sauf que la liste de
+			localisation est utilisée à la place de la liste quickfix.
+			Si la fenêtre d'aide est déjà ouverte, la liste de
+			localisation pour cette fenêtre est utilisée. Sinon, une
+			nouvelle fenêtre d'aide est ouverte et la liste de
+			localisation pour cette fenêtre est définie. La liste de
+			localisation pour la fenêtre courante n'est alors pas
+			modifiée.
+
+							*:exu* *:exusage*
+:exu[sage]		Affiche l'aide sur les commandes Ex. Ajouté pour simuler
+			la commande Nvi.
+
+							*:viu* *:viusage*
+:viu[sage]		Affiche l'aide sur les commandes du mode Normal. Ajouté
+			pour simuler la commande Nvi.
+
+Lorsqu'aucun argument n'est donné à |:help|, le fichier donné par l'option
+'helpfile' sera ouvert. Sinon, la balise spécifiée est recherchée dans tous les
+fichiers "doc/tags" des répertoires spécifiés dans l'option 'runtimepath'.
+
+Si vous souhaitez ouvrir l'aide dans la fenêtre courante, voir cette astuce :
+|help-curwin|.
+
+La hauteur initiale de la fenêtre d'aide peut être définie avec l'option
+'helpheight' (par défaut 20).
+						*help-buffer-options*
+Lorsque le buffer d'aide est créé, plusieurs options locales sont définies pour
+garantir que le texte d'aide est affiché comme prévu :
+    'iskeyword'		presque tous les caractères ASCII sauf ' ', '*', '"' et '|'
+    'foldmethod'	"manual"
+    'tabstop'		8
+    'arabic'		off
+    'binary'		off
+    'buflisted'		off
+    'cursorbind'	off
+    'diff'		off
+    'foldenable'	off
+    'list'		off
+    'modifiable'	off
+    'number'		off
+    'relativenumber'	off
+    'rightleft'		off
+    'scrollbind'	off
+    'spell'		off
+
+Sauter vers des sujets spécifiques en utilisant les balises. Cela peut se faire
+de deux manières :
+- Utilisez la commande "CTRL-]" en vous tenant sur le nom d'une commande ou
+  d'une option. Cela ne fonctionne que lorsque la balise est un mot-clé.
+  "<C-Leftmouse>" et "g<LeftMouse>" fonctionnent exactement comme "CTRL-]".
+- Utilisez la commande ":ta {sujet}". Cela fonctionne aussi avec des caractères
+  non-mots.
+
+Utilisez CTRL-T ou CTRL-O pour revenir en arrière.
+Utilisez ":q" pour fermer la fenêtre d'aide.
+Utilisez `g==` pour exécuter le bloc de code Lua/Vimscript courant.
+
+S'il y a plusieurs correspondances pour un élément que vous recherchez, voici
+comment sauter à chacun d'eux :
+1. Ouvrez une fenêtre d'aide
+2. Utilisez la commande ":tag" avec une barre oblique précédant la balise.
+   Exemple : >
+	:tag /min
+3. Utilisez ":tnext" pour sauter à la balise correspondante suivante.
+
+Il est possible d'ajouter des fichiers d'aide pour des plugins et d'autres
+éléments. Vous n'avez pas besoin de modifier les fichiers d'aide distribués
+pour cela. Voir |add-local-help|.
+
+Pour écrire un fichier d'aide local, voir |write-local-help|.
+
+Notez que les lignes de titre des fichiers d'aide locaux sont automatiquement
+ajoutées à la section "LOCAL ADDITIONS" du fichier d'aide "help.txt"
+|local-additions|. Cela est fait lors de la visualisation du fichier dans Vim,
+le fichier lui-même n'est pas modifié. Cela est fait en parcourant tous les
+fichiers d'aide et en obtenant la première ligne de chaque fichier. Les
+fichiers dans $VIMRUNTIME/doc sont ignorés.
+
+					*:helpt* *:helptags*
+			*E150* *E151* *E152* *E153* *E154* *E670* *E856*
+:helpt[ags] [++t] {dir}
+			Génère le(s) fichier(s) de balises d'aide pour le
+			répertoire {dir}.
+			Lorsque {dir} est ALL, tous les répertoires "doc" dans
+			'runtimepath' seront utilisés.
+
+			Tous les fichiers "*.txt" et "*.??x" dans le répertoire et
+			les sous-répertoires sont analysés pour une définition de
+			balise d'aide entre des astérisques. Les fichiers "*.??x"
+			sont pour les docs traduits, ils génèrent le fichier
+			"tags-??", voir |help-translated|. Les fichiers de
+			balises générés sont triés.
+			En cas de doublons, un message d'erreur est donné.
+			Un fichier de balises existant est silencieusement écrasé.
+
+			L'argument facultatif "++t" force l'ajout de la balise
+			"help-tags". Ceci est également fait lorsque le {dir} est
+			égal à $VIMRUNTIME/doc.
+
+			Pour reconstruire les balises d'aide dans le répertoire
+			runtime (nécessite une autorisation d'écriture) : >
+				:helptags $VIMRUNTIME/doc
+<
+
+
+==============================================================================
+Fichiers d'aide traduits					*help-translated*
+
+Il est possible d'ajouter des fichiers d'aide traduits, à côté des fichiers
+d'aide originaux en anglais. Vim recherchera toute l'aide dans les répertoires
+"doc" de 'runtimepath'.
+
+Actuellement, des traductions sont disponibles pour :
+	Chinois  - plusieurs auteurs
+	Français - traduit par David Blanchet
+	Italien  - traduit par Antonio Colombo
+	Japonais - plusieurs auteurs
+	Polonais - traduit par Mikolaj Machowski
+	Russe    - traduit par Vassily Ragosin
+Consultez le site Web de Vim pour les trouver : https://www.vim.org/translations.php
+
+Un ensemble de fichiers d'aide traduits se compose de ces fichiers :
+
+	help.abx
+	howto.abx
+	...
+	tags-ab
+
+"ab" est le code de langue à deux lettres. Ainsi, pour l'italien, les noms sont :
+
+	help.itx
+	howto.itx
+	...
+	tags-it
+
+L'option 'helplang' peut être définie sur la ou les langues préférées. La valeur
+par défaut est définie en fonction de l'environnement. Vim essaiera d'abord de
+trouver une balise correspondante dans la ou les langues préférées. L'anglais
+est utilisé s'il ne peut pas être trouvé.
+
+Pour trouver une balise dans une langue spécifique, ajoutez "@ab" à une balise,
+où "ab" est le code de langue à deux lettres. Exemple : >
+	:he user-manual@it
+	:he user-manual@en
+La première trouve le manuel utilisateur italien, même si 'helplang' est vide.
+La seconde trouve le manuel utilisateur anglais, même si 'helplang' est défini
+sur "it".
+
+Lors de l'utilisation de la complétion en ligne de commande pour la commande
+":help", l'extension "@en" n'est affichée que lorsqu'une balise existe pour
+plusieurs langues. Lorsque la balise n'existe qu'en anglais, "@en" est omis.
+Lorsque le premier candidat a une extension "@ab" et qu'elle correspond à la
+première langue dans 'helplang', "@ab" est également omis.
+
+Lorsque vous utilisez |CTRL-]| ou ":help!" dans un fichier d'aide non anglais,
+Vim essaiera de trouver la balise dans la même langue. Si elle n'est pas
+trouvée, 'helplang' sera utilisé pour sélectionner une langue.
+
+Les fichiers d'aide doivent utiliser l'encodage latin1 ou utf-8. Vim suppose
+que l'encodage est utf-8 lorsqu'il trouve des caractères non-ASCII dans la
+première ligne. Vous devez donc traduire l'en-tête avec "For Vim version".
+
+Le même encodage doit être utilisé pour les fichiers d'aide d'une même langue
+dans un même répertoire. Vous pouvez utiliser un encodage différent pour
+différentes langues et utiliser un encodage différent pour les fichiers d'aide
+d'une même langue mais dans un répertoire différent.
+
+Conseils pour les traducteurs :
+- Ne traduisez pas les balises. Cela permet d'utiliser 'helplang' pour
+  spécifier la langue préférée. Vous pouvez ajouter de nouvelles balises dans
+  votre langue.
+- Lorsque vous ne traduisez pas une partie d'un fichier, ajoutez des balises à
+  la version anglaise, en utilisant la notation "tag@en".
+- Créez un paquet avec tous les fichiers et le fichier de balises disponible en
+  téléchargement. Les utilisateurs peuvent le placer dans l'un des répertoires
+  "doc" et commencer à l'utiliser.
+  Signalez-le à l'équipe de développement, afin qu'ils puissent ajouter un lien
+  sur www.vim.org.
+- Utilisez la commande |:helptags| pour générer les fichiers de balises. Elle
+  trouvera toutes les langues dans le répertoire spécifié.
+
+==============================================================================
+Écrire des fichiers d'aide					*help-writing*
+
+Pour faciliter l'utilisation, un fichier d'aide Vim pour un plugin doit suivre
+le format des fichiers d'aide Vim standard, sauf pour la première ligne. Si
+vous écrivez un nouveau fichier d'aide, il est préférable de copier l'un des
+fichiers existants et de l'utiliser comme modèle.
+
+La première ligne d'un fichier d'aide doit avoir le format suivant : >
+
+	*plugin_name.txt*	{courte description du plugin}
+
+Le premier champ est une balise d'aide vers laquelle ":help plugin_name"
+sautera. Le reste de la ligne, après une tabulation, décrit brièvement
+l'objectif du plugin. Cela apparaîtra dans la section "LOCAL ADDITIONS" du
+fichier d'aide principal. Vérifiez là-bas qu'il s'affiche correctement :
+|local-additions|.
+
+Si vous souhaitez ajouter un numéro de version ou une date de dernière
+modification, placez-le sur la deuxième ligne, aligné à droite.
+
+En bas du fichier d'aide, placez un modeline Vim pour définir les options
+'textwidth' et 'tabstop' ainsi que le 'filetype' sur "help". Ne définissez
+jamais une option globale dans un tel modeline, cela pourrait avoir des
+conséquences indésirables.
+
+
+BALISES
+
+Pour définir une balise d'aide, placez le nom entre des astérisques
+("*nom-de-la-balise*"). Le nom de la balise doit être différent de tous les
+noms de balises d'aide Vim et devrait idéalement commencer par le nom du
+plugin Vim. Le nom de la balise est généralement aligné à droite sur une ligne.
+
+Lorsque vous faites référence à une balise d'aide existante et pour créer un
+lien hypertexte, placez le nom entre deux barres ("|") par exemple |help-writing|.
+
+Lorsque vous faites référence à une option Vim dans le fichier d'aide, placez le
+nom de l'option entre deux guillemets simples, par exemple 'statusline'.
+
+Lorsque vous faites référence à tout autre terme technique ou symbole, tel qu'un
+nom de fichier ou un paramètre de fonction, entourez-le d'accents graves,
+par exemple `~/.path/to/init.vim`. Cela le rendra comme du code "en ligne"
+(par opposition à un "bloc de code" |help-codeblock|).
+
+
+COLORATION SYNTAXIQUE
+
+Pour définir un en-tête de colonne, utilisez un caractère tilde à la fin de la
+ligne, précédé d'un espace. Cela mettra en évidence l'en-tête de colonne dans
+une couleur différente. Par exemple :
+
+En-tête de colonne ~
+
+Pour séparer des sections dans un fichier d'aide, placez une série de
+caractères '=' sur une ligne commençant à la première colonne. La ligne de
+séparation de section est mise en évidence différemment.
+
+							      *help-codeblock*
+Pour citer un bloc de commandes Ex textuellement, placez un caractère supérieur
+(>) à la fin de la ligne avant le bloc et un caractère inférieur (<) comme
+premier caractère non blanc sur une ligne suivant le bloc. Toute ligne
+commençant à la colonne 1 arrête également implicitement le bloc de commandes Ex
+avant elle. Par exemple : >
+	function Example_Func()
+	  echo "Example"
+	endfunction
+<
+Pour activer la coloration syntaxique pour un bloc de code, placez une
+annotation de nom de langue (par exemple "vim") après un caractère supérieur
+(>). Par exemple : >vim
+	function Example_Func()
+	  echo "Example"
+	endfunction
+<
+						*help-notation*
+Les éléments suivants sont mis en évidence différemment dans un fichier d'aide
+Vim :
+  - un nom de touche spécial exprimé soit en notation <> comme <PageDown>, soit
+    comme un caractère Ctrl comme CTRL-X
+  - tout ce qui est entre {accolades}, par exemple {lhs} et {rhs}
+
+Le mot "Note", "Notes" et similaires reçoivent automatiquement une mise en
+évidence distinctive. De même pour :
+	Todo	quelque chose à faire
+	Error	quelque chose de faux
+
+Vous pouvez trouver les détails dans $VIMRUNTIME/syntax/help.vim
+
+
+COMPLÉTION DE FILETYPE					*ft-help-omni*
+
+Pour obtenir une complétion des balises d'aide lors de l'écriture d'une
+référence de balise, vous pouvez utiliser la commande |i_CTRL-X_CTRL-O|.
+
+
+ vim:tw=78:ts=8:noet:ft=help:norl:

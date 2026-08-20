@@ -1,0 +1,867 @@
+*motion.txt*	Nvim
+
+
+		  MANUEL DE RÉFÉRENCE VIM	  par Bram Moolenaar
+
+
+Mouvements du curseur					*cursor-motions* *navigation*
+
+Ces commandes déplacent la position du curseur. Si la nouvelle position est hors de l'écran, l'écran défile pour afficher le curseur (voir aussi les options 'scrolljump' et 'scrolloff').
+
+Remarques générales :
+
+Si vous voulez savoir où vous vous trouvez dans le fichier, utilisez la commande "CTRL-G" |CTRL-G| ou la commande "g CTRL-G" |g_CTRL-G|. Si vous définissez l'option 'ruler', la position du curseur est affichée en continu dans la barre d'état (ce qui ralentit un peu Vim).
+
+Les utilisateurs expérimentés préfèrent les touches hjkl car elles sont toujours sous leurs doigts. Les débutants préfèrent souvent les touches fléchées, car ils ne savent pas ce que font les touches hjkl. La valeur mnémotechnique de hjkl est claire en regardant le clavier. Considérez j comme une flèche pointant vers le bas.
+
+L'option 'virtualedit' peut être activée pour permettre de déplacer le curseur vers des positions où il n'y a pas de caractère ou à l'intérieur d'un caractère multi-colonnes (comme une tabulation).
+
+                                      Tapez |gO| pour voir la table des matières.
+
+==============================================================================
+1. Mouvements et opérateurs				*operator*
+
+Les commandes de mouvement peuvent être utilisées après une commande opérateur, pour que la commande agisse sur le texte parcouru. Il s'agit du texte situé entre la position du curseur avant et après le mouvement. Les opérateurs sont généralement utilisés pour supprimer ou modifier du texte. Les opérateurs suivants sont disponibles :
+
+	|c|	c	changer
+	|d|	d	effacer
+	|y|	y	copier dans un registre (ne modifie pas le texte)
+	|~|	~	inverser la casse (uniquement si 'tildeop' est défini)
+	|g~|	g~	inverser la casse
+	|gu|	gu	mettre en minuscules
+	|gU|	gU	mettre en majuscules
+	|!|	!	filtrer via un programme externe
+	|=|	=	filtrer via 'equalprg' ou indentation C si vide
+	|gq|	gq	formatage du texte
+	|gw|	gw	formatage du texte sans déplacer le curseur
+	|g?|	g?	encodage ROT13
+	|>|	>	décaler à droite
+	|<|	<	décaler à gauche
+	|zf|	zf	définir un pli
+	|g@|	g@	appeler la fonction définie avec l'option 'operatorfunc'
+						*motion-count-multiplied*
+Si le mouvement inclut un compteur et que l'opérateur avait également un compteur avant lui, les deux compteurs sont multipliés. Par exemple : "2d3w" supprime six mots.
+						*operator-doubled*
+En doublant l'opérateur, il opère sur une ligne. Lorsque vous utilisez un compteur, avant ou après le premier caractère, ce nombre de lignes est traité. Ainsi `3dd` supprime trois lignes. Un compteur avant et après le premier caractère est multiplié, donc `2y3y` copie six lignes.
+						*operator-resulting-pos*
+Après l'application de l'opérateur, le curseur est généralement laissé au début du texte sur lequel l'opération a été effectuée. Par exemple, "yfe" ne déplace pas le curseur, mais "yFe" déplace le curseur vers la gauche jusqu'au "e" où la copie a commencé.
+L'option 'startofline' s'applique uniquement aux opérations en mode ligne "d", "<<", "==" et ">>".
+
+						*linewise* *charwise* *characterwise*
+L'opérateur affecte soit des lignes entières, soit les caractères entre la position de début et de fin. Généralement, les mouvements qui se déplacent entre les lignes affectent des lignes (mode ligne), et les mouvements qui se déplacent à l'intérieur d'une ligne affectent des caractères (mode caractère). Cependant, il y a quelques exceptions.
+
+						*exclusive* *inclusive*
+Un mouvement de caractère est soit inclusif, soit exclusif. Lorsqu'il est inclusif, la position de début et de fin du mouvement sont incluses dans l'opération. Lorsqu'il est exclusif, le dernier caractère vers la fin du tampon n'est pas inclus. Les mouvements en mode ligne incluent toujours la position de début et de fin. Les plugins peuvent vérifier le drapeau v:event.inclusive de l'événement |TextYankPost|.
+
+Les mouvements qui sont en mode ligne, inclusifs ou exclusifs sont mentionnés avec la commande. Il y a cependant deux exceptions générales :
+1. Si le mouvement est exclusif et que la fin du mouvement est dans la colonne 1, la fin du mouvement est déplacée à la fin de la ligne précédente et le mouvement devient inclusif. Exemple : "}" se déplace vers la première ligne après un paragraphe, mais "d}" n'inclura pas cette ligne.
+						*exclusive-linewise*
+2. Si le mouvement est exclusif, que la fin du mouvement est dans la colonne 1 et que le début du mouvement se trouvait à ou avant le premier non-blanc de la ligne, le mouvement devient en mode ligne. Exemple : si un paragraphe commence par des espaces et que vous faites "d}" alors que vous êtes sur le premier non-blanc, toutes les lignes du paragraphe sont supprimées, y compris les espaces. Si vous faites un collage maintenant, les lignes supprimées seront insérées sous la position du curseur.
+
+Notez que lorsque l'opérateur est en attente (la commande opérateur est tapée, mais le mouvement ne l'est pas encore), un ensemble spécial de mappages peut être utilisé. Voir |:omap|.
+
+Au lieu de donner d'abord l'opérateur puis un mouvement, vous pouvez utiliser le mode Visuel : marquez le début du texte avec "v", déplacez le curseur jusqu'à la fin du texte à affecter, puis appuyez sur l'opérateur. Le texte situé entre le début et la position du curseur est surligné, vous pouvez donc voir sur quel texte l'opération va porter. Cela offre beaucoup plus de liberté, mais nécessite plus de frappes et a une fonctionnalité de répétition limitée. Voir le chapitre sur le mode Visuel |Visual-mode|.
+
+Vous pouvez utiliser une commande ":" comme mouvement. Par exemple "d:call FindEnd()". Mais cela ne peut pas être répété avec "." si la commande fait plus d'une ligne. Ceci peut être répété : >
+	d:call search("f")<CR>
+Ceci ne peut pas être répété : >
+	d:if 1<CR>
+	   call search("f")<CR>
+	endif<CR>
+Notez que lors de l'utilisation de ":", tout mouvement devient exclusif en mode caractère.
+
+					*inclusive-motion-selection-exclusive*
+Lorsque 'selection' est "exclusive", le mode |Visual| est actif et un mouvement inclusif a été utilisé, la position du curseur sera ajustée d'un autre caractère vers la droite, afin que la sélection Visuelle inclue le texte attendu et puisse être traitée.
+
+								*forced-motion*
+FORCER UN MOUVEMENT À ÊTRE EN MODE LIGNE, CARACTÈRE OU BLOC
+
+Lorsqu'un mouvement n'est pas du type que vous souhaitez utiliser, vous pouvez forcer un autre type en utilisant "v", "V" ou CTRL-V juste après l'opérateur.
+Exemple : >
+	dj
+supprime deux lignes >
+	dvj
+supprime de la position du curseur jusqu'au caractère sous le curseur >
+	d<C-V>j
+supprime le caractère sous le curseur et le caractère en dessous. >
+
+Soyez prudent lorsque vous forcez un mouvement en mode ligne à être utilisé en mode caractère ou bloc, la colonne peut ne pas toujours être définie.
+
+							*o_v*
+v		Lorsqu'il est utilisé après un opérateur, avant la commande de mouvement : Force l'opérateur à fonctionner en mode caractère, même si le mouvement est en mode ligne. Si le mouvement était en mode ligne, il deviendra |exclusive|.
+		Si le mouvement était déjà en mode caractère, bascule entre inclusif/exclusif. Cela peut être utilisé pour rendre un mouvement exclusif inclusif et inversement.
+
+							*o_V*
+V		Lorsqu'il est utilisé après un opérateur, avant la commande de mouvement : Force l'opérateur à fonctionner en mode ligne, même si le mouvement est en mode caractère.
+
+							*o_CTRL-V*
+CTRL-V		Lorsqu'il est utilisé après un opérateur, avant la commande de mouvement : Force l'opérateur à fonctionner en mode bloc. Cela fonctionne comme la sélection en mode bloc Visuel, avec les coins définis par la position du curseur avant et après le mouvement.
+
+==============================================================================
+2. Mouvements gauche-droite					*left-right-motions*
+
+Ces commandes déplacent le curseur vers la colonne spécifiée dans la ligne courante. Elles s'arrêtent à la première colonne et à la fin de la ligne, sauf "$" qui peut se déplacer vers l'une des lignes suivantes. Voir l'option 'whichwrap' pour permettre à certaines commandes de franchir les limites de ligne.
+
+h		ou					*h*
+<Left>		ou					*<Left>*
+CTRL-H		ou					*CTRL-H* *<BS>*
+<BS>			[count] caractères vers la gauche. Mouvement |exclusive|.
+			Remarque : Si vous préférez que <BS> supprime un caractère, utilisez le mappage : >
+				:map CTRL-V<BS>		X
+<			(pour entrer "CTRL-V<BS>" tapez la touche CTRL-V, suivie de la touche <BS>)
+
+l		ou					*l*
+<Right>		ou					*<Right>* *<Space>*
+<Space>			[count] caractères vers la droite. Mouvement |exclusive|.
+			Voir l'option 'whichwrap' pour ajuster le comportement en fin de ligne.
+
+							*0*
+0			Vers le premier caractère de la ligne. Mouvement |exclusive|.
+
+							*<Home>* *<kHome>*
+<Home>			Vers le premier caractère de la ligne. Mouvement |exclusive|. Lors du déplacement vers le haut ou le bas suivant, restez dans la même colonne TEXTE (si possible). La plupart des autres commandes restent dans la même colonne ÉCRAN. <Home> fonctionne comme "1|", ce qui diffère de "0" lorsque la ligne commence par une tabulation.
+
+							*^*
+^			Vers le premier caractère non-blanc de la ligne. Mouvement |exclusive|. Tout compteur est ignoré.
+
+							*$* *<End>* *<kEnd>*
+$  ou <End>		Vers la fin de la ligne. Avec un compteur, descend également de [count - 1] lignes, ou aussi loin que possible. Mouvement |inclusive|. Si un compteur de 2 ou plus est donné et que le curseur est sur la dernière ligne, c'est une erreur et le curseur ne bouge pas.
+			En mode Visuel, le curseur va juste après le dernier caractère de la ligne.
+			Lorsque 'virtualedit' est actif, "$" peut ramener le curseur depuis après la fin de la ligne jusqu'au dernier caractère de la ligne.
+
+							*g_*
+g_			Vers le dernier caractère non-blanc de la ligne et [count - 1] lignes vers le bas |inclusive|.
+
+							*g0* *g<Home>*
+g0 ou g<Home>		Lorsque les lignes s'enroulent ('wrap' activé) : Vers le premier caractère de la ligne d'écran. Mouvement |exclusive|. Diffère de "0" lorsqu'une ligne est plus large que l'écran.
+			Lorsque les lignes ne s'enroulent pas ('wrap' désactivé) : Vers le caractère le plus à gauche de la ligne courante qui est visible à l'écran. Diffère de "0" lorsque le premier caractère de la ligne n'est pas visible à l'écran.
+
+							*g^*
+g^			Lorsque les lignes s'enroulent ('wrap' activé) : Vers le premier caractère non-blanc de la ligne d'écran. Mouvement |exclusive|. Diffère de "^" lorsqu'une ligne est plus large que l'écran.
+			Lorsque les lignes ne s'enroulent pas ('wrap' désactivé) : Vers le caractère non-blanc le plus à gauche de la ligne courante qui est visible à l'écran. Diffère de "^" lorsque le premier caractère non-blanc de la ligne n'est pas visible à l'écran.
+
+							*gm*
+gm			Comme "g0", mais à une demi-largeur d'écran vers la droite (ou autant que possible).
+
+							*gM*
+gM			Comme "g0", mais à la moitié du texte de la ligne. Avec un compteur : à ce pourcentage du texte dans la ligne. Ainsi "10gM" est près du début du texte et "90gM" est près de la fin du texte.
+
+							*g$*
+g$			Lorsque les lignes s'enroulent ('wrap' activé) : Vers le dernier caractère de la ligne d'écran et [count - 1] lignes d'écran vers le bas |inclusive|. Diffère de "$" lorsqu'une ligne est plus large que l'écran.
+			Lorsque les lignes ne s'enroulent pas ('wrap' désactivé) : Vers le caractère le plus à droite de la ligne courante visible à l'écran. Diffère de "$" lorsque le dernier caractère de la ligne n'est pas visible à l'écran ou lorsqu'un compteur est utilisé. De plus, les mouvements verticaux conservent la colonne, au lieu d'aller en fin de ligne.
+			Lorsque 'virtualedit' est activé, se déplace vers la fin de la ligne d'écran.
+
+							*g<End>* *g<kEnd>*
+g<End>			Comme |g$| mais vers le dernier caractère non-blanc au lieu du dernier caractère.
+
+							*bar*
+|			Vers la colonne d'écran [count] dans la ligne courante. Mouvement |exclusive|. Ceci n'est pas une pipe.
+
+							*f*
+f{char}			Vers la [count]ème occurrence de {char} vers la droite. Le curseur est placé sur {char} |inclusive|.
+			{char} peut être saisi comme un digraphe |digraph-arg|. Lorsque 'encoding' est défini sur Unicode, des caractères de composition peuvent être utilisés, voir |utf-8-char-arg|. Les mappages |:lmap| s'appliquent à {char}. La commande CTRL-^ en mode Insertion peut être utilisée pour activer/désactiver ceci |i_CTRL-^|.
+
+							*F*
+F{char}			Vers la [count]ème occurrence de {char} vers la gauche. Le curseur est placé sur {char} |exclusive|. {char} peut être saisi comme pour la commande |f|.
+
+							*t*
+t{char}			Jusqu'avant la [count]ème occurrence de {char} vers la droite. Le curseur est placé sur le caractère à gauche de {char} |inclusive|. {char} peut être saisi comme pour la commande |f|.
+
+							*T*
+T{char}			Jusqu'après la [count]ème occurrence de {char} vers la gauche. Le curseur est placé sur le caractère à droite de {char} |exclusive|. {char} peut être saisi comme pour la commande |f|.
+
+							*;*
+;			Répéter la dernière commande f, t, F ou T [count] fois. Voir |cpo-;|
+
+							*,*
+,			Répéter la dernière commande f, t, F ou T dans la direction opposée [count] fois. Voir aussi |cpo-;|
+
+==============================================================================
+3. Mouvements haut-bas					*up-down-motions*
+
+k		ou					*k*
+<Up>		ou					*<Up>* *CTRL-P*
+CTRL-P			[count] lignes vers le haut |linewise|.
+
+j		ou					*j*
+<Down>		ou					*<Down>*
+CTRL-J		ou					*CTRL-J*
+<NL>		ou					*<NL>* *CTRL-N*
+CTRL-N			[count] lignes vers le bas |linewise|.
+
+gk		ou					*gk* *g<Up>*
+g<Up>			[count] lignes d'affichage vers le haut. Mouvement |exclusive|. Diffère de 'k' lorsque les lignes s'enroulent et lorsqu'il est utilisé avec un opérateur, car il n'est pas en mode ligne.
+
+gj		ou					*gj* *g<Down>*
+g<Down>			[count] lignes d'affichage vers le bas. Mouvement |exclusive|. Diffère de 'j' lorsque les lignes s'enroulent et lorsqu'il est utilisé avec un opérateur, car il n'est pas en mode ligne.
+
+							*-*
+`-`  <moins>		[count] lignes vers le haut, sur le premier caractère non-blanc |linewise|.
+
+`+`		ou					*+*
+CTRL-M		ou					*CTRL-M* *<CR>*
+<CR>			[count] lignes vers le bas, sur le premier caractère non-blanc |linewise|.
+
+							*_*
+_  <souligné>		[count] - 1 lignes vers le bas, sur le premier caractère non-blanc |linewise|.
+
+							*G*
+G			Aller à la ligne [count], par défaut la dernière ligne, sur le premier caractère non-blanc |linewise|. Si 'startofline' n'est pas défini, conserve la même colonne. G est l'un des |jump-motions|.
+
+							*<C-End>*
+<C-End>			Aller à la ligne [count], par défaut la dernière ligne, sur le dernier caractère |inclusive|.
+
+<C-Home>	ou					*gg* *<C-Home>*
+gg			Aller à la ligne [count], par défaut la première ligne, sur le premier caractère non-blanc |linewise|. Si 'startofline' n'est pas défini, conserve la même colonne.
+
+							*:[range]*
+:[range]		Place le curseur sur le dernier numéro de ligne dans [range]. En mode Ex, imprime les lignes dans [range]. [range] peut aussi être un seul numéro de ligne, par exemple ":1" ou ":'m". Contrairement à |G|, cette commande ne modifie pas la |jumplist|.
+							*N%*
+{count}%		Aller au pourcentage {count} du fichier, sur le premier non-blanc de la ligne |linewise|. Pour calculer le nouveau numéro de ligne, cette formule est utilisée :
+			    ({count} * nombre-de-lignes + 99) / 100
+			Voir aussi l'option 'startofline'.
+
+:[range]go[to] [count]					*:go* *:goto* *go*
+[count]go		Aller à l'octet [count] dans le tampon. Mouvement |exclusive|. Par défaut [count] est un, le début du fichier. Lorsque vous donnez [range], le dernier nombre est utilisé comme compteur d'octets. Les caractères de fin de ligne sont comptés en fonction du paramètre 'fileformat' actuel. Voir aussi la fonction |line2byte()| et l'option 'o' dans 'statusline'.
+
+Ces commandes se déplacent vers la ligne spécifiée. Elles s'arrêtent lorsqu'elles atteignent la première ou la dernière ligne. Les deux premières commandes placent le curseur dans la même colonne (si possible) qu'après la dernière commande qui a changé la colonne, sauf après la commande "$", où le curseur sera placé sur le dernier caractère de la ligne.
+
+==============================================================================
+4. Mouvements de mots						*word-motions*
+
+<S-Right>	ou					*<S-Right>* *w*
+w			[count] mots vers l'avant. Mouvement |exclusive|.
+
+<C-Right>	ou					*<C-Right>* *W*
+W			[count] MOTS vers l'avant. Mouvement |exclusive|.
+
+							*e*
+e			Vers l'avant jusqu'à la fin du mot [count] |inclusive|. Ne s'arrête pas dans une ligne vide.
+
+							*E*
+E			Vers l'avant jusqu'à la fin du MOT [count] |inclusive|. Ne s'arrête pas dans une ligne vide.
+
+<S-Left>	ou					*<S-Left>* *b*
+b			[count] mots vers l'arrière. Mouvement |exclusive|.
+
+<C-Left>	ou					*<C-Left>* *B*
+B			[count] MOTS vers l'arrière. Mouvement |exclusive|.
+
+							*ge*
+ge			Vers l'arrière jusqu'à la fin du mot [count] |inclusive|.
+
+							*gE*
+gE			Vers l'arrière jusqu'à la fin du MOT [count] |inclusive|.
+
+Ces commandes se déplacent sur des mots ou des MOTS.
+							*word*
+Un mot consiste en une séquence de lettres, chiffres et underscores, ou une séquence d'autres caractères non-blancs, séparés par des espaces blancs (espaces, tabulations, <EOL>). Cela peut être modifié avec l'option 'iskeyword'. Pour les caractères supérieurs à 255, un mot se termine lorsque la classe de caractères Unicode change (par exemple, entre lettres, indices, emojis, etc.). Une ligne vide est également considérée comme un mot.
+							*WORD*
+Un MOT consiste en une séquence de caractères non-blancs, séparés par des espaces blancs. Une ligne vide est également considérée comme un MOT.
+
+Une séquence de lignes pliées est comptée comme un mot d'un seul caractère. "w" et "W", "e" et "E" se déplacent vers le début/fin du premier mot ou MOT après une plage de lignes pliées. "b" et "B" se déplacent vers le début du premier mot ou MOT avant le pli.
+
+Cas particulier : "cw" et "cW" sont traités comme "ce" et "cE" si le curseur est sur un non-blanc. Ceci est compatible avec Vi, voir |cpo-_| pour modifier le comportement.
+
+Un autre cas particulier : lors de l'utilisation du mouvement "w" en combinaison avec un opérateur et que le dernier mot parcouru est en fin de ligne, la fin de ce mot devient la fin du texte opéré, et non le premier mot de la ligne suivante.
+
+L'implémentation originale de Vi pour "e" est buggée. Par exemple, la commande "e" s'arrêtera sur le premier caractère d'une ligne si la ligne précédente était vide. Mais lorsque vous utilisez "2e", cela ne se produit pas. Dans Vim, "ee" et "2e" sont identiques, ce qui est plus logique. Cependant, cela provoque une petite incompatibilité entre Vi et Vim.
+
+==============================================================================
+5. Mouvements d'objets texte				*object-motions*
+
+							*(*
+(			[count] |sentence|s vers l'arrière. Mouvement |exclusive|.
+
+							*)*
+)			[count] |sentence|s vers l'avant. Mouvement |exclusive|.
+
+							*{*
+{			[count] |paragraph|s vers l'arrière. Mouvement |exclusive|.
+
+							*}*
+}			[count] |paragraph|s vers l'avant. Mouvement |exclusive|.
+
+							*]]*
+]]			[count] |section|s vers l'avant ou vers le prochain "{" dans la première colonne. Lorsqu'il est utilisé après un opérateur, s'arrête également sous un "}" dans la première colonne. |exclusive| Notez que |exclusive-linewise| s'applique souvent.
+			Dans un tampon :terminal, chaque invite de shell est traitée comme une section. |terminal_]]|
+
+							*][*
+][			[count] |section|s vers l'avant ou vers le prochain '}' dans la première colonne. |exclusive| Notez que |exclusive-linewise| s'applique souvent.
+
+							*[[*
+[[			[count] |section|s vers l'arrière ou vers le précédent "{" dans la première colonne. |exclusive| Notez que |exclusive-linewise| s'applique souvent.
+			Dans un tampon :terminal, chaque invite de shell est traitée comme une section. |terminal_]]|
+
+							*[]*
+[]			[count] |section|s vers l'arrière ou vers le précédent "}" dans la première colonne. |exclusive| Notez que |exclusive-linewise| s'applique souvent.
+
+Ces commandes se déplacent sur trois types d'objets texte.
+
+							*sentence*
+Une phrase est définie comme se terminant par un '.', '!' ou '?' suivi soit de la fin d'une ligne, soit d'un espace ou d'une tabulation. Un nombre quelconque de caractères fermants ')', ']', '"' et ''' peuvent apparaître après le '.', '!' ou '?' avant les espaces, tabulations ou fin de ligne. Une limite de paragraphe et de section est également une limite de phrase.
+Si le drapeau 'J' est présent dans 'cpoptions', au moins deux espaces doivent suivre le signe de ponctuation ; les <Tab> ne sont pas reconnus comme des espaces blancs. La définition d'une phrase ne peut pas être modifiée.
+
+							*paragraph*
+Un paragraphe commence après chaque ligne vide, et également à chacun d'un ensemble de macros de paragraphe, spécifiées par les paires de caractères dans l'option 'paragraphs'. La valeur par défaut est "IPLPPPQPP TPHPLIPpLpItpplpipbp", ce qui correspond aux macros ".IP", ".LP", etc. (Ce sont des macros nroff, donc le point doit être dans la première colonne). Une limite de section est également une limite de paragraphe.
+Notez qu'une ligne vide (ne contenant que des espaces blancs) n'est PAS une limite de paragraphe.
+Note : cela n'inclut pas un '{' ou '}' dans la première colonne.
+
+							*section*
+Une section commence après un saut de page (<C-L>) dans la première colonne et à chacun d'un ensemble de macros de section, spécifiées par les paires de caractères dans l'option 'sections'. La valeur par défaut est "SHNHH HUnhsh", qui définit qu'une section commence aux macros nroff ".SH", ".NH", ".H", ".HU", ".nh" et ".sh".
+Dans un tampon :terminal, chaque invite de shell est traitée comme une section. |terminal_]]|
+
+Les commandes "]]" et "[[" s'arrêtent au '{' dans la première colonne. Ceci est utile pour trouver le début d'une fonction dans un programme C. Pour rechercher un '}' dans la première colonne, la fin d'une fonction C, utilisez "][" (vers l'avant) ou "[]" (vers l'arrière). Notez que le premier caractère de la commande détermine la direction de recherche.
+
+Si vos '{' ou '}' ne sont pas dans la première colonne et que vous souhaitez quand même utiliser "[[" et "]]", essayez ces mappages : >
+   :map [[ ?{<CR>w99[{
+   :map ][ /}<CR>b99]}
+   :map ]] j0[[%/{<CR>
+   :map [] k$][%?}<CR>
+[tapez-les littéralement, voir |<>|]
+
+==============================================================================
+6. Sélection d'objets texte			*object-select* *text-objects*
+						*v_a* *v_i*
+
+Ceci est une série de commandes qui ne peuvent être utilisées qu'en mode Visuel ou après un opérateur. Les commandes qui commencent par "a" sélectionnent "un" objet incluant les espaces blancs, les commandes commençant par "i" sélectionnent un objet "intérieur" sans espaces blancs, ou juste les espaces blancs. Ainsi, les commandes "intérieures" sélectionnent toujours moins de texte que les commandes "a".
+
+Voir aussi `gn` et `gN`, qui opèrent sur le dernier motif de recherche.
+
+							*v_aw* *aw*
+aw			"un mot", sélectionne [count] mots (voir |word|). Les espaces blancs de début ou de fin sont inclus, mais non comptés.
+			Lorsqu'il est utilisé en mode Visuel ligne, "aw" bascule en mode Visuel caractère.
+
+							*v_iw* *iw*
+iw			"mot intérieur", sélectionne [count] mots (voir |word|). Les espaces blancs entre les mots sont également comptés.
+			Lorsqu'il est utilisé en mode Visuel ligne, "iw" bascule en mode Visuel caractère.
+
+							*v_aW* *aW*
+aW			"un MOT", sélectionne [count] MOTS (voir |WORD|). Les espaces blancs de début ou de fin sont inclus, mais non comptés.
+			Lorsqu'il est utilisé en mode Visuel ligne, "aW" bascule en mode Visuel caractère.
+
+							*v_iW* *iW*
+iW			"MOT intérieur", sélectionne [count] MOTS (voir |WORD|). Les espaces blancs entre les mots sont également comptés.
+			Lorsqu'il est utilisé en mode Visuel ligne, "iW" bascule en mode Visuel caractère.
+
+							*v_as* *as*
+as			"une phrase", sélectionne [count] phrases (voir |sentence|). Lorsqu'il est utilisé en mode Visuel, il devient en mode caractère.
+
+							*v_is* *is*
+is			"phrase intérieure", sélectionne [count] phrases (voir |sentence|). Lorsqu'il est utilisé en mode Visuel, il devient en mode caractère.
+
+							*v_ap* *ap*
+ap			"un paragraphe", sélectionne [count] paragraphes (voir |paragraph|). Exception : une ligne vide (ne contenant que des espaces blancs) est également une limite de paragraphe.
+			Lorsqu'il est utilisé en mode Visuel, il devient en mode ligne.
+
+							*v_ip* *ip*
+ip			"paragraphe intérieur", sélectionne [count] paragraphes (voir |paragraph|). Exception : une ligne vide (ne contenant que des espaces blancs) est également une limite de paragraphe.
+			Lorsqu'il est utilisé en mode Visuel, il devient en mode ligne.
+
+a]						*v_a]* *v_a[* *a]* *a[*
+a[			"un bloc []", sélectionne [count] blocs '[' ']'. Recule jusqu'au [count]ème '[' non fermé, et trouve le ']' correspondant. Le texte inclus est sélectionné, y compris les '[' et ']'. Le drapeau d'option |cpo-M| est utilisé pour gérer les crochets échappés.
+			Lorsqu'il est utilisé en mode Visuel, il devient en mode caractère.
+
+i]						*v_i]* *v_i[* *i]* *i[*
+i[			"bloc [] intérieur", sélectionne [count] blocs '[' ']'. Recule jusqu'au [count]ème '[' non fermé, et trouve le ']' correspondant. Le texte inclus est sélectionné, excluant les '[' et ']'. C'est une erreur de sélectionner un bloc intérieur vide comme "[]". Le drapeau d'option |cpo-M| est utilisé pour gérer les crochets échappés.
+			Lorsqu'il est utilisé en mode Visuel, il devient en mode caractère.
+
+a)							*v_a)* *a)* *a(*
+a(							*vab* *v_ab* *v_a(* *ab*
+ab			"un bloc", sélectionne [count] blocs, de "[count] [(" jusqu'au ')' correspondant, incluant les '(' et ')' (voir |[(|). N'inclut pas les espaces blancs en dehors des parenthèses. Le drapeau d'option |cpo-M| est utilisé pour gérer les parenthèses échappées.
+			Lorsqu'il est utilisé en mode Visuel, il devient en mode caractère.
+
+i)							*v_i)* *i)* *i(*
+i(							*vib* *v_ib* *v_i(* *ib*
+ib			"bloc intérieur", sélectionne [count] blocs, de "[count] [(" jusqu'au ')' correspondant, excluant les '(' et ')' (voir |[(|). Si le curseur n'est pas à l'intérieur d'un bloc (), alors trouve la prochaine "(". C'est une erreur de sélectionner un bloc intérieur vide comme "()". Le drapeau d'option |cpo-M| est utilisé pour gérer les parenthèses échappées.
+			Lorsqu'il est utilisé en mode Visuel, il devient en mode caractère.
+
+a>						*v_a>* *v_a<* *a>* *a<*
+a<			"un bloc <>", sélectionne [count] blocs <>, du [count]ème '<' non apparié vers l'arrière jusqu'au '>' correspondant, incluant les '<' et '>'. Le drapeau d'option |cpo-M| est utilisé pour gérer les '<' et '>' échappés.
+			Lorsqu'il est utilisé en mode Visuel, il devient en mode caractère.
+
+i>						*v_i>* *v_i<* *i>* *i<*
+i<			"bloc <> intérieur", sélectionne [count] blocs <>, du [count]ème '<' non apparié vers l'arrière jusqu'au '>' correspondant, excluant les '<' et '>'. C'est une erreur de sélectionner un bloc intérieur vide comme "<>". Le drapeau d'option |cpo-M| est utilisé pour gérer les '<' et '>' échappés.
+			Lorsqu'il est utilisé en mode Visuel, il devient en mode caractère.
+
+						*v_at* *at*
+at			"un bloc de balise", sélectionne [count] blocs de balises, du [count]ème "<aaa>" non apparié vers l'arrière jusqu'au "</aaa>" correspondant, incluant le "<aaa>" et "</aaa>". Voir |tag-blocks| pour les détails.
+			Lorsqu'il est utilisé en mode Visuel, il devient en mode caractère.
+
+						*v_it* *it*
+it			"bloc de balise intérieur", sélectionne [count] blocs de balises, du [count]ème "<aaa>" non apparié vers l'arrière jusqu'au "</aaa>" correspondant, excluant le "<aaa>" et "</aaa>". Voir |tag-blocks| pour les détails.
+			Lorsqu'il est utilisé en mode Visuel, il devient en mode caractère.
+
+a}							*v_a}* *a}* *a{*
+a{							*v_aB* *v_a{* *aB*
+aB			"un Bloc", sélectionne [count] Blocs, de `[count] [{` au "}" correspondant, incluant les "{" et "}" (voir |[{|). Le drapeau d'option |cpo-M| est utilisé pour gérer les accolades échappées.
+			Lorsqu'il est utilisé en mode Visuel, il devient en mode caractère.
+
+i}							*v_i}* *i}* *i{*
+i{							*v_iB* *v_i{* *iB*
+iB			"Bloc intérieur", sélectionne [count] Blocs, de `[count] [{` au "}" correspondant, excluant les "{" et "}" (voir |[{|). C'est une erreur de sélectionner un bloc intérieur vide comme "{}". Le drapeau d'option |cpo-M| est utilisé pour gérer les accolades échappées.
+			Lorsqu'il est utilisé en mode Visuel, il devient en mode caractère.
+
+a"							*v_aquote* *aquote*
+a'							*v_a'* *a'*
+a`							*v_a`* *a`*
+			"une chaîne entre guillemets". Sélectionne le texte depuis le guillemet précédent jusqu'au guillemet suivant. L'option 'quoteescape' est utilisée pour ignorer les guillemets échappés. Fonctionne uniquement sur une ligne.
+			Lorsque le curseur commence sur un guillemet, Vim détermine quelles paires de guillemets forment une chaîne en cherchant depuis le début de la ligne.
+			Les espaces blancs de fin sont inclus, sauf s'il n'y en a pas, alors les espaces blancs de début sont inclus.
+			Lorsqu'il est utilisé en mode Visuel, il devient en mode caractère.
+			Répéter cet objet en mode Visuel inclut une autre chaîne. Un compteur n'est actuellement pas utilisé.
+
+i"							*v_iquote* *iquote*
+i'							*v_i'* *i'*
+i`							*v_i`* *i`*
+			Comme a", a' et a`, mais exclut les guillemets et la répétition n'étend pas la sélection Visuelle.
+			Cas particulier : Avec un compteur de 2, les guillemets sont inclus, mais pas d'espace blanc supplémentaire comme avec a"/a'/a`.
+
+							*o_object-select*
+Lorsqu'il est utilisé après un opérateur :
+Pour les objets non-bloc :
+	Pour les commandes "a" : L'opérateur s'applique à l'objet et aux espaces blancs après l'objet. S'il n'y a pas d'espaces blancs après l'objet ou si le curseur était dans les espaces blancs avant l'objet, les espaces blancs avant l'objet sont inclus.
+	Pour les commandes "intérieures" : Si le curseur était sur l'objet, l'opérateur s'applique à l'objet. Si le curseur était sur un espace blanc, l'opérateur s'applique à l'espace blanc.
+Pour un objet bloc :
+	L'opérateur s'applique au bloc dans lequel se trouve le curseur, ou au bloc sur lequel le curseur se trouve sur l'une des accolades. Pour les commandes "intérieures", les accolades environnantes sont exclues. Pour les commandes "a", les accolades sont incluses.
+
+							*v_object-select*
+Lorsqu'il est utilisé en mode Visuel :
+Lorsque le début et la fin de la zone Visuelle sont identiques (juste après avoir tapé "v") :
+	Un objet est sélectionné, identique à l'utilisation d'un opérateur.
+Lorsque le début et la fin de la zone Visuelle ne sont pas identiques :
+	Pour les objets non-bloc, la zone est étendue d'un objet ou des espaces blancs jusqu'à l'objet suivant, ou les deux pour les objets "a". La direction dans laquelle cela se produit dépend du côté de la zone Visuelle où se trouve le curseur. Pour les objets bloc, le bloc est étendu d'un niveau vers l'extérieur.
+
+Pour illustration, voici une liste de commandes de suppression, regroupées du plus petit au plus grand objet. Notez que pour un seul caractère et une ligne entière, les commandes de mouvement vi existantes sont utilisées.
+	"dl"	supprimer le caractère (alias : "x")		|dl|
+	"diw"	supprimer le mot intérieur			*diw*
+	"daw"	supprimer un mot				*daw*
+	"diW"	supprimer le MOT intérieur (voir |WORD|)	*diW*
+	"daW"	supprimer un MOT (voir |WORD|)			*daW*
+	"dgn"   supprimer la prochaine occurrence du motif de recherche    *dgn*
+	"dd"	supprimer une ligne				|dd|
+	"dis"	supprimer la phrase intérieure			*dis*
+	"das"	supprimer une phrase				*das*
+	"dib"	supprimer le bloc '(' ')' intérieur		*dib*
+	"dab"	supprimer un bloc '(' ')'			*dab*
+	"dip"	supprimer le paragraphe intérieur		*dip*
+	"dap"	supprimer un paragraphe			*dap*
+	"diB"	supprimer le bloc '{' '}' intérieur		*diB*
+	"daB"	supprimer un bloc '{' '}'			*daB*
+
+Notez la différence entre l'utilisation d'une commande de mouvement et d'un objet. La commande de mouvement opère d'ici (position du curseur) jusqu'à l'endroit où le mouvement nous mène. Lors de l'utilisation d'un objet, l'objet entier est opéré, peu importe où sur l'objet se trouve le curseur. Par exemple, comparez "dw" et "daw" : "dw" supprime de la position du curseur au début du mot suivant, "daw" supprime le mot sous le curseur et l'espace après ou avant lui.
+
+
+Blocs de balises						*tag-blocks*
+
+Pour les objets texte "it" et "at", on tente de sélectionner des blocs entre des balises correspondantes pour HTML et XML. Mais comme ils ne sont pas totalement compatibles, il y a quelques restrictions.
+
+La méthode normale consiste à sélectionner un <tag> jusqu'au </tag> correspondant. Pour "at", les balises sont incluses, pour "it" elles sont exclues. Mais lorsque "it" est répété, les balises seront incluses (sinon rien ne changerait). De plus, "it" utilisé sur un bloc de balises sans contenu sélectionnera la balise de début.
+
+Les éléments "<aaa/>" sont ignorés. La casse est ignorée, également pour XML où la casse compte.
+
+En HTML, il est possible d'avoir une balise comme <br> ou <meta ...> sans balise de fin correspondante. Celles-ci sont ignorées.
+
+Les objets texte sont tolérants aux erreurs. Les balises de fin erratiques sont ignorées.
+
+==============================================================================
+7. Marques					*mark-motions* *E20* *E78*
+
+Sauter à une marque peut se faire de deux manières :
+1. Avec ` (accent grave) : Le curseur est positionné à l'emplacement spécifié et le mouvement est |exclusive|.
+2. Avec ' (guillemet simple) : Le curseur est positionné sur le premier caractère non-blanc de la ligne de l'emplacement spécifié et le mouvement est en mode ligne.
+						*mark-view*
+3. En plus de ce qui précède, si 'jumpoptions' contient "view", ils tenteront également de restaurer la vue de la marque. Il s'agit du nombre de lignes entre la position du curseur et la ligne supérieure de la fenêtre (première ligne du tampon affichée dans la fenêtre) lorsqu'elle a été définie.
+
+						*m* *mark* *Mark*
+m{a-zA-Z}		Définir la marque {a-zA-Z} à la position du curseur (ne déplace pas le curseur, ce n'est pas une commande de mouvement).
+
+						*m'* *m`*
+m'  ou  m`		Définir la marque de contexte précédente. On peut y sauter avec la commande "''" ou "``" (ne déplace pas le curseur, ce n'est pas une commande de mouvement).
+
+						*m[* *m]*
+m[  ou  m]		Définir la marque |'[| ou |']|. Utile lorsqu'un opérateur doit être simulé par plusieurs commandes. (ne déplace pas le curseur, ce n'est pas une commande de mouvement).
+
+						*m<* *m>*
+m<  ou  m>		Définir la marque |'<| ou |'>|. Utile pour modifier ce que la commande `gv` sélectionne. (ne déplace pas le curseur, ce n'est pas une commande de mouvement). Notez que le mode Visuel ne peut pas être défini, seulement la position de début et de fin.
+
+						*:ma* *:mark* *E191*
+:[range]ma[rk] {a-zA-Z'}
+			Définir la marque {a-zA-Z'} au dernier numéro de ligne dans [range], colonne 0. Par défaut, la ligne du curseur.
+
+						*:k*
+:[range]k{a-zA-Z'}	Identique à :mark, mais l'espace avant le nom de la marque peut être omis.
+
+						*'* *'a* *`* *`a*
+'{a-z}  `{a-z}		Sauter à la marque {a-z} dans le tampon courant.
+
+						*'A* *'0* *`A* *`0*
+'{A-Z0-9}  `{A-Z0-9}	Sauter à la marque {A-Z0-9} dans le fichier où elle a été définie (pas une commande de mouvement lorsqu'elle se trouve dans un autre fichier).
+
+						*g'* *g'a* *g`* *g`a*
+g'{mark}  g`{mark}
+			Sauter à la {mark}, mais ne pas modifier la liste des sauts lors d'un saut dans le tampon courant. Exemple : >
+				g`"
+<			sauter à la dernière position connue dans un fichier.
+			Voir aussi |:keepjumps|.
+
+						*:marks*
+:marks			Lister toutes les marques courantes (pas une commande de mouvement). Les marques |'(|, |')|, |'{| et |'}| ne sont pas listées. La première colonne a le numéro zéro.
+						*E283*
+:marks {arg}		Lister les marques mentionnées dans {arg} (pas une commande de mouvement). Par exemple : >
+				:marks aB
+<			pour lister les marques 'a' et 'B'.
+
+							*:delm* *:delmarks*
+:delm[arks] {marks}	Supprimer les marques spécifiées. Les marques pouvant être supprimées incluent A-Z et 0-9. Vous ne pouvez pas supprimer la marque '. Elles peuvent être spécifiées en donnant la liste des noms de marques, ou avec une plage, séparée par un tiret. Les espaces sont ignorés. Exemples : >
+			   :delmarks a	supprime la marque a
+			   :delmarks a b 1	supprime les marques a, b et 1
+			   :delmarks Aa	supprime les marques A et a
+			   :delmarks p-z	supprime les marques dans la plage p à z
+			   :delmarks ^.[]	supprime les marques ^ . [ ]
+			   :delmarks \"	supprime la marque "
+<
+
+:delm[arks]!		Supprimer toutes les marques pour le tampon courant, mais pas les marques A-Z ou 0-9. Efface également la |changelist|.
+
+Une marque n'est pas visible de quelque manière que ce soit. C'est juste une position dans le fichier qui est mémorisée. Ne confondez pas les marques avec les registres nommés, ils sont totalement indépendants.
+
+'a - 'z		marques minuscules, valides dans un seul fichier
+'A - 'Z		marques majuscules, également appelées marques de fichier, valides entre les fichiers
+'0 - '9		marques numérotées, définies à partir du fichier |shada|
+
+Les marques minuscules 'a à 'z sont mémorisées tant que le fichier reste dans la liste des tampons. Si vous supprimez le fichier de la liste des tampons, toutes ses marques sont perdues. Si vous supprimez une ligne contenant une marque, cette marque est effacée.
+
+Les marques minuscules peuvent être utilisées en combinaison avec des opérateurs. Par exemple : "d't" supprime les lignes de la position du curseur à la marque 't'. Astuce : utilisez la marque 't' pour Top, 'b' pour Bottom, etc. Les marques minuscules sont restaurées lors de l'utilisation d'annulation et de rétablissement.
+
+Les marques majuscules 'A à 'Z incluent le nom du fichier. Vous pouvez les utiliser pour sauter de fichier en fichier. Vous ne pouvez utiliser une marque majuscule avec un opérateur que si la marque se trouve dans le fichier courant. Le numéro de ligne de la marque reste correct, même si vous insérez/supprimez des lignes ou modifiez un autre fichier momentanément. Lorsque l'option 'shada' n'est pas vide, les marques majuscules sont conservées dans le fichier .shada. Voir |shada-file-marks|.
+
+Les marques numérotées '0 à '9 sont assez différentes. Elles ne peuvent pas être définies directement. Elles ne sont présentes que lors de l'utilisation d'un fichier shada |shada-file|. Fondamentalement, '0 est l'emplacement du curseur lors de la dernière sortie de Vim, '1 l'avant-dernière fois, etc. Utilisez le drapeau "r" dans 'shada' pour spécifier les fichiers pour lesquels aucune marque numérotée ne doit être stockée. Voir |shada-file-marks|.
+
+
+							*'[* *`[*
+'[  `[			Vers le premier caractère du texte précédemment changé ou copié. Également défini lors de l'écriture du tampon.
+
+							*']* *`]*
+']  `]			Vers le dernier caractère du texte précédemment changé ou copié. Également défini lors de l'écriture du tampon.
+
+Après l'exécution d'un opérateur, le curseur est placé au début du texte sur lequel l'opération a été effectuée. Après une commande de collage ("p" ou "P"), le curseur est parfois placé sur la première ligne insérée et parfois sur le dernier caractère inséré. Les quatre commandes ci-dessus placent le curseur à l'une ou l'autre extrémité. Exemple : Après avoir copié 10 lignes, vous voulez aller à la dernière : "10Y']". Après avoir inséré plusieurs lignes avec la commande "p", vous voulez sauter à la ligne insérée la plus basse : "p']". Cela fonctionne également pour le texte qui a été inséré.
+
+Remarque : Après la suppression de texte, les positions de début et de fin sont identiques, sauf en mode Visuel bloc. Ces commandes ne fonctionnent pas si aucune modification n'a encore été effectuée dans le fichier courant.
+
+							*'<* *`<*
+'<  `<			Vers la première ligne ou le premier caractère de la dernière zone Visuelle sélectionnée dans le tampon courant. Pour le mode bloc, il peut également s'agir du dernier caractère de la première ligne (pour pouvoir définir le bloc).
+
+							*'>* *`>*
+'>  `>			Vers la dernière ligne ou le dernier caractère de la dernière zone Visuelle sélectionnée dans le tampon courant. Pour le mode bloc, il peut également s'agir du premier caractère de la dernière ligne (pour pouvoir définir le bloc). Notez que 'selection' s'applique, la position peut être juste après la zone Visuelle.
+
+							*''* *``*
+''  ``			Vers la position avant le dernier saut, ou là où la dernière commande "m'" ou "m`" a été donnée. Non défini lorsque le modificateur de commande |:keepjumps| a été utilisé.
+			Voir aussi |restore-position|.
+
+							*'quote* *`quote*
+'"  `"			Vers la position du curseur lors de la dernière sortie du tampon courant. Par défaut, le premier caractère de la première ligne. Voir |last-position-jump| pour savoir comment l'utiliser pour chaque fichier ouvert.
+			Une seule position est mémorisée par tampon, pas une par fenêtre. Tant que le tampon est visible dans une fenêtre, la position ne change pas. La marque est également réinitialisée lors de l'exécution de |:wshada|.
+
+							*'^* *`^*
+'^  `^			Vers la position où se trouvait le curseur la dernière fois que le mode Insertion a été arrêté. Ceci est utilisé par la commande |gi|. Non défini lorsque le modificateur de commande |:keepjumps| a été utilisé.
+
+							*'.* *`.*
+'.  `.			Vers la position où la dernière modification a été effectuée. La position se trouve à ou près de l'endroit où la modification a commencé. Parfois, une commande est exécutée comme plusieurs modifications, alors la position peut être près de la fin de ce que la commande a modifié. Par exemple, lors de l'insertion d'un mot, la position sera sur le dernier caractère.
+			Pour sauter vers des modifications plus anciennes, utilisez |g;|.
+
+							*':* *`:*
+':			Dans un tampon d'invite, le début de l'entrée utilisateur courante. Le texte de cette marque jusqu'à la fin du tampon sera soumis lorsque l'utilisateur soumettra l'invite.
+
+							*'(* *`(*
+'(  `(			Vers le début de la phrase courante, comme la commande |(|.
+
+							*')* *`)*
+')  `)			Vers la fin de la phrase courante, comme la commande |)|.
+
+							*'{* *`{*
+'{  `{			Vers le début du paragraphe courant, comme la commande |{|.
+
+							*'}* *`}*
+'}  `}			Vers la fin du paragraphe courant, comme la commande |}|.
+
+Ces commandes ne sont pas des marques elles-mêmes, mais sautent vers une marque :
+
+							*]'*
+]'			[count] fois vers la ligne suivante avec une marque minuscule en dessous du curseur, sur le premier caractère non-blanc de la ligne.
+
+							*]`*
+]`			[count] fois vers la marque minuscule après le curseur.
+
+							*['*
+['			[count] fois vers la ligne précédente avec une marque minuscule avant le curseur, sur le premier caractère non-blanc de la ligne.
+
+							*[`*
+[`			[count] fois vers la marque minuscule avant le curseur.
+
+
+:loc[kmarks] {command}				*:loc* *:lock* *:lockmarks*
+			Exécuter {command} sans ajuster les marques. Ceci est utile lors de la modification de texte d'une manière telle que le nombre de lignes sera le même une fois la modification terminée.
+			ATTENTION : Lorsque le nombre de lignes change, les marques en dessous de la modification conservent leur numéro de ligne, donc se déplacent vers une autre ligne de texte.
+			Les éléments suivants ne seront pas ajustés pour les lignes supprimées/insérées :
+			- marques minuscules 'a - 'z
+			- marques majuscules 'A - 'Z
+			- marques numérotées '0 - '9
+			- dernière position d'insertion '^
+			- dernière position de modification '.
+			- dernière zone de texte affectée '[ et ']
+			- la zone Visuelle '< et '>
+			- numéros de ligne dans les signes placés
+			- numéros de ligne dans les positions quickfix
+			- positions dans la |jumplist|
+			- positions dans la |tagstack|
+			Ces éléments seront toujours ajustés :
+			- marque de contexte précédente ''
+			- la position du curseur
+			- la vue d'une fenêtre sur un tampon
+			- les plis
+			- les diffs
+
+:kee[pmarks] {command}				*:kee* *:keep* *:keepmarks*
+			Actuellement n'a d'effet que pour la commande de filtrage |:range!| :
+			- Lorsque le nombre de lignes après le filtrage est égal ou supérieur à avant, toutes les marques sont conservées au même numéro de ligne.
+			- Lorsque le nombre de lignes diminue, les marques dans les lignes qui ont disparu sont supprimées.
+			Dans tous les cas, les marques en dessous du texte filtré ont leurs numéros de ligne ajustés, donc restent attachées au texte, comme d'habitude.
+			Lorsque le drapeau 'R' est manquant dans 'cpoptions', cela a le même effet que l'utilisation de ":keepmarks".
+
+							*:keepj* *:keepjumps*
+:keepj[umps] {command}
+			Les déplacements dans {command} ne modifient pas les marques |''|, |'.| et |'^|, la |jumplist| ou la |changelist|.
+			Utile lors de la modification ou de l'insertion automatique de texte et que l'utilisateur ne souhaite pas aller à cette position. Par exemple, lors de la mise à jour d'un horodatage "Dernière modification" dans la première ligne : >
+
+				:let lnum = line(".")
+				:keepjumps normal gg
+				:call SetLastChange()
+				:keepjumps exe "normal " .. lnum .. "G"
+<
+			Notez que ":keepjumps" doit être utilisé pour chaque commande. Lors de l'appel d'une fonction, les commandes dans cette fonction peuvent toujours modifier la liste des sauts. De plus, pour `:keepjumps exe 'command '`, la "commande" ne conservera pas les sauts. Utilisez plutôt : `:exe 'keepjumps command'`
+
+==============================================================================
+8. Sauts					*jump-motions*
+
+Un "saut" est une commande qui déplace normalement le curseur de plusieurs lignes. Si vous faites "sauter" le curseur, la position du curseur avant le saut est mémorisée. Vous pouvez revenir à cette position avec les commandes "''" et "``", à moins que la ligne contenant cette position n'ait été modifiée ou supprimée. Les commandes suivantes sont des commandes de "saut" : "'", "`", "G", "/", "?", "n", "N", "%", "(", ")", "[[", "]]", "{", "}", ":s", ":tag", "L", "M", "H" et les commandes qui commencent à éditer un nouveau fichier.
+
+							*CTRL-O*
+CTRL-O			Aller à la position [count] plus ancienne dans la liste des sauts (pas une commande de mouvement).
+
+<Tab>		ou					*CTRL-I* *<Tab>*
+CTRL-I			Aller à la position [count] plus récente dans la liste des sauts (pas une commande de mouvement).
+
+			REMARQUE : Dans l'interface graphique et dans un terminal supportant |tui-modifyOtherKeys| ou |tui-csiu|, CTRL-I peut être mappé séparément de <Tab>, à condition que les deux touches soient mappées, sinon le mappage s'applique aux deux. Sauf dans tmux : https://github.com/tmux/tmux/issues/2705
+
+							*:ju* *:jumps*
+:ju[mps]		Afficher la liste des sauts (pas une commande de mouvement).
+
+							*:cle* *:clearjumps*
+:cle[arjumps]		Effacer la liste des sauts de la fenêtre courante.
+
+							*jumplist*
+Les sauts sont mémorisés dans une liste des sauts. Avec les commandes CTRL-O et CTRL-I, vous pouvez aller aux positions du curseur avant des sauts plus anciens, et revenir. Ainsi, vous pouvez vous déplacer vers le haut et vers le bas dans la liste. Il y a une liste des sauts distincte pour chaque fenêtre. Le nombre maximum d'entrées est fixé à 100.
+
+Par exemple, après trois commandes de saut, vous avez cette liste des sauts : >
+
+    jump line  col file/text
+      3     1    0 some text
+      2    70    0 another line
+      1  1154   23 end.
+   >
+<
+La colonne "file/text" affiche le nom du fichier, ou le texte au saut s'il se trouve dans le fichier courant (une indentation est supprimée et une ligne longue est tronquée pour tenir dans la fenêtre).
+
+Le marqueur ">" indique la position actuelle dans la liste des sauts. Il peut ne pas être affiché lors du filtrage de la commande |:jumps| avec |:filter|.
+
+Vous êtes actuellement à la ligne 1167. Si vous utilisez ensuite la commande CTRL-O, le curseur est placé à la ligne 1154. Cela donne : >
+
+    jump line  col file/text
+      2     1    0 some text
+      1    70    0 another line
+   >  0  1154   23 end.
+      1  1167    0 foo bar
+<
+Le pointeur sera défini sur la dernière position de saut utilisée. La prochaine commande CTRL-O utilisera l'entrée au-dessus, la prochaine commande CTRL-I utilisera l'entrée en dessous. Si le pointeur est en dessous de la dernière entrée, cela indique que vous n'avez pas utilisé CTRL-I ou CTRL-O auparavant. Dans ce cas, la commande CTRL-O ajoutera la position du curseur à la liste des sauts, afin que vous puissiez revenir à la position avant CTRL-O. Dans ce cas, il s'agit de la ligne 1167.
+
+Avec plus de commandes CTRL-O, vous irez aux lignes 70 et 1. Si vous utilisez CTRL-I, vous pouvez revenir à 1154 et 1167. Notez que le nombre dans la colonne "jump" indique le compteur pour la commande CTRL-O ou CTRL-I qui vous amène à cette position.
+
+Si vous utilisez une commande de saut, le numéro de ligne courant est inséré à la fin de la liste des sauts. Si la même ligne était déjà dans la liste des sauts, elle est supprimée. Le résultat est qu'en répétant CTRL-O, vous ne reviendrez aux anciennes positions qu'une seule fois.
+
+Lorsque le modificateur de commande |:keepjumps| est utilisé, les sauts ne sont pas stockés dans la liste des sauts. Les sauts ne sont pas non plus stockés dans d'autres cas, par exemple dans une commande |:global|. Vous pouvez ajouter explicitement un saut en définissant la marque ' avec "m'". Notez que l'appel à setpos() ne fait pas cela.
+
+Après la commande CTRL-O qui vous a amené à la ligne 1154, vous pouvez donner une autre commande de saut (par exemple "G"). La liste des sauts deviendrait alors : >
+
+    jump line  col file/text
+      4     1    0 some text
+      3    70    0 another line
+      2  1167    0 foo bar
+      1  1154   23 end.
+   >
+<
+Les numéros de ligne seront ajustés pour les lignes supprimées et insérées. Cela échoue si vous arrêtez d'éditer un fichier sans l'écrire, comme avec ":n!".
+
+Lorsque vous divisez une fenêtre, la liste des sauts est copiée dans la nouvelle fenêtre.
+
+Si vous avez inclus l'élément ' dans l'option 'shada', la liste des sauts sera stockée dans le fichier ShaDa et restaurée au démarrage de Vim.
+
+							*jumplist-stack*
+Lorsque l'option 'jumpoptions' inclut "stack", la liste des sauts se comporte comme la pile de tags. Lorsque vous sautez vers un nouvel emplacement depuis le milieu de la liste des sauts, les emplacements après la position actuelle seront ignorés. Avec cette option définie, vous pouvez vous déplacer dans une arborescence d'emplacements de saut. Lorsque vous remontez une branche puis redescendez une autre branche, CTRL-O vous emmène toujours plus haut dans l'arbre.
+
+Étant donné une liste des sauts comme celle-ci, dans laquelle CTRL-O a été utilisé pour revenir trois fois à l'emplacement X : >
+
+     jump line  col file/text
+       2  1260    8 mark.c		<-- emplacement X-2
+       1   685    0 eval.c		<-- emplacement X-1
+    >  0   462   36 eval.c		<-- emplacement X
+       1   479   39 eval.c
+       2   213    2 mark.c
+       3   181    0 mark.c
+<
+sauter vers un (nouvel) emplacement Y entraîne la suppression des emplacements après les emplacements courants : >
+
+     jump line  col file/text
+       3  1260    8 mark.c		<-- emplacement X-2
+       2   685    0 eval.c		<-- emplacement X-1
+       1   462   36 eval.c		<-- emplacement X
+    >
+<
+Ensuite, lorsqu'un autre emplacement Z est rejoint, le nouvel emplacement Y apparaît directement après l'emplacement X dans la liste des sauts et l'emplacement X reste dans la même position relative par rapport aux emplacements (X-1, X-2, etc.) qui étaient avant lui avant le saut original de X à Y : >
+
+     jump line  col file/text
+       4  1260    8 mark.c		<-- emplacement X-2
+       3   685    0 eval.c		<-- emplacement X-1
+       2   462   36 eval.c		<-- emplacement X
+       1   100    0 buffer.c		<-- emplacement Y
+    >
+<
+SAUTS DANS LA LISTE DES MODIFICATIONS			*changelist* *change-list-jumps* *E664*
+
+Lors d'une modification, la position du curseur est mémorisée. Une position est mémorisée pour chaque modification pouvant être annulée, à moins qu'elle ne soit proche d'une modification précédente. Deux commandes peuvent être utilisées pour sauter aux positions des modifications, même celles qui ont été annulées :
+
+							*g;* *E662*
+g;			Aller à la position [count] plus ancienne dans la liste des modifications.
+			Si [count] est plus grand que le nombre de positions de modification plus anciennes, aller à la modification la plus ancienne.
+			S'il n'y a pas de modification plus ancienne, un message d'erreur est donné.
+			(pas une commande de mouvement)
+
+							*g,* *E663*
+g,			Aller à la position [count] plus récente dans la liste des modifications.
+			Comme |g;| mais dans la direction opposée.
+			(pas une commande de mouvement)
+
+Avec un compteur, vous sautez aussi loin en arrière ou en avant que possible. Ainsi, vous pouvez utiliser "999g;" pour aller à la première modification dont la position est encore mémorisée. Le nombre d'entrées dans la liste des modifications est fixe et identique à celui de la |jumplist|.
+
+Lorsque deux modifications annulables se trouvent sur la même ligne et à une position de colonne inférieure à 'textwidth' l'une de l'autre, seule la dernière est mémorisée. Cela évite qu'une séquence de petites modifications sur une ligne, par exemple "xxxxx", n'ajoute de nombreuses positions à la liste des modifications. Lorsque 'textwidth' est nul, 'wrapmargin' est utilisé. Si cela n'est pas non plus défini, un nombre fixe de 79 est utilisé. Détail : Pour les calculs, les octets sont utilisés, pas les caractères, pour éviter une pénalité de vitesse (cela n'a d'importance que pour les encodages multi-octets).
+
+Notez que lorsque du texte a été inséré ou supprimé, la position du curseur peut être légèrement différente de la position de la modification. Surtout lorsque des lignes ont été supprimées.
+
+Lorsque le modificateur de commande `:keepjumps` est utilisé, la position d'une modification n'est pas mémorisée.
+
+							*:changes*
+:changes		Afficher la liste des modifications. Un caractère ">" indique la position actuelle. Juste après une modification, il se trouve en dessous de l'entrée la plus récente, indiquant que `g;` vous amène à la position de l'entrée la plus récente. La première colonne indique le compteur nécessaire pour vous amener à cette position. Exemple :
+
+				change line  col text ~
+				    3     9    8 bla bla bla
+				    2    11   57 foo is a bar
+				    1    14   54 the latest changed line
+				>
+
+			La commande `3g;` vous amène à la ligne 9. Ensuite, la sortie de `:changes` est :
+
+				change line  col text ~
+				>   0     9    8 bla bla bla
+				    1    11   57 foo is a bar
+				    2    14   54 the latest changed line
+
+			Vous pouvez maintenant utiliser "g," pour aller à la ligne 11 et "2g," pour aller à la ligne 14.
+
+==============================================================================
+9. Mouvements divers				*various-motions*
+
+							*%*
+%			Trouver l'élément suivant dans cette ligne après ou sous le curseur et sauter vers sa correspondance. Mouvement |inclusive|.
+			Les éléments peuvent être :
+			([{}])		parenthèses ou crochets (accolades/carrés) (peut être modifié avec l'option 'matchpairs')
+			`/* */`		début ou fin de commentaire de style C
+			#if, #ifdef, #else, #elif, #endif
+					conditionnels du préprocesseur C (lorsque le curseur est sur le # ou qu'aucun ([{ ne suit)
+			Pour d'autres éléments, le plugin matchit peut être utilisé, voir |matchit|. Ce plugin aide également à ignorer les correspondances dans les commentaires.
+
+			Lorsque 'cpoptions' contient "M" |cpo-M|, les antislashs avant les parenthèses et les accolades sont ignorés. Sans "M", le nombre d'antislashs compte : un nombre pair ne correspond pas à un nombre impair. Ainsi dans "( \) )" et "\( ( \)", la première et la dernière parenthèse correspondent.
+
+			Lorsque le caractère '%' n'est pas présent dans 'cpoptions' |cpo-%|, les parenthèses et accolades entre guillemets doubles sont ignorées, sauf si le nombre de parenthèses/accolades dans une ligne est impair et que cette ligne et la précédente ne se terminent pas par un antislash. '(', '{', '[', ']', '}' et ')' sont également ignorés (parenthèses et accolades entre guillemets simples). Notez que cela fonctionne bien pour C, mais pas pour Perl, où les guillemets simples sont utilisés pour les chaînes.
+
+			Rien de spécial n'est fait pour les correspondances dans les commentaires. Vous pouvez soit utiliser le plugin |matchit|, soit mettre des guillemets autour des correspondances.
+
+			Aucun compteur n'est autorisé, {count}% saute à une ligne {count} pourcentage en bas du fichier |N%|. L'utilisation de '%' sur #if/#else/#endif rend le mouvement en mode ligne.
+
+						*[(*
+[(			Aller au [count]ème '(' non apparié précédent. Mouvement |exclusive|.
+
+						*[{*
+[{			Aller au [count]ème '{' non apparié précédent. Mouvement |exclusive|.
+
+						*])*
+])			Aller au [count]ème ')' non apparié suivant. Mouvement |exclusive|.
+
+						*]}*
+]}			Aller au [count]ème '}' non apparié suivant. Mouvement |exclusive|.
+
+Les quatre commandes ci-dessus peuvent être utilisées pour aller au début ou à la fin du bloc de code courant. Cela revient à faire "%" sur le "(", ")", "{" ou "}" à l'autre extrémité du bloc de code, mais vous pouvez le faire depuis n'importe où dans le bloc de code. Très utile pour les programmes C. Exemple : lorsque vous êtes sur "case x:", `[{` vous ramènera à l'instruction switch.
+
+						*]m*
+]m			Aller au [count]ème début de méthode suivant (pour Java ou un langage structuré similaire). Lorsque vous n'êtes pas avant le début d'une méthode, sautez au début ou à la fin de la classe. Mouvement |exclusive|.
+						*]M*
+]M			Aller à la [count]ème fin de méthode suivante (pour Java ou un langage structuré similaire). Lorsque vous n'êtes pas avant la fin d'une méthode, sautez au début ou à la fin de la classe. Mouvement |exclusive|.
+						*[m*
+[m			Aller au [count]ème début de méthode précédent (pour Java ou un langage structuré similaire). Lorsque vous n'êtes pas après le début d'une méthode, sautez au début ou à la fin de la classe. Lorsqu'aucun '{' n'est trouvé avant le curseur, c'est une erreur. Mouvement |exclusive|.
+						*[M*
+[M			Aller à la [count]ème fin de méthode précédente (pour Java ou un langage structuré similaire). Lorsque vous n'êtes pas après la fin d'une méthode, sautez au début ou à la fin de la classe. Lorsqu'aucun '}' n'est trouvé avant le curseur, c'est une erreur. Mouvement |exclusive|.
+
+Les quatre commandes ci-dessus supposent que le fichier contient une classe avec des méthodes. La définition de la classe est entourée de '{' et '}'. Chaque méthode de la classe est également entourée de '{' et '}'. Cela s'applique au langage Java. Le fichier ressemble à ceci : >
+
+	// commentaire
+	class foo {
+		int method_one() {
+			body_one();
+		}
+		int method_two() {
+			body_two();
+		}
+	}
+
+[Pour essayer, copiez le texte et placez-le dans un nouveau tampon, le texte d'aide ci-dessus perturbe les commandes de saut]
+
+En commençant avec le curseur sur "body_two()", utiliser "[m" sautera vers le '{' au début de "method_two()" (évidemment, cela est beaucoup plus utile lorsque la méthode est longue !). Utiliser "2[m" sautera vers le début de "method_one()". Utiliser "3[m" sautera vers le début de la classe.
+
+						*[#*
+[#			Aller au [count]ème "#if" ou "#else" non apparié précédent. Mouvement |exclusive|.
+
+						*]#*
+]#			Aller au [count]ème "#else" ou "#endif" non apparié suivant. Mouvement |exclusive|.
+
+Ces deux commandes fonctionnent dans les programmes C contenant des constructions #if/#else/#endif. Elles vous amènent au début ou à la fin du #if/#else/#endif où la ligne courante est incluse. Vous pouvez ensuite utiliser "%" pour aller à la ligne correspondante.
+
+						*[star* *[/*
+[*  ou  [/		Aller au [count]ème début de commentaire C "/*" précédent. Mouvement |exclusive|.
+
+						*]star* *]/*
+]*  ou  ]/		Aller à la [count]ème fin de commentaire C "*/" suivante. Mouvement |exclusive|.
+
+
+						*H*
+H			Vers la ligne [count] depuis le haut (Home) de la fenêtre (par défaut : première ligne de la fenêtre) sur le premier caractère non-blanc |linewise|. Voir aussi l'option 'startofline'.
+			Le curseur est ajusté pour l'option 'scrolloff', sauf si un opérateur est en attente, auquel cas le texte peut défiler. Par exemple, "yH" copie depuis la première ligne visible jusqu'à la ligne du curseur (inclus).
+
+						*M*
+M			Vers la ligne du Milieu de la fenêtre, sur le premier caractère non-blanc |linewise|. Voir aussi l'option 'startofline'.
+
+						*L*
+L			Vers la ligne [count] depuis le bas de la fenêtre (par défaut : Dernière ligne de la fenêtre) sur le premier caractère non-blanc |linewise|. Voir aussi l'option 'startofline'.
+			Le curseur est ajusté pour l'option 'scrolloff', sauf si un opérateur est en attente, auquel cas le texte peut défiler. Par exemple, "yL" copie depuis le curseur jusqu'à la dernière ligne visible.
+
+<LeftMouse>		Se déplace vers la position sur l'écran où le clic de souris a eu lieu |exclusive|. Voir aussi |<LeftMouse>|. Si la position se trouve dans une barre d'état, cette fenêtre devient la fenêtre active et le curseur n'est pas déplacé.
+
+ vim:tw=78:ts=8:noet:ft=help:norl:

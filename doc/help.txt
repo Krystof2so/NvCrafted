@@ -1,0 +1,156 @@
+*help.txt*	Nvim
+
+==============================================================================
+Documentation Nvim
+
+Si vous débutez avec Nvim, consultez |nvim-intro|. (Pour accéder à un lien d'aide, placez le curseur dessus et appuyez sur CTRL-], ou effectuez un clic CTRL avec la souris. Essayez ici : |bars|.)
+
+------------------------------------------------------------------------------
+À propos de Nvim						*reference_toc* *Q_ct*
+
+- |news|		Nouveautés depuis la version précédente
+- |nvim|		Premiers pas avec Nvim
+- |tutor|		Cours interactif de 30 minutes pour débutants
+- |vim-differences|	Nvim comparé à Vim
+- |faq|			Foire aux questions
+- |tips|		Conseils divers
+- |bugs|		Où signaler les bogues
+- |support|		Plateformes supportées
+- |copying|		À propos des droits d'auteur
+
+------------------------------------------------------------------------------
+Utilisation
+
+- |helphelp|		Utilisation des fichiers d'aide `:help`
+- |intro|		Introduction à Vim
+- |quickref|		Aperçu des commandes courantes
+- |index|		Index de toutes les commandes
+- |user-manual|		Manuel utilisateur : comment accomplir des tâches d'édition
+- |message.txt|		Messages d'erreur et explications
+- |Kuwasha|		Aider les enfants pauvres en Ouganda
+
+------------------------------------------------------------------------------
+Édition de base
+
+- |starting|		Démarrage de Vim, arguments de ligne de commande, initialisation
+- |edit-files|		Édition et sauvegarde de fichiers
+- |motion.txt|		Commandes pour se déplacer
+- |scrolling|		Défilement du texte dans la fenêtre
+- |insert.txt|		Mode Insertion et Remplacement
+- |change.txt|		Suppression et remplacement de texte
+- |undo-redo|		Annuler et Rétablir
+- |repeat.txt|		Répétition de commandes, scripts Vim et débogage
+- |visual-mode|		Utilisation du mode Visuel (sélection de texte)
+- |various|		Diverses autres commandes
+- |crash-recovery|	Récupération après un plantage
+
+------------------------------------------------------------------------------
+Édition avancée
+
+- |cmdline|		Édition de la ligne de commande
+- |options|		Description de toutes les options
+- |pattern-searches|	Expressions régulières Vim et commandes de recherche
+- |key-mapping|		Mappage de touches (raccourcis), abréviations
+- |tags|		Tags et recherches spéciales
+- |windows|		Commandes pour utiliser les fenêtres et les buffers
+- |tabpage|		Commandes pour utiliser les onglets
+- |spell|		Vérification orthographique
+- |diff|		Comparaison de fichiers
+- |folding|		Masquer (plier) des plages de lignes
+- |terminal|		Émulateur de terminal intégré
+
+------------------------------------------------------------------------------
+API (extensibilité / script / plugins)
+
+- |api|			API Nvim via RPC, Lua et Vimscript
+- |ui|			Protocole UI de Nvim
+- |lua-guide|		Guide Lua pour Nvim
+- |lua|			API Lua
+- |luaref|		Manuel de référence Lua
+- |luvref|		Manuel de référence Luv (|vim.uv|)
+- |autocmd|		Gestionnaires d'événements
+- |job-control|		Lancer et contrôler plusieurs processus
+- |channel|		E/S asynchrones dans Nvim
+- |vimscript|		Référence Vimscript
+- |vimscript-functions|	Fonctions Vimscript
+- |remote-plugin|	Plugins distants Nvim
+- |health|		Vérification de l'état de santé
+
+------------------------------------------------------------------------------
+Support des langages de programmation
+
+- |diagnostic-api|	Framework de diagnostic
+- |filetype|		Paramètres pour des types de fichiers spécifiques
+- |indent.txt|		Indentation automatique pour C et d'autres langages
+- |lsp|			Protocole Language Server (LSP)
+- |quickfix|		Commandes pour un cycle rapide édition-compilation-correction
+- |syntax|		Coloration syntaxique
+- |treesitter|		Analyse syntaxique incrémentale
+- |vim.pack|		Gestionnaire de plugins
+
+------------------------------------------------------------------------------
+Interface utilisateur
+
+- |tui|			Interface utilisateur intégrée
+- |gui|			Interfaces utilisateur externes (graphiques)
+- |signs|		Signes affichés comme décorations de fenêtre (la "gouttière")
+
+------------------------------------------------------------------------------
+Support multilingue
+
+- |digraph|		Liste des digrammes disponibles
+- |mbyte.txt|		Support du texte multi-octets
+- |mlang.txt|		Support des langues autres que l'anglais
+- |rileft.txt|		Mode d'édition de droite à gauche
+- |l10n-arabic.txt|	Support et édition de la langue arabe
+- |l10n-hebrew.txt|	Support et édition de la langue hébraïque
+- |l10n-russian.txt|	Support et édition de la langue russe
+- |l10n-vietnamese.txt|	Support et édition de la langue vietnamienne
+
+------------------------------------------------------------------------------
+Interopérabilité
+
+- |provider|		Hôtes de plugins distants intégrés
+- |if_perl|		Interface Perl
+- |if_pyth|		Interface Python
+- |if_ruby|		Interface Ruby
+
+------------------------------------------------------------------------------
+Versions
+
+- |deprecated|		Fonctionnalités dépréciées qui seront supprimées
+- |vi-differences|	Différences entre Vim et Vi
+
+------------------------------------------------------------------------------
+Développement de nvim
+
+- |dev|			Développement de Nvim
+- |dev-arch|		Architecture interne, modules, structures de données
+- |dev-style|		Guides de style de développement
+- |dev-test|		Écriture et exécution de tests
+- |dev-theme|		Directives de conception (schémas de couleurs, etc.)
+- |dev-tools|		Outils et techniques pour le développement de Nvim
+- |dev-vimpatch|	Fusion de correctifs depuis Vim
+
+Plugins standard ~
+
+Voir |standard-plugin-list|.
+
+Ajouts locaux ~
+							     *local-additions*
+
+------------------------------------------------------------------------------
+Exemple de barres								*bars*
+
+Maintenant que vous avez sauté ici avec CTRL-] ou un double-clic de souris, vous pouvez utiliser
+CTRL-T, CTRL-O, g<RightMouse> ou <C-RightMouse> pour revenir à l'endroit où vous étiez.
+
+Notez que les tags sont entre des caractères |, mais lorsque la coloration syntaxique est activée, ces
+caractères sont masqués (pour l'esthétique).
+
+Vous pouvez utiliser CTRL-] sur n'importe quel mot (même s'il n'est pas entouré de "|") et Nvim
+essaiera de trouver de l'aide à son sujet. Particulièrement pour les options entre guillemets simples, par ex.
+'hlsearch'.
+
+
+ vim:tw=78:isk=!-~,^*,^\|,^\":ts=8:noet:ft=help:norl:
