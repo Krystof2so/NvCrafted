@@ -385,7 +385,7 @@ Pour écrire un fichier d'aide local, voir |write-local-help|.
 
 Notez que les lignes de titre des fichiers d'aide locaux sont automatiquement
 ajoutées à la section "LOCAL ADDITIONS" du fichier d'aide "help.txt"
-|local-additions|. Cela est fait lors de la visualisation du fichier dans Vim,
+(Voir |local-additions|). Cela est fait lors de la visualisation du fichier dans Vim,
 le fichier lui-même n'est pas modifié. Cela est fait en parcourant tous les
 fichiers d'aide et en obtenant la première ligne de chaque fichier. Les
 fichiers dans $VIMRUNTIME/doc sont ignorés.
@@ -573,7 +573,7 @@ Les éléments suivants sont mis en évidence différemment dans un fichier d'ai
 Vim :
   - un nom de touche spécial exprimé soit en notation <> comme <PageDown>, soit
     comme un caractère Ctrl comme CTRL-X
-  - tout ce qui est entre {accolades}, par exemple {lhs} et {rhs}
+  - tout ce qui est entre accolades (voir {braces}), par exemple {lhs} et {rhs}
 
 Le mot "Note", "Notes" et similaires reçoivent automatiquement une mise en
 évidence distinctive. De même pour :
