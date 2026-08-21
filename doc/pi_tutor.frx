@@ -1,0 +1,47 @@
+*pi_tutor.txt* Interactive tutorials -- Traduction française partielle
+*vim-tutor-mode*
+
+vim-tutor-mode fournit un système permettant de suivre et de créer des 
+tutoriels interactifs pour Vim et les plugins tiers. Il remplace le 
+vénérable système `vimtutor`.
+
+Auteur originel: Felipe Morales <https://github.com/fmoralesc>
+
+==============================================================================
+1. Utilisation                                               *vim-tutor-usage*
+
+Les tutoriels de vim-tutor-mode sont des documents hypertextes, ils 
+contiennent du texte enrichi et des liens. Pour se distinguer du reste du 
+texte, les liens sont soulignés. Vous pouvez les suivre en plaçant le curseur 
+dessus et en appuyant sur <Enter>, ou en double-cliquant dessus.
+
+1.1 Commandes
+------------
+								      *:Tutor*
+:Tutor {tutorial}	Ouvre un tutoriel. La complétion en ligne de commande 
+			pour {tutorial} est fournie, les candidats sont une 
+			liste de fichiers « .tutor » se trouvant dans le 
+			répertoire « tutor/ » du 'runtimepath'. Les tutoriels 
+			préfixés par « vim- » seront toujours affichés en 
+			premier.
+
+			Si aucun {tutorial} n'est fourni, la commande lance le 
+			tutoriel « vim-01-beginner », qui est équivalent à 
+			`vimtutor` de Vim. 
+
+=============================================================================
+2. Creating tutorials                                        *vim-tutor-create*
+
+Writing vim-tutor-mode tutorials is easy. For an overview of the format used,
+please consult the 'tutor.tutor' file: >
+
+    :Tutor tutor
+<
+New tutorials must be placed in the 'tutor/' folder in the 'runtimepath'
+to be detected by the :Tutor command.
+
+It is recommended to use a less formal style when writing tutorials than in
+regular documentation (unless the content requires it).
+
+=============================================================================
+  vim:tw=78:ts=8:noet:ft=help:norl:

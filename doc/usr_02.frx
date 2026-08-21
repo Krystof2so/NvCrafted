@@ -1,0 +1,750 @@
+*usr_02.txt*	Nvim (v0.12.4) - Traduction française
+
+
+		     VIM USER MANUAL	par Bram Moolenaar
+
+
+			    Les premiers pas avec Vim
+
+Ce chapitre fournit juste ce qu'il faut pour modifier un fichier avec Vim. 
+Pas de manière optimale ni rapide, mais vous saurez le faire. Prenez le temps 
+de vous entraîner avec ces commandes, car elles constituent la base de ce qui 
+va suivre.
+
+|02.1|	Lancer Vim pour la première fois
+|02.2|	Insérer du texte
+|02.3|	Se déplacer dans le texte
+|02.4|	Supprimer des caractères
+|02.5|	Annuler et refaire
+|02.6|	Autres commandes d'édition
+|02.7|	Quitter
+|02.8|	Consulter l'aide
+
+     Prochain chapitre: |usr_03.txt|  Se déplacer
+ Previous chapter: |usr_01.txt|  A propos des manuels
+Table des matières: |usr_toc.txt|
+
+==============================================================================
+*02.1*	Lancer Vim pour la première fois
+
+Pour lancer Nvim, saisissez la commande suivante: >
+
+	nvim fichier.txt
+
+Sous Unix, vous pouvez saisir cette commande dans n'importe quelle invite de 
+commande. Si vous utilisez Microsoft Windows, ouvrez une invite de commande et 
+saisissez la commande. Dans les deux cas, Vim ouvre un fichier nommé 
+fichier.txt en mode édition. Comme il s'agit d'un nouveau fichier, la fenêtre 
+est vide. Voici à quoi ressemblera votre écran :
+>
+	+---------------------------------------+
+	|#					|
+	|~					|
+	|~					|
+	|~					|
+	|~					|
+	|"fichier.txt" [New]			|
+	+---------------------------------------+
+	('#' représente la position du curseur.)
+<
+Les lignes avec un tilde (~) indiquent des lignes qui ne figurent pas dans le 
+fichier. En d'autres termes, lorsque Vim n'a plus de contenu à afficher, il 
+affiche des lignes avec un tilde. Au bas de l'écran, une ligne de message 
+indique que le fichier s'appelle fichier.txt et précise que vous êtes en train 
+de créer un nouveau fichier. Ces informations sont temporaires et seront 
+remplacées par d'autres.
+
+==============================================================================
+*02.2*	Insérer du texte
+
+L'éditeur Vim est un éditeur modal. Cela signifie que son comportement varie 
+en fonction du mode dans lequel vous vous trouvez. Les deux modes de base sont 
+appelés « mode normal » et « mode insertion ». En mode normal, les caractères 
+que vous tapez sont des commandes. En mode insertion, les caractères sont 
+insérés sous forme de texte.
+Comme vous venez de lancer Vim, vous êtes en mode Normal. Pour passer en mode 
+Insertion, tapez la commande « i » (i pour Insertion).  Vous pouvez alors 
+saisir du texte. Celui-ci sera inséré dans le fichier. Ne vous inquiétez pas si 
+vous faites des erreurs ; vous pourrez les corriger plus tard. Pour saisir le 
+limerick suivant, écrit par un programmeur, voici ce que vous devez taper : >
+
+	iA very intelligent turtle
+	Found programming Unix a hurdle
+
+Après avoir tapé « turtle », appuyez sur la touche <Enter> pour commencer une 
+nouvelle ligne. Enfin, appuyez sur la touche <Esc> pour quitter le mode 
+Insertion et revenir au mode Normal. Vous avez désormais deux lignes de texte 
+dans votre fenêtre Vim :
+>
+	+---------------------------------------+
+	|A very intelligent turtle		|
+	|Found programming Unix a hurdle	|
+	|~					|
+	|~					|
+	|					|
+	+---------------------------------------+
+<
+
+QUEL EST LE MODE ACTUEL ?
+
+Pour savoir dans quel mode vous vous trouvez, tapez cette commande : >
+
+	:set showmode
+
+Vous remarquerez que lorsque vous tapez les deux points, Vim place le curseur 
+sur la dernière ligne de la fenêtre. C'est là que vous tapez les commandes avec 
+deux points (les commandes qui commencent par deux points). Terminez cette 
+commande en appuyant sur la touche <Enter> (toutes les commandes qui commencent 
+par deux points se terminent de cette manière).
+À présent, si vous tapez la commande « i », Vim affichera --INSERT-- au bas de 
+la fenêtre.  Cela indique que vous êtes en mode Insertion.
+
+>
+	+---------------------------------------+
+	|A very intelligent turtle		|
+	|Found programming Unix a hurdle	|
+	|~					|
+	|~					|
+	|-- INSERT --				|
+	+---------------------------------------+
+<
+Si vous appuyez sur la touche <Esc> pour revenir au mode normal, la dernière 
+ligne sera effacée.
+
+
+SORTIR DE LA DIFFICULTE
+
+L'un des problèmes rencontrés par les débutants sous Vim est la confusion entre
+les modes, qui survient lorsque l'on oublie dans quel mode on se trouve ou 
+lorsque l'on tape accidentellement une commande qui change de mode. Pour 
+revenir au mode Normal, quel que soit le mode dans lequel vous vous trouvez, 
+appuyez sur la touche <Esc>. Il faut parfois appuyer deux fois. Si Vim émet un 
+bip, c'est que vous êtes déjà en mode Normal.
+
+==============================================================================
+*02.3*	Se déplacer dans le texte
+
+Une fois revenu en mode Normal, vous pouvez vous déplacer à l'aide des touches 
+suivantes :
+
+	h   gauche						*hjkl*
+	j   bas
+	k   haut
+	l   droite
+
+À première vue, on pourrait croire que ces commandes ont été choisies au hasard. 
+Après tout, qui a déjà entendu parler d’utiliser la touche « l » pour aller à 
+droite ? Mais en réalité, ces choix s’expliquent très bien : déplacer le curseur 
+est l’action la plus courante dans un éditeur, et ces touches se trouvent sur la 
+rangée de base de votre main droite. En d’autres termes, ces commandes sont 
+placées là où vous pouvez les taper le plus rapidement (surtout lorsque vous 
+tapez avec les dix doigts).
+
+	Note:
+	Vous pouvez également déplacer le curseur à l'aide des touches fléchées.
+	Cependant, cela ralentit considérablement votre saisie, car pour appuyer 
+	sur les touches fléchées, vous devez déplacer votre main des touches de 
+	texte vers celles-ci. Sachant que vous pouvez être amené à le faire des 
+	centaines de fois par heure, cela peut représenter un temps considérable.
+	De plus, certains claviers ne disposent pas de touches fléchées ou les 
+	placent à des emplacements inhabituels ; c'est pourquoi il est utile de 
+	savoir utiliser les touches « hjkl » dans ces situations.
+
+Pour mémoriser ces commandes, on peut se rappeler que « h » est à gauche, « l » 
+à droite et « j » vers le bas. Voici une illustration : >
+
+		     k
+		   h   l
+		     j
+
+La meilleure façon d'apprendre ces commandes est de les utiliser. Utilisez la 
+commande « i » pour insérer quelques lignes de texte supplémentaires. Utilisez 
+ensuite les touches hjkl pour vous déplacer et insérez un mot à un endroit de 
+votre choix. N'oubliez pas d'appuyer sur <Esc> pour revenir en mode normal.
+|:Tutor| est également un bon moyen d'apprendre par la pratique.
+
+Pour les utilisateurs japonais, Hiroshi Iwatani a suggéré d'utiliser ceci :
+
+			Komsomolsk
+			    ^
+			    |
+	   Huan Ho	<--- --->  Los Angeles
+	(Rivière jaune)	    |
+			    v
+			  Java (l'île, non le langage de programmation)
+
+==============================================================================
+*02.4*	Supprimer des caractères
+
+Pour supprimer un caractère, placez le curseur dessus et tapez « x ».  (C'est 
+un clin d'œil à l'époque des machines à écrire, où l'on supprimait des 
+caractères en tapant « xxxx » par-dessus). Placez par exemple le curseur au 
+début de la première ligne et tapez « xxxxxxx » (sept « x ») pour supprimer 
+« A very ». Le résultat devrait ressembler à ceci :
+>
+	+---------------------------------------+
+	|intelligent turtle			|
+	|Found programming Unix a hurdle	|
+	|~					|
+	|~					|
+	|					|
+	+---------------------------------------+
+<
+Vous pouvez désormais insérer du nouveau texte, par exemple en tapant: >
+
+	iA young <Esc>
+
+Cela marque le début d'un mode insertion (la touche « i »), insère les mots 
+« A young », puis quitte le mode insertion (la touche <Esc> finale). Résultat:
+>
+	+---------------------------------------+
+	|A young intelligent turtle		|
+	|Found programming Unix a hurdle	|
+	|~					|
+	|~					|
+	|					|
+	+---------------------------------------+
+<
+
+SUPPRIMER UNE LIGNE
+
+Pour supprimer une ligne entière, utilisez la commande « dd ». La ligne 
+suivante remontera alors pour combler le vide :
+>
+	+---------------------------------------+
+	|Found programming Unix a hurdle	|
+	|~					|
+	|~					|
+	|~					|
+	|					|
+	+---------------------------------------+
+<
+
+SUPPRIMER UN SAUT DE LIGNE
+
+Dans Vim, vous pouvez fusionner deux lignes, ce qui signifie que le saut de 
+ligne qui les sépare est supprimé. La commande « J » permet d'effectuer cette 
+opération.
+Prenons ces deux lignes :
+
+	A young intelligent ~
+	turtle ~
+
+Déplacez le curseur sur la première ligne et pressez « J »:
+
+	A young intelligent turtle ~
+
+==============================================================================
+*02.5*	Annuler et refaire
+
+Imaginons que vous ayez supprimé trop de texte. Vous pouvez bien sûr le 
+retaper, mais il existe un moyen plus simple. La commande « u » annule la 
+dernière modification. Voyez comment cela fonctionne : après avoir utilisé 
+« dd » pour supprimer la première ligne, « u » la fait réapparaître.
+Autre exemple : placez le curseur sur le A de la première ligne :
+
+	A young intelligent turtle ~
+
+Maintenant tapez xxxxxxx pour supprimer "A young". Le résultat est alors le 
+suivant:
+
+	 intelligent turtle ~
+
+Tapez "u" pour annuler la dernière suppression. Cette suppression a effacé le 
+« g », donc la fonction « Annuler » rétablit le caractère.
+
+	g intelligent turtle ~
+
+La commande « u » suivante permet de rétablir l'avant-dernier caractère 
+supprimé:
+
+	ng intelligent turtle ~
+
+La commande « u » suivante vous donne le « u », et ainsi de suite :
+
+	ung intelligent turtle ~
+	oung intelligent turtle ~
+	young intelligent turtle ~
+	 young intelligent turtle ~
+	A young intelligent turtle ~
+
+REFAIRE
+
+Si vous effectuez trop d'annulations, vous pouvez appuyer sur CTRL-R 
+(rétablir) pour annuler la commande précédente. En d'autres termes, cela 
+annule l'annulation. Pour voir cela en action, appuyez deux fois sur CTRL-R. 
+La lettre A et l'espace qui la suit disparaissent :
+
+	young intelligent turtle ~
+
+Il existe une variante de la commande « undo » : la commande « U » (undo 
+line). La commande « undo line » annule toutes les modifications apportées à 
+la dernière ligne éditée. En tapant cette commande deux fois, on annule la 
+commande « U » précédente.
+
+	A very intelligent turtle ~
+	  xxxx				Supprime very
+
+	A intelligent turtle ~
+		      xxxxxx		Supprime turtle
+
+	A intelligent ~
+					Restaure la ligne avec "U"
+	A very intelligent turtle ~
+					Annule "U" avec "u"
+	A intelligent ~
+
+La commande « U » correspond à une modification en soi, que la commande « u » 
+annule et que CTRL-R rétablit. Cela peut sembler un peu déroutant. Ne vous 
+inquiétez pas : grâce à « u » et à CTRL-R, vous pouvez revenir à n'importe 
+quelle situation antérieure. Vous trouverez plus d'informations à ce sujet 
+dans la section |32.2|.
+
+==============================================================================
+*02.6*	Autres commandes d'édition
+
+Vim dispose d'un grand nombre de commandes permettant de modifier le texte. 
+Voir |Q_in| et la suite.
+En voici quelques-unes parmi les plus couramment utilisées.
+
+
+ANNEXE
+
+La commande « i » insère un caractère avant celui situé sous le curseur. Cela 
+fonctionne très bien ; mais que se passe-t-il si vous souhaitez ajouter du texte 
+à la fin de la ligne ? Pour cela, vous devez insérer du texte après le curseur. 
+Cela s'effectue à l'aide de la commande « a » (append).
+Par exemple, pour modifier la ligne
+
+	and that's not saying much for the turtle. ~
+en
+	and that's not saying much for the turtle!!! ~
+
+Placez le curseur sur le point situé à la fin de la ligne. Tapez ensuite « x » 
+pour supprimer le point. Le curseur se trouve désormais à la fin de la ligne, sur 
+le « e » de « turtle ». Tapez maintenant >
+
+	a!!!<Esc>
+
+pour ajouter trois points d'exclamation après le « e » de « turtle » :
+
+	and that's not saying much for the turtle!!! ~
+
+
+CREER UNE NOUVELLE LIGNE
+
+La commande « o » crée une nouvelle ligne vide sous le curseur et place Vim en 
+mode insertion. Vous pouvez alors saisir le texte de la nouvelle ligne.
+Supposons que le curseur se trouve quelque part dans la première de ces deux 
+lignes:
+
+	A very intelligent turtle ~
+	Found programming Unix a hurdle ~
+
+Si vous utilisez maintenant la commande « o » et que vous saisissez un nouveau 
+texte: >
+
+	oThat liked using Vim<Esc>
+
+Le résultat est:
+
+	A very intelligent turtle ~
+	That liked using Vim ~
+	Found programming Unix a hurdle ~
+
+La commande « O » (en majuscule) ouvre une ligne au-dessus du curseur.
+
+
+UTILISATION DU COMPTEUR
+
+Supposons que vous souhaitiez remonter de neuf lignes. Vous pouvez taper 
+« kkkkkkkkk » ou entrer la commande « 9k ». En effet, vous pouvez faire 
+précéder de nombreux commandes d’un chiffre. Plus haut dans ce chapitre, par 
+exemple, vous avez ajouté trois points d’exclamation à la fin d’une ligne en 
+tapant « a!!!<Esc> ». Une autre façon de procéder consiste à utiliser la 
+commande « 3a!<Esc> ». Le nombre 3 indique à la commande qui suit de tripler 
+son effet. De même, pour supprimer trois caractères, utilisez la commande 
+« 3x ». Le nombre précède toujours la commande à laquelle il s'applique.
+
+==============================================================================
+*02.7*	Quitter
+
+Pour quitter, utilisez la commande « ZZ ». Cette commande enregistre le 
+fichier et quitte l'éditeur.
+
+	Note:
+	Contrairement à de nombreux autres éditeurs, Vim ne crée pas 
+	automatiquement de fichier de sauvegarde. Si vous tapez « ZZ », vos 
+	modifications sont validées et il n'y a pas de retour en arrière 
+	possible. Vous pouvez configurer l'éditeur Vim pour qu'il crée des 
+	fichiers de sauvegarde ; voir |07.4|.
+
+
+ANNULER DES MODIFICATIONS
+
+Il arrive parfois que vous effectuiez une série de modifications et que vous 
+vous rendiez soudain compte que vous étiez mieux avant de commencer. Pas 
+d’inquiétude : Vim dispose d’une commande permettant de quitter et d’annuler 
+toutes les modifications. La voici: >
+
+	:q!
+
+N’oubliez pas d’appuyer sur <Enter> pour valider la commande.
+
+Pour ceux d’entre vous qui souhaitent en savoir plus, cette commande se 
+compose de trois éléments : le deux-points (:), qui permet d’accéder au mode 
+ligne de commande ; la commande q, qui demande à l’éditeur de se fermer ; et 
+le modificateur de commande (!) qui permet de passer outre.
+Le modificateur de commande (!) est nécessaire car Vim est réticent à 
+supprimer les modifications. Si vous tapiez simplement « :q », Vim afficherait 
+un message d’erreur et refuserait de se fermer:
+
+	E37: No write since last change (use ! to override) ~
+
+En spécifiant le modificateur de commande « ! », vous dites en substance à Vim:
+« Je sais que ce que je fais peut paraître stupide, mais je tiens vraiment à le 
+faire. »
+
+Si vous souhaitez poursuivre l’édition avec Vim : la commande « :e! » recharge 
+la version d’origine du fichier.
+
+==============================================================================
+*02.8*	Consulter l'aide
+
+Tout ce que vous avez toujours voulu savoir se trouve dans les fichiers d'aide 
+de Vim.
+N'hésitez pas à poser des questions !
+
+Si vous savez ce que vous cherchez, il est généralement plus simple d’effectuer
+une recherche à l’aide du système d’aide plutôt que d’utiliser Google. En effet,
+les rubriques respectent un certain guide de style.
+
+De plus, l’aide présente l’avantage d’être spécifique à votre version de Vim. 
+Vous n’y trouverez pas d’aide concernant les commandes ajoutées ultérieurement. 
+Celles-ci ne fonctionneraient pas dans votre cas.
+
+Pour obtenir une aide générale, utilisez cette commande: >
+
+	:help
+
+Vous pouvez également utiliser la première touche de fonction <F1>. Si votre 
+clavier dispose d’une touche <Help>, celle-ci devrait également fonctionner.
+Si vous n’indiquez pas de sujet, la commande « :help » affiche la fenêtre d’aide 
+générale. Les créateurs de Vim ont eu une idée très astucieuse (ou très 
+paresseuse) concernant le système d’aide : ils ont fait de la fenêtre d’aide une 
+fenêtre d’édition normale. Vous pouvez utiliser toutes les commandes habituelles 
+de Vim pour naviguer dans les informations d’aide. Ainsi, les touches h, j, k et 
+l permettent de se déplacer vers la gauche, vers le bas, vers le haut et vers la 
+droite.
+Pour quitter la fenêtre d’aide, utilisez la même commande que celle servant à 
+quitter l’éditeur : « ZZ ». Cela fermera uniquement la fenêtre d’aide, sans 
+quitter Vim.
+
+En lisant le texte d’aide, vous remarquerez des passages entre barres verticales 
+(par exemple, |help|). Cela indique un lien hypertexte. Si vous placez le curseur 
+n’importe où entre les barres et que vous appuyez sur CTRL-] (saut vers la balise), 
+le système d’aide vous amène au sujet indiqué (Pour des raisons qui ne seront pas 
+abordées ici, la terminologie de Vim pour un lien hypertexte est « balise ». Ainsi, 
+CTRL-] permet d’accéder à l’emplacement de la balise correspondant au mot situé 
+sous le curseur.)
+Après quelques sauts, vous souhaiterez peut-être revenir en arrière. CTRL-T (pop 
+tag) vous ramène à la position précédente. CTRL-O (saut vers une position 
+antérieure) fonctionne également très bien ici.
+En haut de l'écran d'aide, figure la notation « *help.txt* ». Ce nom entre les 
+caractères « * » est utilisé par le système d'aide pour définir une balise 
+(destination du lien hypertexte).
+Voir |29.1| pour plus de détails sur l'utilisation des balises.
+
+Pour obtenir de l'aide sur un sujet donné, utilisez la commande suivante: >
+
+	:help {sujet}
+
+Pour obtenir de l'aide sur la commande « x », par exemple, saisissez ce qui 
+suit : >
+
+	:help x
+
+Pour savoir comment supprimer du texte, utilisez cette commande : >
+
+	:help deleting
+
+Pour obtenir un index complet de toutes les commandes de Vim, utilisez la 
+commande suivante : >
+
+	:help index
+
+Lorsque vous avez besoin d’aide pour une commande utilisant un caractère de 
+contrôle (par exemple, CTRL-A), vous devez l’écrire en ajoutant le préfixe 
+« CTRL- ». >
+
+        :help CTRL-A
+
+L’éditeur Vim dispose de nombreux modes différents. Par défaut, le système 
+d’aide affiche les commandes du mode normal. Par exemple, la commande 
+suivante affiche l’aide relative à la commande CTRL-H en mode normal : >
+
+	:help CTRL-H
+
+Pour identifier d’autres modes, utilisez un préfixe de mode. Si vous 
+souhaitez obtenir l’aide relative à la version d’une commande en mode 
+insertion, utilisez « i_ ». Pour CTRL-H, cela vous donne la
+commande suivante : >
+
+        :help i_CTRL-H
+
+Lorsque vous lancez l’éditeur Vim, vous pouvez utiliser plusieurs arguments 
+de ligne de commande. Ils commencent tous par un tiret (-). Pour savoir à quoi 
+sert l'argument -t, par exemple, utilisez la commande : >
+
+	:help -t
+
+L'éditeur Vim dispose d'un certain nombre d'options qui vous permettent de 
+configurer et de personnaliser l'éditeur. Si vous souhaitez obtenir de l'aide 
+sur une option, vous devez la placer entre guillemets simples. Pour découvrir 
+la fonction de l’option « number », par exemple, utilisez la commande 
+suivante : >
+
+	:help “number”
+
+Le tableau répertoriant tous les préfixes de mode se trouve ci-dessous:
+|help-summary|.
+
+Les touches spéciales sont placées entre crochets angulaires. Pour obtenir de 
+l’aide sur la touche fléchée vers le haut en mode Insertion, par exemple, 
+utilisez cette commande : >
+
+	:help i_<Up>
+
+Si vous voyez un message d’erreur que vous ne comprenez pas, par exemple :
+
+	E37: No write since last change (use ! to override) ~
+
+Vous pouvez utiliser l’identifiant d’erreur au début pour obtenir de l’aide à 
+ce sujet : >
+
+	:help E37
+
+
+Résumé:					*help-summary*  >
+
+1) Utilisez <Ctrl-D> après avoir saisi un sujet et laissez Vim afficher tous 
+   les sujets disponibles.
+   Ou appuyez sur Tab pour compléter: >
+    :help some<Tab>
+<   Plus d'informations sur l'utilisation de l'aide : >
+    :help helphelp
+
+2) Suivez les liens entre barres verticales pour accéder à l'aide associée. 
+   Vous pouvez passer de l'aide détaillée à la documentation utilisateur, qui 
+   décrit certaines commandes davantage sous l'angle de l'utilisateur et de 
+   façon moins technique. Par exemple, après : >
+    :help pattern.txt
+<   Vous pouvez voir les sujets du guide utilisateur |03.9| et |usr_27.txt| 
+   dans l'introduction.
+
+3) Les options sont encadrées par des apostrophes simples. Pour accéder au 
+   sujet d'aide de l'option 'list' : >
+    :help 'list'
+<   Si vous savez seulement que vous cherchez une certaine option, vous pouvez 
+   aussi faire : >
+    :help options.txt
+<   pour ouvrir la page d'aide qui décrit toute la gestion des options, puis 
+   effectuer une recherche avec des expressions régulières, par ex. textwidth.
+   Certaines options ont leur propre espace de noms, par ex. : >
+    :help cpo-<letter>
+<   pour le drapeau correspondant des paramètres 'cpoptions', remplacez 
+   <letter> par un drapeau spécifique, par ex. : >
+    :help cpo-;
+<   Et pour les drapeaux de 'guioptions' : >
+    :help go-<letter>
+
+4) Les commandes du mode normal n'ont pas de préfixe. Pour accéder à la page 
+   d'aide de la commande "gt" : >
+    :help gt 
+
+5) Les commandes du mode Insertion commencent par i_. Aide pour la 
+   suppression d'un mot : >
+    :help i_CTRL-W 
+
+6) Les commandes du mode Visuel commencent par v_. Aide pour sauter de l'autre 
+   côté de la zone Visuelle : >
+    :help v_o 
+
+7) Les commandes de la ligne de commande et les arguments commencent par c_. 
+   Aide pour l'utilisation de l'argument de commande % : >
+    :help c_% 
+
+8) Les commandes Ex commencent toujours par « : », donc pour accéder à l'aide 
+   de la commande « :s » : >
+    :help :s 
+
+9) Les commandes spécifiquement destinées au débogage commencent par « > ». 
+   Pour accéder à l'aide de la commande de débogage « cont » : >
+    :help >cont 
+
+10) Combinaisons de touches. Elles commencent généralement par une seule 
+    lettre indiquant le mode dans lequel elles peuvent être utilisées. Ex. : >
+	:help i_CTRL-X
+<    vous amène à la famille des commandes CTRL-X pour le mode Insertion, qui 
+    peuvent être utilisées pour l'auto-complétion de différentes choses. Notez 
+    que certaines touches seront toujours écrites de la même manière, par ex. 
+    Control sera toujours CTRL.
+    Pour les commandes du mode Normal, il n'y a pas de préfixe et le sujet est 
+    disponible avec :h CTRL-<Letter>. Ex. : >
+	:help CTRL-W
+<    En revanche, >
+	:help c_CTRL-R
+<    décrit ce que fait CTRL-R lorsque vous saisissez des commandes dans la 
+    ligne de commande, et >
+	:help v_CTRL-A
+<    traite de l'incrémentation de nombres en mode Visuel, tandis que >
+	:help g_CTRL-A
+<    traite de la commande "g<C-A>" (par ex. vous devez appuyer sur "g" puis 
+    sur <CTRL-A>). Ici, le "g" représente la commande normale "g" qui attend 
+    toujours une seconde touche avant d'agir, un peu comme les commandes 
+    commençant par "z".
+
+11) Les éléments d'expressions régulières (regexp) commencent toujours par /. 
+    Ainsi, pour obtenir de l'aide sur le quantificateur \+ dans les regex de 
+    Vim : >
+	:help /+
+<    Si vous avez besoin de tout savoir sur les expressions régulières, 
+    commencez par lire : >
+	:help pattern.txt 
+
+12) Les registres commencent toujours par "quote". Pour en savoir plus sur le 
+    registre spécial ":" : >
+	:help quote: 
+
+13) Le script Vim est disponible à l'adresse : >
+	:help vimeval.txt
+<    Certains aspects du langage sont disponibles avec :h expr-X où "X" est une 
+    lettre unique. Ex. : >
+	:help expr-!
+<    vous amènera au sujet décrivant l'opérateur "!" (Non) pour Vim Script.
+    Il est également important de consulter : >
+	:help function-list
+<    pour trouver une brève description de toutes les fonctions disponibles. 
+    Les sujets d'aide pour les fonctions de Vim script incluent toujours les 
+    "()", donc : >
+	:help append()
+<    traite de la fonction Vim script append() plutôt que de la manière 
+    d'ajouter du texte dans le tampon courant.
+
+14) Les mappings sont abordés dans la page d'aide :h |map.txt|. Utilisez >
+	:help mapmode-i
+<    pour en savoir plus sur la commande |:imap|. Utilisez également 
+    :map-sujet pour trouver des sous-sujets particuliers aux mappings. Ex. : >
+	:help :map-local
+<    pour les mappings locaux au tampon, ou >
+	:help map-bar
+<    pour savoir comment le '|' est géré dans les mappings. 
+
+15) Les définitions de commandes sont abordées dans :h command-sujet, donc 
+    utilisez >
+	:help command-bang
+<    pour en savoir plus sur l'argument '!' des commandes personnalisées. 
+
+16) Les commandes de gestion des fenêtres commencent toujours par CTRL-W, 
+    vous trouverez donc l'aide correspondante avec :h CTRL-W_lettre. Ex. : >
+	:help CTRL-W_p
+<    pour accéder à la fenêtre précédemment consultée. Vous pouvez également 
+    consulter >
+	:help windows.txt
+<    et le parcourir si vous cherchez des commandes de gestion des fenêtres.
+
+17) Utilisez |:helpgrep| pour effectuer une recherche dans toutes les pages 
+    d'aide (ainsi que dans celles des plugins installés). Consultez 
+    |:helpgrep| pour savoir comment l'utiliser.
+    Pour rechercher un sujet : >
+	:helpgrep sujet
+<    Cela vous amène à la première correspondance. Pour passer à la suivante : >
+	:cnext
+<    Toutes les correspondances sont disponibles dans la fenêtre quickfix, 
+    que l'on peut ouvrir avec : >
+	:copen
+<    Déplacez-vous vers la correspondance qui vous intéresse et appuyez sur 
+    Entrée pour accéder à cette aide.
+
+18) Le manuel utilisateur. Il décrit les sujets d'aide pour les débutants de 
+    manière assez conviviale. Commencez par |usr_toc.txt| pour trouver la table 
+    des matières (comme vous l'avez peut-être deviné) : >
+	:help usr_toc.txt
+<    Parcourez le contenu pour trouver des sujets intéressants. Les rubriques 
+    « Digraphes » et « Saisie de caractères spéciaux » se trouvent dans le 
+    chapitre 24 ; pour accéder à cette page d'aide particulière : >
+	:help usr_24.txt
+<    Si vous souhaitez accéder directement à un chapitre précis de l'aide, le 
+    numéro de chapitre peut être utilisé comme ceci : >
+	:help 10.1
+<    qui renvoie au chapitre 10.1 dans |usr_10.txt| et traite de 
+    l'enregistrement des macros.
+
+19) Les groupes de surbrillance (highlighting). Ils commencent toujours par 
+    hl- suivi du nom du groupe. Ex. : >
+	:help hl-WarningMsg
+<    traite du groupe de surbrillance WarningMsg.
+
+20) La coloration syntaxique (syntax highlighting) est rattachée à l'espace 
+    de noms :syn- suivi du sujet. Ex. : >
+	:help :syn-conceal
+<    traite de l'argument conceal pour la commande :syn.
+
+21) Les commandes quickfix commencent généralement par :c, tandis que les 
+    commandes de liste de localisation (location list) commencent 
+    généralement par :l. 
+
+22) Les événements d'autocommande peuvent être trouvés par leur nom : >
+	:help BufWinLeave
+<    Pour voir tous les événements possibles : >
+	:help events 
+
+23) Les options de la ligne de commande (command-line switches) commencent 
+    toujours par un -. Ainsi, pour obtenir l'aide sur l'option -f de Vim, 
+    utilisez : >
+	:help -f 
+
+24) Le langage Lua et la bibliothèque standard Lua de Nvim sont disponibles 
+    dans : >
+	:help lua.txt
+<    Le guide d'utilisation de Lua dans Nvim est disponible dans : >
+	:help lua-guide.txt
+<   Le manuel de référence de Lua 5.1 est disponible dans : >
+	:help luaref.txt 
+<
+25) La documentation pour les fonctionnalités spécifiques à certains types de 
+    fichiers (filetype) inclus est généralement disponible sous la forme 
+    ft-<filetype>-<fonctionnalité>. Ainsi, >
+	:help ft-c-syntax
+<    traite du fichier de syntaxe C et des options qu'il propose. Parfois, des 
+    sections supplémentaires pour l'omni-complétion >
+	:help ft-php-omni
+<    ou pour les plugins de type de fichier >
+	:help ft-tex-plugin
+<    sont disponibles.
+
+26) Les codes d'erreur et d'avertissement peuvent être consultés directement 
+    dans l'aide. Ainsi, >
+	:help E297
+<    vous mène exactement à la description du message d'erreur de swap, et >
+	:help W10
+<    traite de l'avertissement « Changing a readonly file ».
+    Cependant, il arrive que ces codes d'erreur ne soient pas décrits 
+    individuellement, mais plutôt listés dans la commande Vim qui les provoque 
+    généralement. Ainsi : >
+	:help E128
+<   vous amène à la commande |:function|. 
+
+27) La documentation pour les packages distribués avec Vim a la forme
+    package-<nom>. Donc >
+	:help package-termdebug
+<    vous amènera à la section d'aide pour le plugin termdebug inclus et pour 
+    savoir comment l'activer.
+
+==============================================================================
+
+Prochain chapitre: |usr_03.txt|  Se déplacer
+
+Copyright: voir |manual-copyright|
+
+vim:tw=78:ts=8:noet:ft=help:norl:

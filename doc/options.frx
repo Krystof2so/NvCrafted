@@ -4106,24 +4106,25 @@ A jump table for the options with a short description can be found at |Q_op|.
 	enabled with the 'lisp' option.
 
 						*'list'* *'nolist'*
-'list'			boolean	(default off)
-			local to window
-	List mode: By default, show tabs as ">", trailing spaces as "-", and
-	non-breakable space characters as "+". Useful to see the difference
-	between tabs and spaces and for trailing blanks. Further changed by
-	the 'listchars' option.
+'list'			booléen	(defaut off)
+			local à la fenêtre
+Mode Liste : Par défaut, affiche les tabulations comme ">", les espaces de 
+fin de ligne comme "-" et les espaces insécables comme "+". Utile pour voir 
+la différence entre les tabulations et les espaces, ainsi que pour repérer 
+les espaces en fin de ligne. Modifiable en outre par l'option 'listchars'.
 
-	When 'listchars' does not contain "tab" field, tabs are shown as "^I"
-	or "<09>", like how unprintable characters are displayed.
+Lorsque 'listchars' ne contient pas le champ "tab", les tabulations sont 
+affichées comme "^I" ou "<09>", à la manière des caractères non imprimables.
 
-	The cursor is displayed at the start of the space a Tab character
-	occupies, not at the end as usual in Normal mode.  To get this cursor
-	position while displaying Tabs with spaces, use: >vim
-		let &list = v:true | let &lcs = 'tab:  '
+Le curseur est affiché au début de l'espace occupé par un caractère de 
+tabulation, et non à la fin comme c'est habituellement le cas en mode Normal. 
+Pour obtenir cette position du curseur tout en affichant les tabulations avec 
+des espaces, utilisez : >vim
+	let &list = v:true | let &lcs = 'tab: '
 <
-	Note that list mode will also affect formatting (set with 'textwidth'
-	or 'wrapmargin') when 'cpoptions' includes 'L'.  See 'listchars' for
-	changing the way tabs are displayed.
+Notez que le mode Liste affectera également le formatage (défini avec 
+'textwidth' ou 'wrapmargin') lorsque 'cpoptions' contient 'L'. Voir 
+'listchars' pour modifier la façon dont les tabulations sont affichées.
 
 						*'listchars'* *'lcs'*
 'listchars' 'lcs'	string	(default "tab:> ,trail:-,nbsp:+")
