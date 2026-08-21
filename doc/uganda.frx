@@ -1,0 +1,108 @@
+*uganda.txt*    Nvim (v0.12.4) - Traduction française (via DeepSeek)
+
+
+		  MANUEL DE RÉFÉRENCE VIM	  par Bram Moolenaar
+
+
+			*uganda* *Uganda* *copying* *copyright* *license*
+SOMMAIRE
+							*Kuwasha*
+Vim est un logiciel de charité. Vous pouvez l'utiliser et le copier autant que vous le souhaitez, mais il est encouragé de faire un don pour les enfants défavorisés en Ouganda. Veuillez consulter |kcc| ci-dessous ou visiter le site web de Kuwasha, disponible à l'URL suivante :
+
+	https://www.kuwasha.net
+
+Vous pouvez également parrainer le développement de Vim. Les sponsors de Vim peuvent voter pour des fonctionnalités. Voir |sponsor|. L'argent va de toute façon en Ouganda.
+
+							*iccf* *ICCF*
+ICCF Hollande et Kuwasha ~
+
+L'œuvre caritative de |Bram| Moolenaar, ICCF Holland, a longtemps soutenu l'éducation des enfants en Ouganda par l'intermédiaire du Kibaale Children's Centre. Après le décès de Bram en 2023, ICCF Holland a transféré toutes ses activités à sa fondation sœur Kuwasha au Canada et a été dissoute à la fin de l'année 2025.
+
+Les dons des utilisateurs de Vim sont toujours les bienvenus et continueront à aller directement en Ouganda. Pour continuer à soutenir cette cause, veuillez envoyer vos contributions à Kuwasha.
+
+Licence ~
+
+La Licence de Publication Ouverte s'applique à la documentation de Vim, voir |manual-copyright|.
+
+=== début de la licence ===
+
+LICENCE VIM
+
+I)  Il n'y a aucune restriction concernant la distribution de copies non modifiées de Vim, sauf qu'elles doivent inclure ce texte de licence. Vous pouvez également distribuer des parties non modifiées de Vim, de même sans restriction, à condition qu'elles incluent ce texte de licence. Vous êtes également autorisé à inclure des exécutables que vous avez créés à partir des sources non modifiées de Vim, ainsi que vos propres exemples d'utilisation et scripts Vim.
+
+II) Il est permis de distribuer une version modifiée (ou étendue) de Vim, y compris les exécutables et/ou le code source, lorsque les quatre conditions suivantes sont remplies :
+    1) Ce texte de licence doit être inclus sans modification.
+    2) La version modifiée de Vim doit être distribuée de l'une des cinq manières suivantes :
+       a) Si vous apportez vous-même des modifications à Vim, vous devez décrire clairement dans la distribution comment vous contacter. Lorsque le mainteneur vous demande (de quelque manière que ce soit) une copie de la version modifiée de Vim que vous avez distribuée, vous devez mettre vos modifications, y compris le code source, à la disposition du mainteneur sans frais. Le mainteneur se réserve le droit d'inclure vos modifications dans la version officielle de Vim. Ce que le mainteneur fera de vos modifications et sous quelle licence elles seront distribuées est négociable. S'il n'y a pas eu de négociation, alors cette licence, ou une version ultérieure, s'applique également à vos modifications. Les mainteneurs actuels sont listés ici :
+	      https://github.com/orgs/vim/people
+	  Si cela change, il en sera annoncé dans les endroits appropriés (très probablement vim.sf.net, www.vim.org et/ou comp.editors). Lorsqu'il est totalement impossible de contacter le mainteneur, l'obligation de lui envoyer vos modifications cesse. Une fois que le mainteneur a confirmé avoir reçu vos modifications, elles n'auront pas à être renvoyées.
+       b) Si vous avez reçu une version modifiée de Vim qui a été distribuée comme mentionné en a), vous êtes autorisé à la redistribuer sans modification, comme mentionné en I). Si vous apportez des modifications supplémentaires, le texte en a) s'applique à ces modifications.
+       c) Fournir toutes les modifications, y compris le code source, avec chaque copie de la version modifiée de Vim que vous distribuez. Cela peut être fait sous la forme d'un diff contextuel. Vous pouvez choisir la licence à utiliser pour le nouveau code que vous ajoutez. Les modifications et leur licence ne doivent pas restreindre les autres dans la possibilité d'apporter leurs propres modifications à la version officielle de Vim.
+       d) Lorsque vous disposez d'une version modifiée de Vim qui inclut des modifications comme mentionné en c), vous pouvez la distribuer sans le code source des modifications si les trois conditions suivantes sont remplies :
+	  - La licence qui s'applique aux modifications vous permet de distribuer les modifications au mainteneur de Vim sans frais ni restriction, et permet au mainteneur de Vim d'inclure les modifications dans la version officielle de Vim sans frais ni restriction.
+	  - Vous conservez les modifications pendant au moins trois ans après la dernière distribution de la version modifiée de Vim correspondante. Lorsque le mainteneur ou une personne à qui vous avez distribué la version modifiée de Vim vous demande (de quelque manière que ce soit) les modifications pendant cette période, vous devez les lui mettre à disposition.
+	  - Vous décrivez clairement dans la distribution comment vous contacter. Ces coordonnées doivent rester valides pendant au moins trois ans après la dernière distribution de la version modifiée de Vim correspondante, ou aussi longtemps que possible.
+       e) Lorsque la Licence Publique Générale GNU (GPL) s'applique aux modifications, vous pouvez distribuer la version modifiée de Vim sous la GNU GPL version 2 ou toute version ultérieure.
+    3) Un message doit être ajouté, au moins dans la sortie de la commande ":version" et dans l'écran d'introduction, afin que l'utilisateur de la version modifiée de Vim puisse voir qu'elle a été modifiée. Lors de la distribution comme mentionné en 2)e), l'ajout du message n'est requis que dans la mesure où cela n'entre pas en conflit avec la licence utilisée pour les modifications.
+    4) Les coordonnées requises en 2)a) et 2)d) ne doivent pas être supprimées ou modifiées, sauf que la personne elle-même peut faire des corrections.
+
+III) Si vous distribuez une version modifiée de Vim, il est encouragé d'utiliser la licence Vim pour vos modifications et de les mettre à disposition du mainteneur, y compris le code source. La manière privilégiée de procéder est par e-mail ou en téléchargeant les fichiers sur un serveur et en envoyant l'URL par e-mail. Si le nombre de modifications est faible (par exemple, un Makefile modifié), l'envoi d'un diff contextuel par e-mail fera l'affaire. L'adresse e-mail à utiliser est <maintainer@vim.org>
+
+IV) Il n'est pas permis de retirer cette licence de la distribution des sources de Vim, de parties de celles-ci ou d'une version modifiée. Vous pouvez utiliser cette licence pour les versions précédentes de Vim à la place de la licence avec laquelle elles ont été fournies, à votre discrétion.
+
+=== fin de la licence ===
+
+Remarque :
+
+- Si vous êtes satisfait de Vim, veuillez l'exprimer en lisant le reste de ce fichier et en envisageant d'aider les enfants défavorisés en Ouganda.
+
+- Si vous souhaitez soutenir le développement ultérieur de Vim, envisagez de devenir |sponsor|. L'argent va de toute façon en Ouganda.
+
+- Selon Richard Stallman, la licence Vim est compatible avec la GNU GPL. Quelques modifications mineures ont été apportées depuis qu'il l'a vérifiée, mais cela ne devrait pas faire de différence.
+
+- Si vous liez Vim avec une bibliothèque qui relève de la GNU GPL, cela limite toute distribution ultérieure à la GNU GPL. Cela s'applique également lorsque vous n'avez en réalité rien modifié dans Vim.
+
+- Une fois qu'une modification relevant de la GNU GPL est incluse, cela oblige toutes les modifications ultérieures à être également placées sous la GNU GPL ou une licence compatible.
+
+==============================================================================
+Kibaale Children's Centre		*kcc* *Kibaale*  *charity*
+
+Le Kibaale Children's Centre (KCC) est situé à Kibaale, une petite ville du sud de l'Ouganda, près de la Tanzanie, en Afrique de l'Est. La région est connue sous le nom de district de Rakai. La population est principalement composée d'agriculteurs. Bien que les gens soient pauvres, il y a généralement assez de nourriture. Mais ce district souffre du SIDA plus que toute autre région du monde. Certains disent que c'est là que tout a commencé. Les estimations indiquent que par le passé, 10 à 30 % des Ougandais étaient infectés par le VIH. Comme les parents meurent, il y a de nombreux orphelins. Dans ce district, environ 60 000 enfants ont perdu un parent ou les deux, sur une population de 350 000 habitants. Bien que le SIDA soit désormais largement maîtrisé, les problèmes persistent.
+
+Les enfants ont besoin de beaucoup d'aide. Le KCC travaille dur pour fournir aux plus démunis de la nourriture, des soins médicaux et de l'éducation. De la nourriture et des soins médicaux pour les maintenir en bonne santé maintenant, et une éducation pour qu'ils puissent subvenir à leurs besoins à l'avenir. Le KCC fonctionne sur une base chrétienne, mais l'aide est apportée aux enfants de toute religion.
+
+La clé pour résoudre les problèmes de cette région est l'éducation. Celle-ci a été négligée au cours des dernières années sous le président Idi Amin et les guerres civiles qui ont suivi. Maintenant que le gouvernement est de nouveau stable, les enfants et les parents doivent apprendre à prendre soin d'eux-mêmes et à éviter les infections. Une aide est également apportée aux personnes malades et affamées, mais l'objectif principal est de prévenir les maladies et d'enseigner comment cultiver des aliments sains.
+
+La plupart des orphelins vivent dans une famille élargie. Un oncle ou une sœur aînée s'occupe d'eux. Comme ces familles sont nombreuses et que les revenus (s'il y en a) sont faibles, un enfant a de la chance s'il reçoit de la nourriture saine. Les vêtements, les soins médicaux et la scolarité sont hors de sa portée. Pour aider ces enfants défavorisés, un programme de parrainage a été mis en place. Un enfant peut être adopté financièrement. Pour quelques dollars par mois, le KCC veille à ce que l'enfant reçoive des biens indispensables, soit en bonne santé, aille à l'école et prenne en charge tout ce qui doit être fait pour l'enfant et la famille qui le soutient.
+
+Outre l'aide directe à l'enfant, l'environnement dans lequel il grandit doit être amélioré. Le KCC aide les écoles à améliorer leurs méthodes d'enseignement. Il y a une école de démonstration au centre et des formations d'enseignants sont données. Des agents de santé sont formés, des campagnes d'éducation à l'hygiène sont menées et les ménages sont encouragés à construire des latrines adéquates. J'ai aidé à mettre en place un site de production de dalles de ciment. Celles-ci sont utilisées pour construire de bonnes latrines. Elles sont vendues en dessous du prix de revient.
+
+Il y a une clinique sur le projet, qui fournit une aide médicale aux enfants et à leur famille. Depuis 2020, une maternité a été ajoutée et un service 24h/24 et 7j/7 est disponible. En cas de besoin, un transport vers un hôpital est proposé. Des programmes de vaccination sont menés et une aide est fournie en cas d'épidémie (la rougeole et le choléra ont posé problème).
+
+De l'été 1994 à l'été 1995, Bram a passé une année entière au centre, en tant que bénévole. Bram a contribué à l'agrandissement du centre et a travaillé dans le domaine de l'eau et de l'assainissement. Bram a appris que l'aide fournie par le KCC est vraiment utile. Lorsque Bram est revenu en Hollande, il a voulu continuer à soutenir le KCC. Pour ce faire, il a collecté des fonds et organisé le programme de parrainage.
+
+Comment savoir que l'argent sera bien dépensé ? Tout d'abord, vous avez la garantie personnelle de Bram en tant qu'auteur de Vim, qui connaissait personnellement les personnes travaillant au centre. De plus, le centre a été coparrainé et inspecté par World Vision, le Save the Children Fund et est désormais sous la supervision de la Pacific Academy Outreach Society. Bram a visité le centre à nombreuses reprises, à partir de 1993. Les rapports de visite ont été partagés sur le site web de l'ICCF (peut-être plus disponibles).
+
+Si vous avez d'autres questions, envoyez un e-mail : info@kuwasha.net.
+
+L'adresse du centre est :
+			Kibaale Children's Centre
+			p.o. box 1658
+			Masaka, Ouganda, Afrique de l'Est
+
+							*donate*
+Envoi d'argent :
+
+Consultez le site web de Kuwasha pour les dernières informations !
+
+		Consultez leur site pour des informations sur le parrainage :
+		    https://www.kuwasha.net/
+		Si vous faites un don à Kuwasha, vous recevrez un reçu fiscal
+		pouvant être joint à votre déclaration d'impôts.
+
+Carte de crédit :	Vous pouvez utiliser PayPal pour envoyer de l'argent avec une carte de crédit. Il s'agit du système de paiement basé sur Internet le plus utilisé. C'est vraiment simple à utiliser. Utilisez ce lien pour plus d'informations :
+		    https://www.paypal.com/en_US/mrb/pal=XAC62PML3GF8Q
+		L'adresse e-mail pour envoyer l'argent est :
+		    info@kuwasha.net
+
+ vim:tw=78:ts=8:noet:ft=help:norl:

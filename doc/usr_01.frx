@@ -1,0 +1,122 @@
+*usr_01.txt*	Nvim (v0.12.4) - Traduction française
+
+
+		     VIM USER MANUAL	par Bram Moolenaar
+
+
+			      A propos des manuels 
+
+
+Ce chapitre présente les manuels disponibles avec Vim. Lisez-le pour connaître
+les conditions des explications des commandes.
+
+|01.1|	Deux manuels
+|01.2|	Vim est installé
+|01.3|	Utilisation du tutoriel Vim
+|01.4|	Copyright
+
+     Chapitre suivant: |usr_02.txt|  Les premiers pas avec Vim
+Table des matières: |usr_toc.txt|
+
+==============================================================================
+*01.1*	Deux manuels 
+
+La documentation de Vim se compose de deux parties :
+
+1. Le manuel d'utilisation
+   Des explications axées sur les tâches, allant du plus simple au plus 
+   complexe. Se lit du début à la fin comme un livre.
+
+2. Le manuel de référence
+   Description précise du fonctionnement de tous les éléments de Vim.
+
+La notation utilisée dans ces manuels est expliquée ici : |notation|
+
+NAVIGATION
+
+Le texte contient des liens hypertextes entre les deux parties, ce qui vous
+permet de passer rapidement de la description d’une tâche d’édition à une 
+explication précise des commandes et options utilisées pour celle-ci.  
+Utilisez ces deux commandes :
+
+	Presser  CTRL-]  pour accéder à un sujet situé sous le curseur.
+	Presser  CTRL-O  pour revenir en arrière (répétez l’opération pour 
+			 remonter plus loin).
+
+De nombreux liens se présentent sous forme de barres verticales, comme ceci:
+|bars|. Les barres elles-mêmes peuvent être masquées ou invisibles ; voir 
+ci-dessous. Un nom d'option, comme 'number', une commande entre guillemets
+comme ":write" et tout autre mot peuvent également servir de lien. Essayez
+ceci: placez le curseur sur CTRL-] et appuyez sur CTRL-] à cet endroit.
+
+D'autres sujets sont accessibles via la commande ":help"; voir |help.txt|.
+
+Les barres et les étoiles sont généralement masquées grâce à la fonctionnalité
+|conceal|. Elles utilisent également |hl-Ignore|, qui applique au texte la 
+même couleur que l'arrière-plan. Vous pouvez les rendre visible avec: >
+	:set conceallevel=0
+	:hi link HelpBar Normal
+	:hi link HelpStar Normal
+
+==============================================================================
+*01.2*	Vim est installé			   *setup-vimrc_example*
+
+Pour créer un fichier vimrc vide: >
+
+	:call mkdir(stdpath('config'),'p')
+	:exe 'edit' stdpath('config').'/init.vim'
+	:write
+
+Pour plus d'informations, voir |vimrc|.
+
+==============================================================================
+*01.3*	Utilisation du tutoriel Vim		         *tutor* *vimtutor*
+
+Au lieu de lire le texte (quelle barbe !), vous pouvez utiliser :Tutor pour 
+apprendre vos premières commandes Vim. Il s'agit d'un tutoriel de 30 minutes 
+qui vous enseigne les fonctionnalités les plus élémentaires de Vim de manière 
+pratique.
+
+Pour lancer le tutoriel, exécutez >
+
+        :Tutor
+<
+depuis nvim. Le tutoriel vous guidera à partir de là. Amusez-vous bien !
+
+==============================================================================
+*01.4*	Copyright					*manual-copyright*
+
+Le manuel d'utilisation et le manuel de référence de Vim sont protégés par le 
+droit d'auteur (Copyright © 1988) de Bram Moolenaar.  Ce contenu ne peut être 
+diffusé que sous réserve du respect des conditions générales énoncées dans la 
+licence Open Publication License, version 1.0 ou ultérieure. La dernière 
+version est actuellement disponible à l'adresse suivante :
+	     https://opencontent.org/openpub/
+
+Les personnes qui contribuent à la rédaction des manuels doivent accepter la 
+mention de droits d'auteur ci-dessus.
+							*frombook*
+Certaines parties du manuel d'utilisation sont tirées de l'ouvrage 
+« Vi IMproved - Vim » de Steve Oualline (édité par New Riders Publishing, 
+ISBN : 0735710015). Ce livre est soumis à la licence Open Publication License. 
+Seules certaines parties ont été incluses et d'autres ont été modifiées (par 
+exemple, en supprimant les illustrations, en mettant à jour le texte pour Vim 
+6.0 et les versions ultérieures, en corrigeant des erreurs). L'absence de la 
+balise |frombook| ne signifie pas que le texte ne provient pas du livre.
+
+Un grand merci à Steve Oualline et à New Riders pour avoir créé cet ouvrage et 
+l’avoir publié sous licence OPL ! Il m’a été d’une grande aide lors de la 
+rédaction du manuel d’utilisation. Non seulement en fournissant du texte brut, 
+mais aussi en donnant le ton et le style.
+
+Si vous tirez des revenus de la vente de ces manuels, vous êtes vivement 
+encouragé à reverser une partie des bénéfices pour venir en aide aux victimes 
+du sida en Ouganda. Voir |Kuwasha|.
+
+==============================================================================
+
+Prochain chapitre: |usr_02.txt|  Les premiers pas avec Vim
+
+Copyright: voir |manual-copyright|
+
+vim:tw=78:ts=8:noet:ft=help:norl:
