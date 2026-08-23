@@ -67,10 +67,11 @@ end
 -- ------------------------------------------------------------------------------------
 opt.guicursor = "n-v-c:block-Cursor,i-ci-ve:ver25-CursorIM,r-cr:hor20-Cursor" -- Apparence curseur selon le thème
 
--- *********************************
--- * 6. Navigation dans le fichier *
--- *********************************
+-- ***********************************************
+-- * 6. Navigation dans le fichier et mouvements *
+-- ***********************************************
 opt.jumpoptions = "view" -- str : Continuité visuelle lors des sauts
+opt.matchpairs = "(:),{:},[:],<:>" -- str : Paires reconnues par la commande %
 
 -- ****************
 -- * 7. Recherche *

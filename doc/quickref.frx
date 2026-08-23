@@ -9,14 +9,14 @@ Quick reference guide
 							 *quickref* *Contents*
  tag	  sujet			         tag	  sujet 	~
 |Q_ct|	list of help files		|Q_re|	Repeating commands
-|Q_lr|	motion: Left-right		|Q_km|	Key mapping
+|Q_lr|	mouvement: gauche-droite	|Q_km|	Key mapping
 |Q_ud|	motion: Up-down			|Q_ab|	Abbreviations
 |Q_tm|	motion: Text object		|Q_op|	Options
 |Q_pa|	motion: Pattern searches	|Q_ur|	Undo/Redo commands
 |Q_ma|	motion: Marks			|Q_et|	External commands
 |Q_vm|	motion: Various			|Q_qf|	Quickfix commands
 |Q_ta|	motion: Using tags		|Q_vc|	Various commands
-|Q_sc|	Scrolling			|Q_ce|	Ex: Command-line editing
+|Q_sc|	Défilement			|Q_ce|	Ex: Command-line editing
 |Q_in|	insert: Inserting text		|Q_ra|	Ex: Ranges
 |Q_ai|	insert: Keys			|Q_ex|	Ex: Special characters
 |Q_ss|	insert: Special keys		|Q_st|	Starting Vim
@@ -31,32 +31,37 @@ Quick reference guide
 					|Q_fo|	Folding
 
 ------------------------------------------------------------------------------
-*Q_lr*		Left-right motions
+*Q_lr*		Les mouvements gauche-droite
 
-N is used to indicate an optional count that can be given before the command.
+N est utilisé pour indiquer un compteur facultatif qui peut être donné avant 
+la commande.
 
-|h|	N  h		left (also: CTRL-H, <BS>, or <Left> key)
-|l|	N  l		right (also: <Space> or <Right> key)
-|0|	   0		to first character in the line (also: <Home> key)
-|^|	   ^		to first non-blank character in the line
-|$|	N  $		to the next EOL (end of line) position
-			   (also: <End> key)
-|g0|	   g0		to first character in screen line (differs from "0"
-			   when lines wrap)
-|g^|	   g^		to first non-blank character in screen line (differs
-			   from "^" when lines wrap)
-|g$|	N  g$		to last character in screen line (differs from "$"
-			   when lines wrap)
-|gm|	   gm		to middle of the screen line
-|gM|	   gM		to middle of the line
-|bar|	N  |		to column N (default: 1)
-|f|	N  f{char}	to the Nth occurrence of {char} to the right
-|F|	N  F{char}	to the Nth occurrence of {char} to the left
-|t|	N  t{char}	till before the Nth occurrence of {char} to the right
-|T|	N  T{char}	till before the Nth occurrence of {char} to the left
-|;|	N  ;		repeat the last "f", "F", "t", or "T" N times
-|,|	N  ,		repeat the last "f", "F", "t", or "T" N times in
-			   opposite direction
+|h|	N  h		à gauche (aussi : CTRL-H, <BS> ou touche <Gauche>)
+|l|	N  l		à droite (aussi : <Espace> ou touche <Droite>)
+|0|	   0		au premier caractère de la ligne (aussi : touche
+			   <Home>)
+|^|	   ^		au premier caractère non-blanc de la ligne
+|$|	N  $		à la prochaine position de fin de ligne (EOL)
+			   (aussi : touche <Fin>)
+|g0|	   g0		au premier caractère de la ligne écran (diffère de "0" 
+			   lorsque les lignes sont enveloppées)
+|g^|	   g^		au premier caractère non-blanc de la ligne écran
+			   (diffère de "^" lorsque les lignes sont 
+			   enveloppées)
+|g$|	N  g$		au dernier caractère de la ligne écran (diffère de "$" 
+			   lorsque les lignes sont enveloppées)
+|gm|	   gm		au milieu de la ligne écran
+|gM|	   gM		au milieu de la ligne
+|bar|	N  |		à la colonne N (par défaut : 1)
+|f|	N  f{char}	à la N-ième occurrence de {char} vers la droite
+|F|	N  F{char}	à la N-ième occurrence de {char} vers la gauche
+|t|	N  t{char}	jusqu'avant la N-ième occurrence de {char} vers la 
+			   droite
+|T|	N  T{char}	jusqu'avant la N-ième occurrence de {char} vers la			   gauche
+|;|	N  ;		répète la dernière commande "f", "F", "t" ou "T" N 
+			   fois
+|,|	N  ,		répète la dernière commande "f", "F", "t" ou "T" N 
+			   fois dans la direction opposée
 
 ------------------------------------------------------------------------------
 *Q_ud*		Up-down motions
@@ -240,21 +245,26 @@ N is used to indicate an optional count that can be given before the command.
 ------------------------------------------------------------------------------
 *Q_sc*		Scrolling
 
-|CTRL-E|	N  CTRL-E	window N lines downwards (default: 1)
-|CTRL-D|	N  CTRL-D	window N lines Downwards (default: 1/2 window)
-|CTRL-F|	N  CTRL-F	window N pages Forwards (downwards)
-|CTRL-Y|	N  CTRL-Y	window N lines upwards (default: 1)
-|CTRL-U|	N  CTRL-U	window N lines Upwards (default: 1/2 window)
-|CTRL-B|	N  CTRL-B	window N pages Backwards (upwards)
-|z<CR>|		   z<CR> or zt	redraw, current line at top of window
-|z.|		   z.	 or zz	redraw, current line at center of window
-|z-|		   z-	 or zb	redraw, current line at bottom of window
+|CTRL-E|	N  CTRL-E	fenêtre N lignes vers le bas (par défaut : 1)
+|CTRL-D|	N  CTRL-D	fenêtre N lignes vers le bas (par défaut : 1/2 
+				fenêtre)
+|CTRL-F|	N  CTRL-F	fenêtre N pages vers l'avant (vers le bas)
+|CTRL-Y|	N  CTRL-Y	fenêtre N lignes vers le haut (par défaut : 1)
+|CTRL-U|	N  CTRL-U	fenêtre N lignes vers le haut (par défaut : 1/2 
+				fenêtre)
+|CTRL-B|	N  CTRL-B	fenêtre N pages vers l'arrière (vers le haut)
+|z<CR>|		   z<CR> or zt	réaffiche, ligne courante en haut de la fenêtre
+|z.|		   z.	 or zz	réaffiche, ligne courante au centre de la 
+				fenêtre
+|z-|		   z-	 or zb	réaffiche, ligne courante en bas de la fenêtre
 
-These only work when 'wrap' is off:
-|zh|		N  zh		scroll screen N characters to the right
-|zl|		N  zl		scroll screen N characters to the left
-|zH|		N  zH		scroll screen half a screenwidth to the right
-|zL|		N  zL		scroll screen half a screenwidth to the left
+Ces commandes ne fonctionnent que lorsque 'wrap' est désactivé :
+|zh|		N  zh		défile l'écran de N caractères vers la droite
+|zl|		N  zl		défile l'écran de N caractères vers la gauche
+|zH|		N  zH		défile l'écran d'une demi-largeur d'écran vers 
+				la droite
+|zL|		N  zL		défile l'écran d'une demi-largeur d'écran vers 
+				la gauche
 
 ------------------------------------------------------------------------------
 *Q_in*		Insertion de texte

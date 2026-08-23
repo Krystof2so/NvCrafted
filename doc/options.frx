@@ -3501,27 +3501,33 @@ A jump table for the options with a short description can be found at |Q_op|.
 	The maximum value is 10000.
 
 				*'hlsearch'* *'hls'* *'nohlsearch'* *'nohls'*
-'hlsearch' 'hls'	boolean	(default on)
+'hlsearch' 'hls'	booléen	(defaut on)
 			global
-	When there is a previous search pattern, highlight all its matches.
-	The |hl-Search| highlight group determines the highlighting for all
-	matches not under the cursor while the |hl-CurSearch| highlight group
-	(if defined) determines the highlighting for the match under the
-	cursor. If |hl-CurSearch| is not defined, then |hl-Search| is used for
-	both. Note that only the matching text is highlighted, any offsets
-	are not applied.
-	See also: 'incsearch' and |:match|.
-	When you get bored looking at the highlighted matches, you can turn it
-	off with |:nohlsearch|.  This does not change the option value, as
-	soon as you use a search command, the highlighting comes back.
-	'redrawtime' specifies the maximum time spent on finding matches.
-	When the search pattern can match an end-of-line, Vim will try to
-	highlight all of the matched text.  However, this depends on where the
-	search starts.  This will be the first line in the window or the first
-	line below a closed fold.  A match in a previous line which is not
-	drawn may not continue in a newly drawn line.
-	You can specify whether the highlight status is restored on startup
-	with the 'h' flag in 'shada' |shada-h|.
+	Lorsqu'il existe un motif de recherche précédent, permet de 
+	surligner toutes ses correspondances. Le groupe de surbrillance 
+	|hl-Search| détermine le surlignage pour toutes les correspondances 
+	qui ne sont pas sous le curseur, tandis que le groupe de surbrillance 
+	|hl-CurSearch| (s'il est défini) détermine le surlignage pour la 
+	correspondance sous le curseur. Si |hl-CurSearch| n'est pas défini, 
+	alors |hl-Search| est utilisé pour les deux. Notez que seul le texte 
+	correspondant est surligné, les éventuels décalages (offsets) ne sont 
+	pas appliqués.
+	Voir aussi : 'incsearch' et |:match|.
+	Lorsque vous en avez assez de voir les correspondances surlignées, vous 
+	pouvez les désactiver avec |:nohlsearch|. Cela ne modifie pas la valeur 
+	de l'option ; dès que vous utilisez une commande de recherche, le
+	surlignage réapparaît.
+	'redrawtime' spécifie le temps maximal consacré à la recherche des 
+	correspondances.
+	Lorsque le motif de recherche peut correspondre à une fin de ligne, 
+	Vim tentera de surligner tout le texte correspondant. Cependant, cela 
+	dépend de l'endroit où la recherche commence. Il s'agira de la 
+	première ligne de la fenêtre ou de la première ligne en dessous d'un 
+	repli (fold) fermé. Une correspondance dans une ligne précédente qui
+	n'est pas dessinée peut ne pas se poursuivre sur une ligne 
+	nouvellement dessinée.
+	Vous pouvez spécifier si l'état du surlignage est restauré au 
+	démarrage avec le flag 'h' dans 'shada' |shada-h|.
 
 						*'icon'* *'noicon'*
 'icon'			boolean	(default off, on when title can be restored)
@@ -3544,13 +3550,13 @@ A jump table for the options with a short description can be found at |Q_op|.
 	This option cannot be set in a modeline when 'modelineexpr' is off.
 
 			*'ignorecase'* *'ic'* *'noignorecase'* *'noic'*
-'ignorecase' 'ic'	boolean	(default off)
+'ignorecase' 'ic'	booléen	(defaut off)
 			global
-	Ignore case in search patterns, |cmdline-completion|, when
-	searching in the tags file, |expr-==| and for Insert-mode completion
-	|ins-completion|.
-	Also see 'smartcase' and 'tagcase'.
-	Can be overruled by using "\c" or "\C" in the pattern, see
+	Ignore la casse dans les motifs de recherche, |cmdline-completion|, 
+	lors de la recherche dans le fichier de tags, |expr-==| et pour la 
+	complétion en mode Insertion |ins-completion|.
+	Voir aussi 'smartcase' et 'tagcase'.
+	Peut être annulé en utilisant \c ou \C dans le motif, voir
 	|/ignorecase|.
 
 						*'iminsert'* *'imi'*
@@ -3816,26 +3822,30 @@ A jump table for the options with a short description can be found at |Q_op|.
 	change 'iskeyword' instead.
 
 						*'iskeyword'* *'isk'*
-'iskeyword' 'isk'	string	(default "@,48-57,_,192-255")
-			local to buffer
-	Keywords are used in searching and recognizing with many commands:
-	"w", "*", "[i", etc.  It is also used for "\k" in a |pattern|.  See
-	'isfname' for a description of the format of this option.  For '@'
-	characters above 255 check the "word" character class (any character
-	that is categorized as a letter, number or emoji according to the
-	Unicode general category).
+'iskeyword' 'isk'	string	(défaut "@,48-57,_,192-255")
+			local au buffer (tampon)
+	Les mots-clés sont utilisés dans les recherches et les 
+	reconnaissances avec de nombreuses commandes : "w", "*", "[i", etc. 
+	Ils sont également utilisés pour "\k" dans un |pattern|. Voir
+	'isfname' pour une description du format de cette option. Pour les 
+	caractères '@' au-dessus de 255, consultez la classe de caractères 
+	"word" (tout caractère classé comme lettre, chiffre ou emoji selon 
+	la catégorie générale Unicode).
 
-	Note that there is a difference between the "\k" character class and
-	the |word| motion.  The former matches any word character, while the
-	latter stops at a change of the character class.
+	Notez qu'il existe une différence entre la classe de caractères "\k"
+	et le mouvement par mot (|word|). La première correspond à tout 
+	caractère de mot, tandis que le second s'arrête lors d'un changement 
+	de classe de caractères.
 
-	For C programs you could use "a-z,A-Z,48-57,_,.,-,>".
-	For a help file it is set to all non-blank printable characters except
-	"*", '"' and '|' (so that CTRL-] on a command finds the help for that
-	command).
-	When the 'lisp' option is on the '-' character is always included.
-	This option also influences syntax highlighting, unless the syntax
-	uses |:syn-iskeyword|.
+	Pour les programmes en C, vous pourriez utiliser "a-z,A-Z,48-57,_,.,
+	-,>".
+	Pour un fichier d'aide, il est défini sur tous les caractères	    
+	imprimables non-blancs sauf "*", '"' et '|' (afin que CTRL-] sur une 
+	commande trouve l'aide pour cette commande).
+	Lorsque l'option 'lisp' est activée, le caractère '-' est toujours
+	inclus.
+	Cette option influence également la coloration syntaxique, sauf si 
+	la syntaxe utilise |:syn-iskeyword|.
 
 						*'isprint'* *'isp'*
 'isprint' 'isp'		string	(default "@,161-255")
@@ -4293,23 +4303,23 @@ Notez que le mode Liste affectera également le formatage (défini avec
 <
 
 						*'matchpairs'* *'mps'*
-'matchpairs' 'mps'	string	(default "(:),{:},[:]")
-			local to buffer
-	Characters that form pairs.  The |%| command jumps from one to the
-	other.
-	Only character pairs are allowed that are different, thus you cannot
-	jump between two double quotes.
-	The characters must be separated by a colon.
-	The pairs must be separated by a comma.  Example for including '<' and
-	'>' (for HTML): >vim
+'matchpairs' 'mps'	string	(défaut "(:),{:},[:]")
+			local au buffer (tampon)
+	Caractères qui forment des paires. La commande |%| saute de l'un à 
+	l'autre.
+	Seules les paires de caractères différents sont autorisées, vous ne 
+	pouvez donc pas sauter entre deux guillemets doubles.
+	Les caractères doivent être séparés par un deux-points. Les paires 
+	doivent être séparées par une virgule. Exemple pour inclure < 
+	et > (pour HTML) : >vim
 		set mps+=<:>
 
-<	A more exotic example, to jump between the '=' and ';' in an
-	assignment, useful for languages like C and Java: >vim
+<	Un exemple plus exotique, pour sauter entre = et ; dans une
+	assignation, utile pour des langages comme C et Java : >vim
 		au FileType c,cpp,java set mps+==:;
 
-<	For a more advanced way of using "%", see the matchit.vim plugin in
-	the $VIMRUNTIME/plugin directory. |add-local-help|
+<	Pour une utilisation plus avancée de %, consultez le plugin 
+	matchit.vim dans le répertoire $VIMRUNTIME/plugin. |add-local-help|
 
 						*'matchtime'* *'mat'*
 'matchtime' 'mat'	number	(default 5)
@@ -5092,30 +5102,32 @@ Notez que le mode Liste affectera également le formatage (défini avec
 	The 'rightleft' option must be set for 'rightleftcmd' to take effect.
 
 					*'ruler'* *'ru'* *'noruler'* *'noru'*
-'ruler' 'ru'		boolean	(default on)
+'ruler' 'ru'		booléen	(defaut on)
 			global
-	Show the line and column number of the cursor position, separated by a
-	comma.  When there is room, the relative position of the displayed
-	text in the file is shown on the far right:
-		Top	first line is visible
-		Bot	last line is visible
-		All	first and last line are visible
-		45%	relative position in the file
-	If 'rulerformat' is set, it will determine the contents of the ruler.
-	Each window has its own ruler.  If a window has a status line, the
-	ruler is shown there.  If a window doesn't have a status line and
-	'cmdheight' is zero, the ruler is not shown.  Otherwise it is shown in
-	the last line of the screen.  If the statusline is given by
-	'statusline' (i.e. not empty), this option takes precedence over
-	'ruler' and 'rulerformat'.
-	If the number of characters displayed is different from the number of
-	bytes in the text (e.g., for a TAB or a multibyte character), both
-	the text column (byte number) and the screen column are shown,
-	separated with a dash.
-	For an empty line "0-1" is shown.
-	For an empty buffer the line number will also be zero: "0,0-1".
-	If you don't want to see the ruler all the time but want to know where
-	you are, use "g CTRL-G" |g_CTRL-G|.
+	Affiche le numéro de ligne et de colonne de la position du curseur,
+	séparés par une virgule. Lorsque l'espace le permet, la position	
+	relative du texte affiché dans le fichier est indiquée tout à 
+	droite :  
+		Top	la première ligne est visible
+		Bot	la dernière ligne est visible
+		All	la première et la dernière ligne sont visibles
+		45%	position relative dans le fichier
+	Si 'rulerformat' est défini, il détermine le contenu de la règle.
+	Chaque fenêtre possède sa propre règle. Si une fenêtre a une ligne 
+	d'état, la règle y est affichée. Si une fenêtre n'a pas de ligne 
+	d'état et que 'cmdheight' est nul, la règle n'est pas affichée. 
+	Sinon, elle est affichée dans la dernière ligne de l'écran. Si la 
+	ligne d'état est définie par 'statusline' (c'est-à-dire non vide), 
+	cette option prévaut sur 'ruler' et 'rulerformat'.
+	Si le nombre de caractères affichés est différent du nombre d'octets 
+	dans le texte (par exemple, pour une tabulation ou un caractère 
+	multi-octets), la colonne texte (numéro d'octet) et la colonne écran 
+	sont toutes deux affichées, séparées par un tiret.
+	Pour une ligne vide, "0-1" est affiché.
+	Pour un tampon vide, le numéro de ligne sera également zéro : 
+	"0,0-1".
+	Si vous ne voulez pas voir la règle en permanence mais souhaitez 
+	savoir où vous vous trouvez, utilisez "g CTRL-G" |g_CTRL-G|.
 
 						*'rulerformat'* *'ruf'*
 'rulerformat' 'ruf'	string	(default "")
@@ -5265,18 +5277,20 @@ Notez que le mode Liste affectera également le formatage (défini avec
 	hauteur.
 
 						*'scrolloff'* *'so'*
-'scrolloff' 'so'	number	(default 0)
-			global or local to window |global-local|
-	Minimal number of screen lines to keep above and below the cursor.
-	This will make some context visible around where you are working.  If
-	you set it to a very large value (999) the cursor line will always be
-	in the middle of the window (except at the start or end of the file or
-	when long lines wrap).
-	After using the local value, go back the global value with one of
-	these two: >vim
+'scrolloff' 'so'	nombre	(défaut 0)
+			global ou local à window |global-local|
+	Nombre minimal de lignes d'écran à conserver au-dessus et en dessous 
+	du curseur.
+	Cela rendra visible un certain contexte autour de l'endroit où vous 
+	travaillez. Si vous le définissez à une valeur très grande (999), la 
+	ligne du curseur sera toujours au milieu de la fenêtre (sauf au début 
+	ou à la fin du fichier, ou lorsque les longues lignes sont 
+	enveloppées).
+	Après avoir utilisé la valeur locale, revenez à la valeur globale 
+	avec l'une de ces deux commandes : >vim
 		setlocal scrolloff<
 		setlocal scrolloff=-1
-<	For scrolling horizontally see 'sidescrolloff'.
+<	Pour le défilement horizontal, consultez 'sidescrolloff'
 
 						*'scrollopt'* *'sbo'*
 'scrollopt' 'sbo'	string	(default "ver,jump")
@@ -7685,10 +7699,11 @@ Notez que le mode Liste affectera également le formatage (défini avec
 	See also 'formatoptions' and |ins-textwidth|.
 
 			*'wrapscan'* *'ws'* *'nowrapscan'* *'nows'* *E384* *E385*
-'wrapscan' 'ws'		boolean	(default on)
+'wrapscan' 'ws'		booléen	(defaut on)
 			global
-	Searches wrap around the end of the file.  Also applies to |]s| and
-	|[s|, searching for spelling mistakes.
+	Les recherches rebouclent en fin de fichier. Cela s'applique 
+	également à |]s| et |[s|, lors de la recherche de fautes 
+	d'orthographe.
 
 						*'write'* *'nowrite'*
 'write'			boolean	(default on)
