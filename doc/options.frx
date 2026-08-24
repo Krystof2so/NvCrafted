@@ -1,20 +1,21 @@
 *options.txt*	Nvim - Traduction française partielle
 
 
-		  VIM REFERENCE MANUAL	  by Bram Moolenaar
+		  VIM REFERENCE MANUAL	  par Bram Moolenaar
 
 
 Options							*options*
 
-For an overview of options see quickref.txt |option-list|.
+Pour un aperçu des options, consultez quickref.txt |option-list|.
 
-Vim has a number of internal variables and switches which can be set to
-achieve special effects.  These options come in three forms:
-	boolean		can only be on or off		*boolean* *toggle*
-	number		has a numeric value
-	string		has a string value
+Vim dispose d'un certain nombre de variables internes et de commutateurs 
+qui peuvent être définis pour obtenir des effets particuliers. Ces options 
+se présentent sous trois formes :
+	booléen	    ne peut être qu'activé ou désactivé   *boolean* *toggle*
+	nombre	    possède une valeur numérique
+	string	    possède une valeur de type chaîne
 
-				      Type |gO| to see the table of contents.
+			    Tapez |gO| pour voir la table des matières
 
 ==============================================================================
 1. Setting options					*set-option* *E764*
@@ -6892,9 +6893,10 @@ Notez que le mode Liste affectera également le formatage (défini avec
 	See |option-value-function| for more information.
 
 				*'tildeop'* *'top'* *'notildeop'* *'notop'*
-'tildeop' 'top'		boolean	(default off)
+'tildeop' 'top'		booléen	(défaut off)
 			global
-	When on: The tilde command "~" behaves like an operator.
+	Lorsqu'elle est activée : la commande tilde "~" se comporte comme un 
+	opérateur.
 
 				*'timeout'* *'to'* *'notimeout'* *'noto'*
 'timeout' 'to'		boolean	(default on)

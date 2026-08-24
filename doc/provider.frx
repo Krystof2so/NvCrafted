@@ -1,0 +1,382 @@
+*provider.txt*		Nvim (v.0.12.5) - Traduction française partielle
+
+
+		 NVIM REFERENCE MANUAL	  par Thiago de Arruda
+
+
+Fournisseurs ("Providers")					*provider*
+
+Nvim délègue certaines fonctionnalités à des « fournisseurs » dynamiques. Ce 
+document décrit les fournisseurs et comment les installer.
+						*E319*
+L'utilisation d'une fonctionnalité nécessitant un fournisseur manquant génère 
+une erreur : >
+
+    E319: No "foo" provider found. Run ":checkhealth vim.provider"
+
+Exécutez la commande |:checkhealth| et consultez les sections ci-dessous.
+
+				   Tapez |gO| pour voir la table des matières
+
+==============================================================================
+Python integration				*provider-python*
+
+Nvim supports Python |remote-plugin|s and the Vim legacy |python3| and
+|pythonx| interfaces (which are implemented as remote-plugins).
+
+Note: Only the Vim 7.3 legacy interface is supported, not later features such
+as |python-bindeval| (Vim 7.4); use the Nvim API instead. Python 2 is not
+supported.
+
+
+PYTHON QUICKSTART ~
+
+To use Python plugins, you need the "pynvim" module. Run |:checkhealth| to see
+if you already have it (some package managers install the module with Nvim
+itself).
+
+For Python 3 plugins:
+1. Make sure Python 3.9+ is available in your $PATH.
+2. Install either uv (https://docs.astral.sh/uv/) or pipx
+   (https://pipx.pypa.io/stable/).
+3. Install the module: >bash
+   pipx install pynvim
+   # or:
+   uv tool install --upgrade pynvim
+
+The `--upgrade` flag ensures that you get the latest version even if
+a previous version was already installed.
+
+See also |python-virtualenv|.
+
+PYTHON PROVIDER CONFIGURATION ~
+						*g:python3_host_prog*
+Command to start Python 3 (executable, not directory). Setting this makes
+startup faster. Useful for working with virtualenvs. Must be set before any
+check for has("python3").  >vim
+    let g:python3_host_prog = '/path/to/python3'
+<
+						*g:loaded_python3_provider*
+To disable Python 3 support: >vim
+    let g:loaded_python3_provider = 0
+
+
+PYTHON VIRTUALENVS ~
+						*python-virtualenv*
+Using pynvim 0.6.0+ installed via uv or pipx, Nvim will automatically detect
+pynvim even if other Python virtual environments are activated (technical
+note: via the "pynvim-python" global python tool).  For older pynvim (or older
+Neovim), where detection involved finding the first Python interpreter and
+checking if it could import pynvim, automatic detection would fail when
+another virtual environment is active.  Upgrading to the latest pynvim is the
+recommended solution to this; but if that's not an option, then you can set
+the variable |g:python3_host_prog| in `init.vim` to point to the full path to
+the Python interpreter where `pynvim` is installed, e.g.: >vim
+
+  let g:python3_host_prog = '/path/to/pynvim-venv/bin/python'
+<
+See also: https://github.com/zchee/deoplete-jedi/wiki/Setting-up-Python-for-Neovim
+
+==============================================================================
+Ruby integration			      *provider-ruby*
+
+Nvim supports Ruby |remote-plugin|s and the Vim legacy |ruby-vim| interface
+(which is itself implemented as a Nvim remote-plugin).
+
+
+RUBY QUICKSTART ~
+
+To use Ruby plugins with Nvim, install the latest "neovim" RubyGem: >bash
+    gem install neovim
+
+Run |:checkhealth| to see if your system is up-to-date.
+
+
+RUBY PROVIDER CONFIGURATION ~
+						*g:loaded_ruby_provider*
+To disable Ruby support: >vim
+    let g:loaded_ruby_provider = 0
+<
+						*g:ruby_host_prog*
+Command to start the Ruby host. By default this is "neovim-ruby-host". With
+project-local Ruby versions (via tools like RVM or rbenv) setting this can
+avoid the need to install the "neovim" gem in every project.
+
+To use an absolute path (e.g. to an rbenv installation): >vim
+    let g:ruby_host_prog = '~/.rbenv/versions/2.4.1/bin/neovim-ruby-host'
+
+To use the RVM "system" Ruby installation: >vim
+    let g:ruby_host_prog = 'rvm system do neovim-ruby-host'
+
+==============================================================================
+Perl integration				*provider-perl*
+
+Nvim supports Perl |remote-plugin|s on Unix platforms. Support for polling STDIN
+on MS-Windows is currently lacking from all known event loop implementations.
+The Vim legacy |perl-vim| interface is also supported (which is itself
+implemented as a Nvim remote-plugin).
+https://github.com/jacquesg/p5-Neovim-Ext
+
+Note: Only perl versions from 5.22 onward are supported.
+
+PERL QUICKSTART~
+
+To use perl remote-plugins with Nvim, install the "Neovim::Ext" cpan package: >bash
+    cpanm -n Neovim::Ext
+
+Run |:checkhealth| to see if your system is up-to-date.
+
+
+PERL PROVIDER CONFIGURATION~
+						*g:loaded_perl_provider*
+To disable Perl support: >vim
+    :let g:loaded_perl_provider = 0
+<
+						*g:perl_host_prog*
+Command to start the Perl executable. Must be set before any
+check for has("perl").  >vim
+    let g:perl_host_prog = '/path/to/perl'
+<
+==============================================================================
+Node.js integration				*provider-nodejs*
+
+Nvim supports Node.js |remote-plugin|s.
+https://github.com/neovim/node-client/
+
+
+NODEJS QUICKSTART~
+
+To use javascript remote-plugins with Nvim, install the "neovim" npm package: >bash
+    npm install -g neovim
+
+Run |:checkhealth| to see if your system is up-to-date.
+
+
+NODEJS PROVIDER CONFIGURATION~
+						*g:loaded_node_provider*
+To disable Node.js support: >vim
+    :let g:loaded_node_provider = 0
+<
+						*g:node_host_prog*
+Command to start the Node.js host. Setting this makes startup faster.
+
+By default, Nvim searches for "neovim-node-host" using "npm root -g", which
+can be slow. To avoid this, set g:node_host_prog to the host path: >vim
+    let g:node_host_prog = '/usr/local/bin/neovim-node-host'
+<
+==============================================================================
+Intégration du presse-papier	      *provider-clipboard* *clipboard*
+
+Nvim n'a pas de connexion directe avec le presse-papiers système. Il dépend 
+plutôt d'un |provider| qui utilise de manière transparente des commandes shell 
+pour communiquer avec le presse-papiers système ou tout autre « backend » de 
+presse-papiers.
+
+Pour utiliser TOUJOURS le presse-papiers pour TOUTES les opérations (au lieu 
+d'interagir explicitement avec les registres "+" et/ou "*") : >vim
+    set clipboard+=unnamedplus
+
+Voir 'clipboard' pour les détails et les options.
+
+							      *clipboard-tool*
+La présence d'un outil de presse-papiers fonctionnel active implicitement les 
+registres "+" et "*". Nvim prend en charge ces outils de presse-papiers, par 
+ordre de priorité :
+
+- |g:clipboard| : Remplacement utilisateur (si défini comme un dictionnaire ou 
+  une chaîne de caractères correspondant à l'un des noms ci-dessous ; par ex. 
+  `g:clipboard="tmux"` force le presse-papiers tmux et ignore la détection 
+  automatique).
+- "pbcopy"    : pbcopy, pbpaste (macOS)
+- "wl-copy"   : wl-copy, wl-paste (si $WAYLAND_DISPLAY est défini)
+- "wayclip"   : waycopy, waypaste (si $WAYLAND_DISPLAY est défini)
+- "xsel"      : xsel (si $DISPLAY est défini)
+- "xclip"     : xclip (si $DISPLAY est défini)
+- "lemonade"  : lemonade (pour SSH) https://github.com/pocke/lemonade
+- "doitclient": doitclient (pour SSH) https://www.chiark.greenend.org.uk/~sgtatham/doit/
+- "win32yank" : *win32yank* (Windows)
+- "putclip"   : putclip, getclip (Windows) https://cygwin.com/packages/summary/cygutils.html
+- "clip"      : clip, powershell (Windows) https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/clip
+- "termux"    : termux (via termux-clipboard-set, termux-clipboard-get)
+- "tmux"      : tmux (si $TMUX est défini)
+- "osc52"     : |clipboard-osc52| (si supporté par votre terminal)
+
+								 *g:clipboard*
+Pour configurer un outil de presse-papiers personnalisé, définissez 
+`g:clipboard` comme une chaîne de caractères (parmi la liste |clipboard-tool| 
+ci-dessus) ou comme un dictionnaire (pour spécifier explicitement les 
+commandes shell ou les fonctions |lambda|) avant que les fournisseurs de 
+presse-papiers ne soient initialisés.
+
+Note: Les fournisseurs de presse-papiers sont initialisés en appelant 
+`has('clipboard')`, ce qu'il est préférable d'éviter avant de définir 
+`g:clipboard`. Voir « G:CLIPBOARD SETTINGS ARE NOT USED » dans |faq-runtime| 
+pour des solutions alternatives.
+
+Si « cache_enabled » est |TRUE|, alors lorsqu'une sélection est copiée, Nvim 
+met en cache la sélection jusqu'à ce que le processus de la commande de 
+copie se termine. Lors du collage, si le processus de copie n'est pas 
+terminé, la sélection mise en cache est utilisée.
+
+La fonction « copy » stocke une liste de lignes et le type de registre. La 
+fonction « paste » renvoie le presse-papiers sous forme d'une liste 
+`[lines, regtype]`, où `lines` est une liste de lignes et `regtype` est un 
+type de registre conforme à |setreg()|.
+
+Exemple : définir sur "osc52" pour forcer OSC52, en ignorant la détection automatique du support du terminal : >vim
+
+    let g:clipboard = 'osc52'
+
+Exemple : définir sur "wayclip" pour forcer waycopy/waypaste : >vim
+
+    let g:clipboard = 'wayclip'
+
+Exemple : définir comme un dictionnaire qui intègre le presse-papiers tmux : >vim
+
+    let g:clipboard = {
+      \   'name': 'myClipboard',
+      \   'copy': {
+      \      '+': ['tmux', 'load-buffer', '-'],
+      \      '*': ['tmux', 'load-buffer', '-'],
+      \    },
+      \   'paste': {
+      \      '+': ['tmux', 'save-buffer', '-'],
+      \      '*': ['tmux', 'save-buffer', '-'],
+      \   },
+      \   'cache_enabled': 1,
+      \ }
+
+Exemple : définir comme un dictionnaire qui utilise g:foo comme presse-papiers 
+factice : >vim
+
+    let g:clipboard = {
+      \   'name': 'myClipboard',
+      \   'copy': {
+      \      '+': {lines, regtype -> extend(g:, {'foo': [lines, regtype]}) },
+      \      '*': {lines, regtype -> extend(g:, {'foo': [lines, regtype]}) },
+      \    },
+      \   'paste': {
+      \      '+': {-> get(g:, 'foo', [])},
+      \      '*': {-> get(g:, 'foo', [])},
+      \   },
+      \ }
+<
+							      *clipboard-wsl*
+Pour Windows WSL, essayez cette définition g:clipboard :
+>vim
+    let g:clipboard = {
+      \   'name': 'WslClipboard',
+      \   'copy': {
+      \      '+': 'clip.exe',
+      \      '*': 'clip.exe',
+      \    },
+      \   'paste': {
+      \      '+': 'powershell.exe -NoLogo -NoProfile -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+      \      '*': 'powershell.exe -NoLogo -NoProfile -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+      \   },
+      \   'cache_enabled': 0,
+      \ }
+<
+							    *clipboard-osc52*
+Nvim est livré avec un fournisseur de presse-papiers qui permet de copier 
+vers le presse-papiers système en utilisant OSC 52, une séquence de contrôle 
+« Operating System Command » qui demande à l'émulateur de terminal d'écrire 
+dans le presse-papiers système ou de le lire.
+
+Lorsque Nvim s'exécute dans le |TUI|, il détecte automatiquement si le terminal 
+hôte prend en charge OSC 52. En cas de succès, Nvim utilisera OSC 52 pour 
+copier et coller si aucun autre |clipboard-tool| n'est trouvé et lorsque 
+'clipboard' n'est pas défini.
+NOTE: L'utilisation d'un multiplexeur de terminal (par exemple tmux) peut 
+inhiber la détection automatique du support OSC 52.
+
+							*g:termfeatures*
+Pour désactiver la détection automatique, définissez la clé « osc52 » de 
+|g:termfeatures| à false au début de votre |config|. Exemple : >lua
+	local termfeatures = vim.g.termfeatures or {}
+	termfeatures.osc52 = false
+	vim.g.termfeatures = termfeatures
+<
+Pour forcer Nvim à utiliser le fournisseur OSC 52, vous pouvez définir 
+|g:clipboard| : >lua
+
+    vim.g.clipboard = 'osc52'
+
+Ce qui est équivalent à : >lua
+    vim.g.clipboard = {
+      name = 'OSC 52',
+      copy = {
+        ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
+        ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+      },
+      paste = {
+        ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+        ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+      },
+    }
+<
+Note: tous les émulateurs de terminal ne prennent pas en charge la lecture 
+depuis le presse-papiers système (et même pour ceux qui le font, les 
+utilisateurs doivent être conscients des implications en matière de sécurité). 
+Il se peut donc que l'utilisation d'OSC 52 pour le collage ne soit pas 
+possible (et ne soit pas nécessaire, car vous pouvez utiliser |paste| à la place 
+via la fonction de collage de votre système). Les utilisateurs devront 
+peut-être configurer leur émulateur de terminal pour autoriser la lecture du 
+presse-papiers.
+<
+==============================================================================
+Paste							*provider-paste* *paste*
+
+"Paste" is a separate concept from |clipboard|: paste means "dump a bunch of
+text to the editor", whereas clipboard provides features like |quote+| to get
+and set the OS clipboard directly.  For example, middle-click or CTRL-SHIFT-v
+(macOS: CMD-v) in your terminal is "paste", not "clipboard": the terminal
+application (Nvim) just gets a stream of text, it does not interact with the
+clipboard directly.
+
+							*bracketed-paste-mode*
+Pasting in the |TUI| depends on the "bracketed paste" terminal capability,
+which allows terminal applications to distinguish between user input and
+pasted text.  https://cirw.in/blog/bracketed-paste
+This works automatically if your terminal supports it.
+
+							*ui-paste*
+GUIs can paste by calling |nvim_paste()|.
+
+PASTE BEHAVIOR ~
+
+Paste inserts text after the cursor.  Lines break at <NL>, <CR>, and <CR><NL>.
+When pasting a huge amount of text, screen-updates are throttled and the
+message area shows a "..." pulse.
+
+In cmdline-mode only the first line is pasted, to avoid accidentally executing
+many commands.  Use the |cmdline-window| if you really want to paste multiple
+lines to the cmdline.
+
+You can implement a custom paste handler by redefining |vim.paste()|.
+Example: >lua
+
+  vim.paste = (function(lines, phase)
+    vim.api.nvim_put(lines, 'c', true, true)
+  end)
+
+==============================================================================
+X11 selection mechanism			      *clipboard-x11* *x11-selection*
+
+X11 clipboard providers store text in "selections". Selections are owned by an
+application, so when the application gets closed, the selection text is lost.
+The contents of selections are held by the originating application (e.g., upon
+a copy), and only passed to another application when that other application
+requests them (e.g., upon a paste).
+
+				*primary-selection* *quotestar* *quoteplus* *quote+*
+
+There are three documented X11 selections: PRIMARY, SECONDARY, and CLIPBOARD.
+CLIPBOARD is typically used in X11 applications for copy/paste operations
+(CTRL-c/CTRL-v), while PRIMARY is used for the last selected text, which is
+generally inserted with the middle mouse button.
+
+Nvim's X11 clipboard providers only use the PRIMARY and CLIPBOARD selections,
+for the "*" and "+" registers, respectively.
+
+ vim:tw=78:ts=8:noet:ft=help:norl:

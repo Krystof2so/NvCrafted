@@ -1,0 +1,558 @@
+
+
+*usr_04.txt*	Nvim (v.0.12.4) - Traduction française
+
+
+		     VIM USER MANUAL	par Bram Moolenaar
+
+
+			     Effectuer de petites modifications
+
+
+Ce chapitre vous montre plusieurs façons de faire des corrections et de 
+déplacer du texte. Il vous enseigne les trois manières fondamentales de 
+modifier du texte : opérateur-mouvement, mode Visuel et objets texte.
+
+|04.1|	Opérateurs et mouvements
+|04.2|	Modifier du texte
+|04.3|	Répéter une modification
+|04.4|	Mode Visuel
+|04.5|	Déplacer du texte
+|04.6|	Copier du texte
+|04.7|	Utiliser le presse-papiers
+|04.8|	Objets texte
+|04.9|	Mode Remplacement
+|04.10|	Conclusion
+
+     Prochain chapitre: |usr_05.txt|  Définir vos paramètres
+    Précédent chapitre: |usr_03.txt|  Se déplacer
+    Table des matières: |usr_toc.txt|
+
+==============================================================================
+*04.1*	Opérateurs et mouvements
+
+Dans le chapitre 2, vous avez appris la commande "x" pour supprimer un 
+caractère unique. Et en utilisant un compteur : "4x" supprime quatre 
+caractères.
+   La commande "dw" supprime un mot. Vous reconnaissez peut-être la commande 
+"w" comme la commande de déplacement par mot. En fait, la commande "d" peut 
+être suivie de n'importe quelle commande de mouvement, et elle supprime depuis 
+la position actuelle jusqu'à l'endroit où le curseur se retrouve.
+   La commande "4w", par exemple, déplace le curseur de quatre mots. La 
+commande "d4w" supprime quatre mots.
+
+	To err is human. To really foul up you need a computer. ~
+			 ------------------>
+				 d4w
+
+	To err is human. you need a computer. ~
+
+Vim ne supprime que jusqu'à la position où le mouvement amène le curseur. 
+C'est parce que Vim sait que vous ne voulez probablement pas supprimer le 
+premier caractère d'un mot. Si vous utilisez la commande "e" pour vous 
+déplacer jusqu'à la fin d'un mot, Vim suppose que vous voulez inclure ce 
+dernier caractère :
+
+	To err is human. you need a computer. ~
+			-------->
+			   d2e
+
+	To err is human. a computer. ~
+
+Que le caractère sous le curseur soit inclus dépend de la commande que vous 
+avez utilisée pour vous déplacer vers ce caractère. Le manuel de référence 
+appelle cela « exclusif » lorsque le caractère n'est pas inclus et 
+« inclusif » lorsqu'il l'est.
+
+La commande "$" se déplace en fin de ligne. La commande "d$" supprime depuis 
+le curseur jusqu'à la fin de la ligne. C'est un mouvement inclusif, donc le 
+dernier caractère de la ligne est inclus dans l'opération de suppression :
+
+	To err is human. a computer. ~
+		       ------------>
+			    d$
+
+	To err is human ~
+
+Il y a un schéma ici : opérateur-mouvement. Vous tapez d'abord une commande 
+opérateur. Par exemple, "d" est l'opérateur de suppression. Ensuite, vous 
+tapez une commande de mouvement comme "4l" ou "w". De cette façon, vous 
+pouvez opérer sur tout texte sur lequel vous pouvez vous déplacer.
+
+==============================================================================
+*04.2*	Modifier du texte
+
+Un autre opérateur est "c", pour changer (change). Il agit exactement comme 
+l'opérateur "d", sauf qu'il vous laisse en mode Insertion. Par exemple, "cw" 
+change un mot. Ou plus précisément, il supprime un mot puis vous place en mode 
+Insertion.
+
+	To err is human ~
+	   ------->
+	     c2wbe<Esc>
+
+	To be human ~
+
+Ce "c2wbe<Esc>" contient ces éléments :
+
+	c	l'opérateur de changement (change)
+	2w	se déplacer de deux mots (ils sont supprimés et le mode Insertion démarre)
+	be	insérer ce texte
+	<Esc>	retour en mode Normal
+
+Vous aurez remarqué quelque chose d'étrange : l'espace avant « human » n'est 
+pas supprimé. Il y a un dicton qui dit que pour chaque problème, il existe une 
+réponse simple, claire et fausse. C'est le cas avec l'exemple utilisé ici pour 
+la commande "cw". L'opérateur c fonctionne exactement comme l'opérateur d, à 
+une exception près : "cw", en réalité, fonctionne comme "ce", c'est-à-dire 
+qu'il permet de changer jusqu'à la fin du mot (change to end of word). Ainsi, 
+l'espace après le mot n'est pas inclus. Il s'agit d'une exception qui remonte 
+à l'ancien Vi. Comme de nombreuses personnes y sont désormais habituées, cette 
+incohérence a été conservée dans Vim.
+
+
+AUTRES MODIFICATIONS
+
+Comme "dd" supprime toute une ligne, "cc" change toute une ligne. Il conserve 
+cependant l'indentation existante (les espaces en début de ligne).
+
+De la même manière que "d$" supprime jusqu'à la fin de la ligne, "c$" change	
+jusqu'à la fin de la ligne. C'est comme si vous faisiez "d$" pour supprimer 
+le texte, puis "a" pour passer en mode Insertion et ajouter le nouveau texte.
+
+
+RACCOURCIS
+
+Certaines commandes opérateur-mouvement sont tellement utilisées qu'elles ont 
+reçu une commande d'une seule lettre :
+
+	x  équivaut à dl (supprime le caractère sous le curseur)
+	X  équivaut à dh (supprime le caractère à gauche du curseur)
+	D  équivaut à d$ (supprime jusqu′a la fin de la ligne)
+	C  équivaut à c$ (supprime jusqu′a la fin de la ligne)
+	s  équivaut à cl (change un caractère)
+	S  équivaut à cc (change toute une ligne)
+
+
+OU PLACER LE COMPTEUR
+
+Les commandes "3dw" et "d3w" suppriment trois mots. Si l'on veut vraiment 
+chipoter, la première commande, "3dw", supprime un mot trois fois ; la 
+commande "d3w" supprime trois mots en une seule fois. C'est une différence 
+sans distinction. Vous pouvez cependant utiliser deux compteurs à la fois. 
+Par exemple, "3d2w" supprime deux mots, répété trois fois, soit un total de 
+six mots.
+
+
+REMPLACER PAR UN SEUL CARACTERE
+
+La commande "r" n'est pas un opérateur. Elle attend que vous tapiez un 
+caractère, et remplace le caractère sous le curseur par celui-ci. Vous 
+pourriez faire la même chose avec "cl" ou avec la commande "s", mais avec "r" 
+vous n'avez pas besoin d'appuyer sur <Esc> pour revenir en mode Normal.
+
+	there is somerhing grong here ~
+	rT	     rt    rw
+
+	There is something wrong here ~
+
+L'utilisation d'un compteur avec "r" remplace ce nombre de caractères par le 
+même caractère. Exemple :
+
+	There is something wrong here ~
+			   5rx
+
+	There is something xxxxx here ~
+
+Pour remplacer un caractère par un saut de ligne, utilisez "r<Enter>". Cela 
+supprime un caractère et insère un saut de ligne. L'utilisation d'un compteur 
+ici ne s'applique qu'au nombre de caractères supprimés : "4r<Enter>" remplace 
+quatre caractères par un seul saut de ligne.
+
+==============================================================================
+*04.3*	Répéter une modification
+
+La commande "." est l'une des commandes les plus simples mais aussi les plus 
+puissantes de Vim. Elle répète la dernière modification. Par exemple, 
+supposons que vous éditiez un fichier HTML et que vous souhaitiez supprimer 
+toutes les balises <B>. Placez le curseur sur le premier < et supprimez <B> 
+avec la commande "df>". Ensuite, allez sur le < du /B> suivant et 
+supprimez-le avec la commande ".". La commande "." exécute la dernière 
+commande de modification (dans ce cas, "df>"). Pour supprimer une autre 
+balise, placez le curseur sur le < et utilisez la commande ".".
+
+			      To <B>generate</B> a table of <B>contents ~
+	f<   find first <     --->
+	df>  delete to >	 -->
+	f<   find next <	   --------->
+	.    repeat df>			    --->
+	f<   find next <		       ------------->
+	.    repeat df>					    -->
+
+La commande "." fonctionne pour toutes les modifications que vous effectuez, 
+sauf pour u (annuler), CTRL-R (rétablir) et les commandes qui commencent par 
+deux-points (:).
+
+Autre exemple : vous voulez remplacer le mot « four » par « five ». Il 
+apparaît plusieurs fois dans votre texte. Vous pouvez le faire rapidement 
+avec cette séquence de commandes :
+
+	/four<Enter>	trouve la première occurrence de "four"
+	cwfive<Esc>	remplace le mot par "five"
+	n		trouve le "four" suivant
+	.		répète la modification pour "five"
+	n		trouve le "four" suivant
+	.		répète la modification
+			etc.
+
+==============================================================================
+*04.4*	Mode visual 
+
+Pour supprimer des éléments simples, les combinaisons opérateur-mouvement 
+fonctionnent très bien. Mais il n'est pas toujours facile de décider quelle 
+commande permet de se déplacer sur le texte que vous voulez modifier. C'est 
+alors que vous pouvez utiliser le mode Visual.
+
+Vous démarrez le mode Visual en appuyant sur "v". Vous déplacez le curseur 
+sur le texte que vous voulez traiter. Le texte est alors surligné. Enfin, vous 
+tapez la commande opérateur.
+   Par exemple, pour supprimer depuis le milieu d'un mot jusqu'au milieu d'un 
+autre :
+
+		This is an examination sample of visual mode ~
+			       ---------->
+				 velllld
+
+		This is an example of visual mode ~
+
+En faisant cela, vous n'avez pas vraiment besoin de compter combien de fois 
+vous devez appuyer sur l pour arriver à la bonne position. Vous pouvez voir 
+immédiatement quel texte sera supprimé lorsque vous appuierez sur d.
+
+Si à tout moment vous décidez de ne rien faire du texte surligné, appuyez 
+simplement sur <Esc> et le mode Visual s'arrêtera sans rien faire.
+
+
+SELECTIONNER DES LIGNES
+
+Si vous voulez travailler sur des lignes entières, utilisez "V" pour démarrer 
+le mode Visual. Vous verrez immédiatement que la ligne entière est surlignée, 
+sans même vous déplacer. Lorsque vous vous déplacez à gauche ou à droite, 
+rien ne change. Lorsque vous vous déplacez vers le haut ou vers le bas, la 
+sélection est étendue ligne par ligne.
+   Par exemple, pour sélectionner trois lignes avec "Vjj" :
+
+			  +------------------------+
+			  | text more text	   |
+		       >> | more text more text    | |
+	selected lines >> | text text text	   | | Vjj
+		       >> | text more		   | V
+			  | more text more	   |
+			  +------------------------+
+
+
+SELECTIONNER DES BLOCS
+
+Si vous voulez travailler sur un bloc rectangulaire de caractères, 
+utilisez CTRL-V pour démarrer le mode Visual par blocs. Ceci est très utile lorsque vous travaillez avec des tableaux.
+
+		name		Q1	Q2	Q3
+		pierre		123	455	234
+		john		0	90	39
+		steve		392	63	334
+
+Pour supprimer la colonne du milieu « Q2 », placez le curseur sur le « Q » de 
+« Q2 ». Appuyez sur CTRL-V pour démarrer le mode Visual par blocs. Déplacez 
+maintenant le curseur de trois lignes vers le bas avec "3j" et jusqu'au mot 
+suivant avec "w". Vous pouvez voir que le premier caractère de la dernière 
+colonne est inclus. Pour l'exclure, utilisez "h". Appuyez maintenant sur "d" 
+et la colonne du milieu disparaît.
+
+
+ALLER A UNE AUTRE EXTREMITE
+
+Si vous avez sélectionné du texte en mode Visual et que vous découvrez que 
+vous devez modifier l'autre extrémité de la sélection, utilisez la commande 
+"o" (Astuce : o pour « other end » / autre extrémité). Le curseur se déplace 
+à l'autre extrémité, et vous pouvez alors déplacer le curseur pour modifier 
+le début de la sélection. Appuyer de nouveau sur o vous ramène à l'autre 
+extrémité.
+
+Lorsque vous utilisez une sélection par blocs, vous avez quatre coins. "o" 
+vous amène uniquement à l'un des autres coins, en diagonale. Utilisez "O" 
+pour vous déplacer vers l'autre coin sur la même ligne.
+
+Notez que "o" et "O" en mode Visual fonctionnent très différemment du mode 
+Normal, car ils ouvrent une nouvelle ligne en dessous ou au-dessus du 
+curseur.
+
+==============================================================================
+*04.5*	Déplacer du texte
+
+Lorsque vous supprimez quelque chose avec "d", "x" ou une autre commande, le 
+texte est sauvegardé. Vous pouvez le recoller en utilisant la commande "p". 
+(Le nom Vim pour cela est « put »).
+   Voyons comment cela fonctionne. Tout d'abord, vous allez supprimer une 
+ligne entière en plaçant le curseur sur la ligne que vous voulez supprimer et 
+en tapant "dd". Ensuite, vous déplacez le curseur à l'endroit où vous voulez 
+placer la ligne et vous utilisez la commande "p" (put). La ligne est insérée 
+sur la ligne en dessous du curseur.
+
+	a line		a line	      a line
+	line 2	  dd	line 3	  p   line 3
+	line 3			      line 2
+
+Comme vous avez supprimé une ligne entière, la commande "p" a placé le texte 
+en dessous du curseur. Si vous supprimez une partie d'une ligne (un mot, par 
+exemple), la commande "p" le place juste après le curseur.
+
+	Some more boring try text to out commands. ~
+			 ---->
+			  dw
+
+	Some more boring text to out commands. ~
+			 ------->
+			    welp
+
+	Some more boring text to try out commands. ~
+
+
+EN SAVOIR PLUS SUR LE COLLAGE (PUT)
+
+La commande "P" colle le texte comme "p", mais avant le curseur. Lorsque vous 
+avez supprimé une ligne entière avec "dd", "P" la recollera au-dessus du 
+curseur. Lorsque vous avez supprimé un mot avec "dw", "P" le recollera juste 
+avant le curseur.
+
+Vous pouvez répéter le collage autant de fois que vous le souhaitez. Le même 
+texte sera utilisé.
+
+Vous pouvez utiliser un compteur avec "p" et "P". Le texte sera répété autant 
+de fois que spécifié par le compteur. Ainsi, "dd" suivi de "3p" colle trois 
+copies de la même ligne supprimée.
+
+
+ECHANGER DEUX CARACTERES
+
+Il arrive souvent, lorsque vous tapez, que vos doigts aillent plus vite que 
+votre cerveau (ou l'inverse ?). Le résultat est une faute de frappe comme 
+« teh » au lieu de « the ». Vim facilite la correction de ce genre de 
+problèmes. Il suffit de placer le curseur sur le e de « teh » et d'exécuter la 
+commande "xp". Voici comment cela fonctionne : "x" supprime le caractère e et 
+le place dans un registre. "p" colle le texte après le curseur, c'est-à-dire 
+après le h.
+
+	teh     th     the ~
+	 x       p
+
+==============================================================================
+*04.6*	Copier du texte
+
+Pour copier du texte d'un endroit à un autre, vous pourriez le supprimer, 
+utiliser "u" pour annuler la suppression, puis "p" pour le coller ailleurs. Il 
+existe une façon plus simple : le "yanking". L'opérateur "y" copie le texte 
+dans un registre. Ensuite, la commande "p" peut être utilisée pour le coller.
+   Le yanking est simplement le nom Vim pour la copie. La lettre "c" était 
+déjà utilisée pour l'opérateur de changement, et y était encore disponible. 
+Appeler cet opérateur « yank » facilite la mémorisation de la touche "y".
+
+Comme "y" est un opérateur, vous utilisez "yw" pour copier (yanker) un mot. 
+Un compteur est possible comme d'habitude. Pour copier deux mots, utilisez 
+"y2w". Exemple :
+
+	let sqr = LongVariable * ~
+		 -------------->
+		       y2w
+
+	let sqr = LongVariable * ~
+			       p
+
+	let sqr = LongVariable * LongVariable ~
+
+Remarquez que "yw" inclut l'espace après un mot. Si vous ne voulez pas cela, 
+utilisez "ye".
+
+La commande "yy" copie une ligne entière, tout comme "dd" supprime une ligne 
+entière.
+
+	a text line   yy	a text line	       a text line
+	line 2			line 2		p      line 2
+	last line		last line	       a text line
+						       last line
+
+À l'origine, "Y" était équivalent à « yanker la ligne entière », par 
+opposition à "D" qui est « supprimer jusqu'à la fin de la ligne ». "Y" a donc 
+été redéfini pour signifier « yanker jusqu'à la fin de la ligne » afin d'être 
+cohérent avec le comportement de "D". Les redéfinitions de touches (mappings) 
+seront abordées dans des chapitres ultérieurs.
+
+==============================================================================
+*04.7*	Utiliser le presse-papier
+
+Si vous utilisez la version graphique de Vim (gvim), vous trouverez l'élément 
+« Copier » dans le menu « Édition ». Sélectionnez d'abord du texte en mode 
+Visual, puis utilisez l'élément de menu Édition/Copier. Le texte sélectionné 
+est alors copié dans le presse-papiers. Vous pouvez coller le texte dans 
+d'autres programmes. Dans Vim lui-même également.
+
+Si vous avez copié du texte dans le presse-papiers depuis une autre 
+application, vous pouvez le coller dans Vim avec l'élément de menu 
+Édition/Coller. Cela fonctionne en mode Normal et en mode Insertion. En mode 
+Visual, le texte sélectionné est remplacé par le texte collé.
+
+L'élément de menu « Couper » supprime le texte avant de le placer dans le 
+presse-papiers. Les éléments « Copier », « Couper » et « Coller » sont 
+également disponibles dans le menu contextuel (uniquement s'il existe un menu 
+contextuel, bien sûr). Si votre Vim dispose d'une barre d'outils, vous y 
+trouverez également ces éléments.
+
+Si vous n'utilisez pas l'interface graphique, ou si vous n'aimez pas utiliser 
+les menus, vous devez utiliser une autre méthode. Vous utilisez les commandes 
+normales "y" (yank) et "p" (put), mais vous les préfixez par "* (guillemet 
+double suivi d'un astérisque). Pour copier une ligne dans le presse-papiers : >
+
+	"*yy
+
+Pour coller le texte du presse-papiers dans votre texte : >
+
+	"*p
+
+Cela ne fonctionne que sur les versions de Vim qui incluent le support du 
+presse-papiers. Plus d'informations sur le presse-papiers se trouvent dans la 
+section |09.3| et ici : |clipboard|.
+
+==============================================================================
+*04.8*	Objets texte 
+
+Si le curseur se trouve au milieu d'un mot et que vous voulez supprimer ce 
+mot, vous devez revenir à son début avant de pouvoir faire "dw". Il existe une 
+façon plus simple de faire ceci : "daw".
+
+	this is some example text. ~
+		       daw
+
+	this is some text. ~
+
+Le "d" de "daw" est l'opérateur de suppression. "aw" est un objet texte. 
+Astuce : "aw" signifie « A Word » (un mot). Ainsi, "daw" signifie « Delete A 
+Word » (supprimer un mot). Pour être précis, l'espace après le mot est également 
+supprimé (ou l'espace avant le mot si vous êtes en fin de ligne).
+
+L'utilisation des objets texte est la troisième façon de faire des modifications 
+dans Vim. Nous avions déjà l'opérateur-mouvement et le mode Visual. Nous 
+ajoutons maintenant l'opérateur-objet texte.
+   C'est très similaire à l'opérateur-mouvement, mais au lieu d'opérer sur le 
+texte situé entre la position du curseur avant et après une commande de 
+mouvement, l'objet texte est utilisé dans son ensemble. Peu importe où se trouve 
+le curseur dans l'objet.
+
+Pour changer une phrase entière, utilisez "cis". Prenons ce texte :
+
+	Hello there.  This ~
+	is an example.  Just ~
+	some text. ~
+
+Déplacez-vous au début de la deuxième ligne, sur « is an ». Utilisez maintenant 
+"cis" :
+
+	Hello there.    Just ~
+	some text. ~
+
+Le curseur se trouve entre les espaces dans la première ligne. Tapez maintenant 
+la nouvelle phrase « Another line. » :
+
+	Hello there.  Another line.  Just ~
+	some text. ~
+
+"cis" est composé de l'opérateur "c" (change) et de l'objet texte "is". Cela 
+signifie « Inner Sentence » (phrase intérieure). Il existe également l'objet 
+"as" (« A Sentence » - une phrase). La différence est que "as" inclut l'espace 
+après la phrase alors que "is" ne l'inclut pas. Si vous supprimez une phrase, 
+vous voulez supprimer l'espace en même temps, utilisez donc "das". Si vous 
+voulez taper un nouveau texte, l'espace peut rester, utilisez donc "cis".
+
+Vous pouvez également utiliser les objets texte en mode Visual. Ils seront 
+inclus dans la sélection Visuelle. Le mode Visual continue, vous pouvez donc 
+faire ceci plusieurs fois. Par exemple, démarrez le mode Visual avec "v" et 
+sélectionnez une phrase avec "as". Vous pouvez ensuite répéter "as" pour 
+inclure plus de phrases. Enfin, utilisez un opérateur pour faire quelque chose 
+avec les phrases sélectionnées.
+
+Vous trouverez une longue liste d'objets texte ici : |text-objects|.
+
+==============================================================================
+*04.9*	Mode remplacement
+
+La commande "R" fait passer Vim en mode Remplacement. Dans ce mode, chaque 
+caractère que vous tapez remplace celui sous le curseur. Cela continue jusqu'à 
+ce que vous tapiez <Esc>.
+   Dans cet exemple, vous démarrez le mode Remplacement sur le premier "t" de 
+« text » :
+
+	This is text. ~
+		Rinteresting.<Esc>
+
+	This is interesting. ~
+
+Vous avez peut-être remarqué que cette commande a remplacé 5 caractères de la 
+ligne par douze autres. La commande "R" étend automatiquement la ligne s'il 
+n'y a plus assez de caractères à remplacer. Elle ne continue pas sur la ligne 
+suivante.
+
+Vous pouvez basculer entre le mode Insertion et le mode Remplacement avec la 
+touche <Insert>.
+
+Lorsque vous utilisez <BS> (retour arrière) pour faire une correction, vous 
+remarquerez que l'ancien texte est rétabli. Cela fonctionne donc comme une 
+commande d'annulation pour le caractère précédemment tapé.
+
+==============================================================================
+*04.10*	Conclusion
+
+Les opérateurs, les commandes de mouvement et les objets texte vous offrent la 
+possibilité de réaliser de nombreuses combinaisons. Maintenant que vous savez 
+comment ils fonctionnent, vous pouvez utiliser N opérateurs avec M commandes 
+de mouvement pour obtenir N * M commandes !
+
+Vous trouverez une liste des opérateurs ici : |operator|.
+
+Par exemple, il existe de nombreuses autres façons de supprimer des morceaux 
+de texte. Voici quelques-unes des plus courantes :
+
+x	supprime le caractère sous le curseur (raccourci pour "dl")
+X	supprime le caractère avant le curseur (raccourci pour "dh")
+D	supprime depuis le curseur jusqu'à la fin de la ligne (raccourci pour	
+	"d$")
+dw	supprime depuis le curseur jusqu'au début du mot suivant
+db	supprime depuis le curseur jusqu'au début du mot précédent
+diw	supprime le mot sous le curseur (sans les espaces)
+daw	supprime le mot sous le curseur (avec les espaces)
+dG	supprime jusqu'à la fin du fichier
+dgg	supprime jusqu'au début du fichier
+
+Si vous utilisez "c" à la place de "d", elles deviennent des commandes de 
+changement. Et avec "y", vous copiez (yank) le texte. Et ainsi de suite.
+
+Il existe quelques commandes courantes pour effectuer des modifications qui 
+n'ont pas trouvé leur place ailleurs :
+
+	~	Change la casse du caractère sous le curseur et déplace le
+		curseur vers le caractère suivant. Ce n'est pas un opérateur 
+		(sauf si 'tildeop' est défini), donc vous ne pouvez pas 
+		l'utiliser avec une commande de mouvement. Il fonctionne en 
+		revanche en mode Visual, où il change la casse de tout le 
+		texte sélectionné.
+
+	I	Démarre le mode Insertion après avoir déplacé le curseur vers 
+		le premier caractère non-blanc de la ligne.
+
+	A	Démarre le mode Insertion après avoir déplacé le curseur à la	
+		fin de la ligne.
+
+==============================================================================
+
+Prochain cjapitre: |usr_05.txt|  Définir vos paramètres
+
+Copyright: voir |manual-copyright|
+
+vim:tw=78:ts=8:noet:ft=help:norl:
