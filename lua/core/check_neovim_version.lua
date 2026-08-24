@@ -6,6 +6,11 @@
 -- * 2. Compare avec la version installée               *
 -- * 3. Notifie s'il existe une nouvelle version stable * 
 -- *    au démarrage de neovim                          *
+-- *                                                    *
+-- * FIX: vim.notify() différé après VimEnter, pour     *
+-- * laisser le temps à Noice (event = VeryLazy) de     *
+-- * s'initialiser — évite le hit-enter-prompt causé par *
+-- * cmdheight = 0 (core/options.lua).                  *
 -- ******************************************************
 
 local M = {}
@@ -28,21 +33,44 @@ end
 --- Récupère la version courante de Neovim
 --- @return string : La version sous forme de chaîne (ex: "v0.12.2")
 local function current_version()
-    local v = vim.version()
-    return string.format("v%d.%d.%d", v.major, v.minor, v.patch)
+	local v = vim.version()
+	return string.format("v%d.%d.%d", v.major, v.minor, v.patch)
 end
 
-function M.check_version()
+--- Effectue la comparaison et notifie si nécessaire
+local function _check()
 	local latest_version = get_latest_version_from_github()
-    local current_nvim = current_version()
-    if latest_version then
-        -- Nettoyage des versions (suppression des espaces, sauts de ligne, etc.)
-        latest_version = latest_version:gsub("v", ""):gsub("%s+", ""):gsub("\n", "")
-        current_nvim = current_nvim:gsub("v", ""):gsub("%s+", ""):gsub("\n", "")
-	    if latest_version ~= current_nvim then
-		    print(" Une nouvelle version stable de Neovim est actuellement disponible : "..current_nvim.." 󰜴 "..latest_version.." Source GitHub")
-	    end
-    end
+	local current_nvim = current_version()
+	if latest_version then
+		-- Nettoyage des versions (suppression des espaces, sauts de ligne, etc.)
+		latest_version = latest_version:gsub("v", ""):gsub("%s+", ""):gsub("\n", "")
+		current_nvim = current_nvim:gsub("v", ""):gsub("%s+", ""):gsub("\n", "")
+		if latest_version ~= current_nvim then
+			vim.notify(
+				string.format(
+					" Une nouvelle version stable de Neovim est disponible : %s 󰜴 %s",
+					current_nvim,
+					latest_version
+				),
+				vim.log.levels.INFO,
+				{ title = " NvCrafted - Neovim" }
+			)
+		end
+	end
+end
+
+--- Point d'entrée public — enregistre l'autocommand VimEnter.
+--- Le délai laisse le temps à Noice (event = VeryLazy) de s'initialiser
+--- avant qu'un message ne soit émis.
+--- @param delay integer|nil  délai en ms avant vérification (défaut : 3000)
+function M.setup(delay)
+	delay = delay or 3000
+	vim.api.nvim_create_autocmd("VimEnter", {
+		once = true,
+		callback = function()
+			vim.defer_fn(_check, delay)
+		end,
+	})
 end
 
 return M

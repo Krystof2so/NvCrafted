@@ -54,5 +54,5 @@ require("lazy").setup("plugins", {
 -- ========================================================
 -- 5. Vérification des mises à jour des plugins
 -- ========================================================
-require("core.check_neovim_version").check_version()
+require("core.check_neovim_version").setup()
 require("core.update_plugins").setup()
