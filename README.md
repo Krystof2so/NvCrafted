@@ -8,545 +8,263 @@
 
 A handcrafted [Neovim](https://neovim.io/) configuration, designed to be understood, extended, and mastered.
 
----
+## 🪪 Overview
 
-## Overview
+This repository contains a **Neovim** configuration that aims to be modern, readable, and highly modular, built as an evolvable foundation for a development environment close to an IDE.
 
-This repository contains a **Neovim** configuration that is modern, readable, and highly modular, intended as an evolving foundation for building a development environment close to an IDE.
+The main goals of the project are:
 
-The main goals of this project are:
-
-- 🧩 **Maximum modularity**: Each feature is isolated in a clearly identified file.
-- 🧠 **Readability and pedagogy**: The configuration remains understandable, even after months of inactivity.
-- 🚀 **Scalability**: Adding a plugin or an LSP layer is done via a simple file.
+- 🧩 **Maximum modularity**: each feature is isolated in a clearly identified file.
+- 🧠 **Readability and pedagogy**: the configuration must remain understandable, even after months away.
+- 🚀 **Scalability**: adding a plugin or an LSP overlay is done via a single file.
 - 🔧 **Declarative approach**: [Lazy.nvim](https://lazy.folke.io/) is used as the central manager.
 
-Once the structure is in place, maintenance essentially involves **adding or adjusting modules**, without modifying the core configuration.
+Once the structure is in place, maintenance essentially boils down to **adding or adjusting modules**, without modifying the core of the configuration.
 
-This project is still under construction...
+(This project is still under construction…)
 
 ---
 
-## Required Tooling
+## ⚙️ Prerequisites
 
-- **Neovim ≥ 0.11**
+- **Neovim ≥ 0.12**
 - [Lua](https://www.lua.org/) as the configuration language
 - **lazy.nvim**: plugin manager
-- [mason.nvim](https://github.com/mason-org/mason.nvim) / [mason-lspconfig.nvim](https://github.com/mason-org/mason-lspconfig.nvim): installation and management of LSPs
-- [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) (via the `vim.lsp` API)
-- [Tree-sitter](https://github.com/nvim-treesitter/nvim-treesitter) for syntax analysis
-- [Lazydev](https://github.com/folke/lazydev.nvim) to improve the **Lua** **LSP** experience with configuration files.
-- [nerdfonts](https://www.nerdfonts.com/)
+- [mason.nvim](https://github.com/mason-org/mason.nvim) / [mason-lspconfig.nvim](https://github.com/mason-org/mason-lspconfig.nvim): LSP installation and management
+- [Tree-sitter](https://github.com/nvim-treesitter/nvim-treesitter) for syntax parsing
+- [Lazydev.nvim](https://github.com/folke/lazydev.nvim) to enhance the **LSP** experience for **Lua** configuration files.
+- [nerdfonts](https://www.nerdfonts.com/): fonts required for icons
 
 ---
 
-## Project Structure
+## 📁 Project Structure
 
 ```text
  .
-├──  docs
-│   ├──  architecture.md
-│   ├──  autocommands.md
-│   ├──  commands.md
-│   ├──  highlights.md
-│   ├──  lsp-nvcrafted.md
-│   └──  themes.md
-├──  init.lua
-├──  lazy-lock.json
+├──  doc       # Neovim built‑in help – partially translated into French
+├──  docs      # Technical documentation (🇫🇷)
+├──  init.lua  # Main entry point
+├──  lazy-lock.json    # Plugin version lock
 ├──  lua
-│   ├──  core
-│   │   ├──  autocmds.lua
-│   │   ├──  bootstrap.lua
+│   ├──  core  # Pure Neovim/NvCrafted configuration (plugin‑independent – various files and directories)
 │   │   ├──  format
-│   │   │   └──  conform.lua
 │   │   ├──  highlights
-│   │   │   ├──  blink_hl.lua
-│   │   │   ├──  diagnostics.lua
-│   │   │   ├──  init.lua
-│   │   │   ├──  neo_tree_ls.lua
-│   │   │   ├──  palettes.lua
-│   │   │   ├──  todo_comments_hl.lua
-│   │   │   └──  which_key_ls.lua
-│   │   ├──  keymaps.lua
+│   │   ├──  git
 │   │   ├──  lsp
-│   │   │   ├──  capabilities.lua
-│   │   │   ├──  on_attach.lua
-│   │   │   ├──  servers.lua
-│   │   │   └──  tools.lua
-│   │   ├──  options.lua
-│   │   ├──  spell.lua
-│   │   └──  theme.lua
+│   │   ├──  map_actions   # NvCrafted‑specific features
+│   │   ├──  snacks_config # Dashboard
 │   ├──  nvcrafted
-│   │   └──  tutor
-│   │       ├──  docs.lua
-│   │       ├──  init.lua
-│   │       ├──  progress.lua
-│   │       └──  tutor.lua
-│   └──  plugins
-│       ├──  appearence
-│       │   ├──  alpha.lua
-│       │   ├──  barbar.lua
-│       │   ├──  everviolet.lua
-│       │   ├──  lualine.lua
-│       │   ├──  nordic.lua
-│       │   └──  rose-pine.lua
+│   │   └──  tutor         # Built‑in tutorial (🇫🇷)
+│   └──  plugins           # Integrated/classified plugins by functional area
+│       ├──  appearance
 │       ├──  editing
-│       │   ├──  autopairs.lua
-│       │   ├──  blink.lua
-│       │   ├──  comment_nvim.lua
-│       │   ├──  conform.lua
-│       │   ├──  lazydev.lua
-│       │   ├──  neogen.lua
-│       │   ├──  todo_comments.lua
-│       │   └──  treesitter.lua
-│       ├──  init.lua
+│       ├──  git
 │       ├──  lsp
-│       │   ├──  config
-│       │   │   ├──  lua_ls.lua
-│       │   │   ├──  pyright.lua
-│       │   │   └──  ruff.lua
-│       │   ├──  init.lua
-│       │   └──  mason.lua
 │       ├──  meta
-│       │   └──  tutor.lua
 │       ├──  navigation
-│       │   ├──  aerial.lua
-│       │   ├──  neo_tree.lua
-│       │   ├──  telescope.lua
-│       │   └──  trouble.lua
 │       └──  ux
-│           ├──  noice.lua
-│           ├──  which_key.lua
-│           └──  zen-mode.lua
 ├──  README.fr.md
 ├── 󰂺 README.md
 ├──  snippets
-│   └──  python.json
-└──  tutor_lessons
-    ├──  01-Les-modes.md
-    ├──  02-Navigation-de-base.md
-    └──  03-La-grammaire-de-Neovim.md
+└──  tutor_lessons     # Built‑in tutorial lessons
+```
+
+For more details on the architecture, see <a href="/docs/architecture.md.">/docs/architecture.md</a>
+
+---
+
+## 🚀 Installation
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Krystof2so/NvCrafted.git ~/.config/nvim
+```
+
+### 2. Launch Neovim
+
+```bash
+nvim
+```
+
+Lazy.nvim will automatically install the plugins on the first run.
+
+⚠️ **Note**:
+
+- Ensure Neovim ≥ 0.12 is installed.
+- Nerd Fonts are required for an optimal experience.
+
+---
+
+🔧 Key Features
+
+- One plugin = one file: each plugin has its own file in lua/plugins/<domain>/.
+- Auto‑import: plugins/init.lua scans subfolders and imports them dynamically.
+- Minimalist configuration: only non‑default options are configured.
+
+Example:
+
+```lua
+-- plugins/editing/autopairs.lua
+return {
+  "windwp/nvim-autopairs",
+  opts = {
+    check_ts = true,
+    ts_config = { lua = { "string" } }
+  }
+}
+```
+
+For extension conventions (declaration vs specification, opts vs config), see <a href="/docs/architecture.md.">/docs/architecture.md</a>.
+
+---
+
+## LSP and Tool Support
+
+NvCrafted structures LSP support in 4 levels:
+
+1. Declaration:
+   - `core/lsp/servers.lua` → List of active LSP servers.
+   - `core/lsp/tools.lua` → List of Mason tools (formatters, linters).
+2. Installation:
+   - `plugins/lsp/mason.lua` → Installs servers and tools via Mason.
+3. Orchestration:
+   - `plugins/lsp/init.lua` → Applies common on_attach and capabilities, loads server‑specific overrides.
+4. Server‑specific configuration:
+   - `plugins/lsp/config/<server>.lua` → Custom per‑server configuration.
+
+Example: Adding an LSP server
+
+1. Add the server name to core/lsp/servers.lua:
+
+```lua
+return { "lua_ls", "pyright", "rust_analyzer" }
+```
+
+2. (Optional) Create a configuration file in `plugins/lsp/config/<server>.lua`.
+
+For a complete description of the LSP architecture, see <a href="/docs/lsp-nvcrafted.md">/docs/lsp-nvcrafted</a>.
+
+---
+
+## Key Mapping Management
+
+Key mappings are organised into 3 scopes based on their reach:
+
+- `core/keymaps.lua`: Global mappings (e.g. `<leader>hm` to access documentation files).
+- Plugin file: Contextual mappings (e.g. mappings inside a floating menu).
+- `core/lsp/on_attach.lua`: LSP‑specific mappings (e.g. `gd` to go to definition).
+
+For the full list of commands, see <a href="/docs/commandes-Vim-Neovim.md">Vim and Neovim commands</a> and <a href="/docs/commandes-et-raccourcis-NvCrafted.md">NvCrafted‑specific commands and shortcuts</a>.
+
+---
+
+## Snippets and Autocompletion
+
+- Snippets: Stored in `~/.config/nvim/snippets/` (VSCode format).
+- Dynamic loading: Via `luasnip.loaders.from_vscode` in `plugins/editing/blink.lua`.
+- Integration with [blink.cmp](https://cmp.saghen.dev/): Snippets are included as a completion source.
+
+Example configuration:
+
+```lua
+-- plugins/editing/blink.lua
+require("luasnip.loaders.from_vscode").lazy_load({
+  paths = { vim.fn.stdpath("config") .. "/snippets" }
+})
 ```
 
 ---
 
-## The `docs/` directory
+## Custom Dictionary
 
-**NvCrafted** includes technical documentation complementing the `README`, organized by topic in the `docs/` folder (written exclusively in French).
+- Dictionaries: English (en), French (fr), and a custom technical dictionary (`code.utf-8.add`).
+- How it works:
+  - `code.utf-8.add` is automatically created on first launch.
+  - Compiled into `code.utf-8.spl` for immediate use.
+  - Targeted spell checking (comments and strings only).
+  - Automatically adds validated words with `zg`.
 
-| File               | Content                                                                                                                                |
-| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `autocommands.md`  | Description of the autocommand groups defined in `core/autocmds.lua`                                                                   |
-| `commands.md`      | List of commands available in **NvCrafted**                                                                                            |
-| `lsp-nvcrafted.md` | Complete **LSP** support architecture: installation flow, orchestration, role of `on_attach` and `capabilities`, extension conventions |
-| `architecture.md`  | An explanation of the architectural design of **NvCrafted**                                                                            |
-| 'themes.ms'        | Guidance on installing and managing themes                                                                                             |
-
----
-
-## `init.lua` (root)
-
-The main entry point (purely declarative):
-
-- Bootstraps **lazy.nvim** via `core.bootstrap` (isolation of **lazy.nvim** installation logic)
-- Defines leaders
-- Loads `core` modules
-- Initializes **Lazy** with automatic plugin imports
-
-### Startup flow
-
-```text
-init.lua (root)
-  │
-  ├── core.bootstrap
-  │     └── installs lazy.nvim if missing
-  │
-  ├── system configuration
-  │     ├── disable unused providers (Perl, Ruby)
-  │     ├── dedicated Neovim Python (~/.venvs/neovim)
-  │     └── append Mason to PATH
-  │
-  ├── leader keys (Space / Backslash)
-  │
-  ├── core/ modules (plugin-independent)
-  │     ├── core.spell
-  │     ├── core.options
-  │     ├── core.keymaps
-  │     └── core.autocmds
-  │
-  └── lazy.setup("plugins")
-        └── plugins/init.lua
-              └── automatic subdirectory scan
-                    ├── plugins/appearence/
-                    ├── plugins/editing/
-                    ├── plugins/meta/
-                    ├── plugins/lsp/
-                    │     └── init.lua
-                    │           ├── servers.lua → activation LSP
-                    │           └── tools.lua  → outils Mason
-                    ├── plugins/navigation/
-                    └── plugins/ux
-```
-
-The order is intentional: `core/` modules are loaded before **Lazy**, ensuring that options and leader keys are in place before any plugin is initialized.
+No external dictionary download is required.
 
 ---
 
-## The `core/` Directory
+## Built‑in Tutorial and French Documentation
 
-Contains the **fundamental Neovim configuration**, independent of plugins.
+- Lessons: Available in `tutor_lessons/` (e.g. `01-Les-modes.md`).
+- Dedicated module: `lua/nvcrafted/tutor/` for an interactive experience.
+- Goal: To help beginners get started with Neovim.
 
-| File              | Role                            |
-| ----------------- | ------------------------------- |
-| `options.lua`     | Neovim options (`vim.opt`)      |
-| `keymaps.lua`     | Global keybindings              |
-| `autocmds.lua`    | Autocommands                    |
-| `spell.lua`       | Custom dictionary               |
-| `bootstrap.lua`   | **lazy.nvim** startup           |
-| `lsp/servers.lua` | Source of truth for LSP servers |
+For more information, see the <a href="/nvcrafted/tutor/">nvcrafted/tutor</a> module.
 
-👉 These files do not depend on any plugin and can be read as "pure Neovim configuration."
+In `/doc` you will find `.frx` files. These are the official Vim/Neovim documentation files, translated (fully or partially) into French. See: <a href="/docs/documentation-aide-neovim.md">Built‑in Vim/Neovim help</a>.
 
 ---
 
-## Extension Conventions
+## Color Customisation
 
-### Adding a _Plugin_
+- Available themes: `everviolet`, `nordic`, `rose-pine` (default).
+- Dedicated files: In `plugins/appearance/` (e.g. `rose-pine.lua`).
+- Overlays: Customisation of colours for specific plugins (e.g. [neo-tree](https://github.com/nvim-neo-tree/neo-tree.nvim), [which-key](https://github.com/folke/which-key.nvim/tree/main)).
 
-1. Create a **Lua** file in the corresponding folder, for example:
-   - `lua/plugins/ux/` relates to ergonomics
-   - `lua/plugins/editing/` relates to editing
-   - `lua/plugins/navigation/` relates to navigation
+- For theme management, see <a href="/docs/themes.md">Themes with NvCrafted</a>.
+- For colour customisations, see <a href="/docs/highlights.md">Highlights</a>.
 
-2. The file must return a table compatible with **Lazy.nvim**. Minimal example:
+---
+
+## 📌 Extension Conventions
+
+### 1. Adding a plugin
+
+1. Create a Lua file in the corresponding folder (e.g. `lua/plugins/editing/my_plugin.lua`).
+2. Return a table compatible with Lazy.nvim:
 
 ```lua
 return {
-  "author/pluginname.nvim",
-  config = function()
-    -- plugin-specific configuration here
+  "author/my_plugin.nvim",
+  opts = { ... },  -- Static options
+  config = function()  -- Logic to execute
+    -- Configuration here
   end
 }
 ```
 
-### Convention: specification vs declaration
+### 2. When to use opts vs config?
 
-Some plugins involve configuration logic rich enough to justify a dedicated file in `core/`. **NvCrafted** then applies a two-level separation:
+- Logic to execute (API, autocommands, `pcall`) → `config`
+- Static options only → `opts`
+- Static options + extra code → `opts` + `config`
 
-| Level         | File                            | Role                                                 |
-| ------------- | ------------------------------- | ---------------------------------------------------- |
-| Declaration   | `plugins/<domain>/<plugin>.lua` | Declares the plugin to Lazy, delegates configuration |
-| Specification | `core/<domain>/<plugin>.lua`    | Holds the actual logic, independent from Lazy        |
+💡 Prefer opts for simple configurations: it is shorter and more readable.
 
-#### Example: `conform.nvim`
-
-`plugins/editing/conform.lua` only declares the plugin and calls the `core` module:
-
-```lua
-return {
-  "stevearc/conform.nvim",
-  opts = function()
-    require("core.format.conform").setup()
-  end,
-}
-```
-
-All the actual logic — formatters per file type, dynamic Python selection, format-on-save — lives in `core/format/conform.lua`.
-
-#### When to apply this convention?
-
-- the plugin configuration contains **business logic** (conditions, functions, autocommands)
-- it is likely to be **reused** by other modules
-- it should remain **readable and testable** independently from Lazy's lifecycle
-
-A plugin whose configuration fits in a few lines of static options does not need this split : `opts = { ... }` directly in the plugin file is enough.
-
-### `opts` vs `config` in Lazy.nvim
-
-**Lazy.nvim** provides two ways to configure a plugin. The choice depends on the nature of the configuration.
-
-#### `opts` — static options
-
-Use when the configuration consists of values passed directly to the plugin:
-
-```lua
--- plugins/editing/autopairs.lua
-opts = {
-  check_ts = true,
-  ts_config = {
-    lua = { "string" },
-  },
-}
-```
-
-**Lazy** automatically calls `plugin.setup(opts)`. No additional code is needed.
-
-#### `config` — logic to execute
-
-Use when the configuration requires code: autocommands, `pcall` protection, manual API calls, etc.
-
-```lua
--- plugins/editing/treesitter.lua
-config = function()
-  local ok, ts_configs = pcall(require, "nvim-treesitter.configs")
-  if not ok then return end
-  ts_configs.setup({ ... })
-end
-```
-
-#### `opts` + `config` — both together
-
-When a plugin has static options _and_ code to run after initialization, both can coexist. `opts` is then received as the second argument of `config`:
-
-```lua
--- plugins/editing/blink.lua
-opts = {
-  keymap = { ... },
-  completion = { ... },
-},
-config = function(_, opts)
-  require("blink.cmp").setup(opts)        -- opts forwarded here
-  require("luasnip.loaders.from_vscode")  -- additional code
-    .lazy_load({ paths = { ... } })
-  vim.cmd([[hi LspFloatBorder ...]])      -- manual highlights
-end,
-```
-
-The `_` as the first argument is the plugin itself (unused here, ignored by convention).
-
-#### Decision rule
-
-| Situation                                          | Key to use        |
-| -------------------------------------------------- | ----------------- |
-| Static options only                                | `opts`            |
-| Code to execute (API calls, autocommands, `pcall`) | `config`          |
-| Static options + additional code                   | `opts` + `config` |
-
-When in doubt, prefer `opts`: it is shorter, more readable, and **Lazy** handles the `setup()` call automatically.
-
-### Keymap organization
-
-Keybindings are distributed across three distinct spaces depending on their scope.
-
-#### `core/keymaps.lua` — global keymaps
-
-All keybindings that are always active, regardless of context, are defined here. This includes shortcuts that invoke _plugins_, as they are part of **NvCrafted**'s global interface:
-
-```lua
--- core/keymaps.lua
-map("n", "<leader>ff", ":Telescope find_files<CR>", { desc = "Chercher fichiers" })
-map("n", "<leader>ee", ":Neotree<CR>",              { desc = "Ouverture de Neotree" })
-```
-
-#### In the plugin file — contextual keymaps
-
-Keybindings that only make sense in a specific context (_popup_, floating menu) stay in the plugin file:
-
-```lua
--- plugins/editing/blink.lua
-opts = {
-  keymap = {
-    ["<CR>"]    = { "accept", "fallback" },
-    ["<Tab>"]   = { "select_next", "fallback" },
-    ["<S-Tab>"] = { "select_prev", "fallback" },
-  },
-}
-```
-
-These keybindings are managed by **blink.cmp** itself and have no effect outside the completion menu. Defining them in `core/keymaps.lua` would serve no purpose.
-
-#### `core/lsp/on_attach.lua` — buffer-local LSP keymaps
-
-A third space exists for **LSP** keybindings: they are defined in `on_attach` and only activate when an **LSP** server is attached to the current _buffer_.
-
-```lua
--- core/lsp/on_attach.lua
-vim.keymap.set("n", "gd",         vim.lsp.buf.definition, opts)
-vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename,     opts)
-```
-
-**LSP** keybindings belong in `on_attach`, never in `core/keymaps.lua` — they must not pollute _buffers_ where no **LSP** is attached.
-
-### Adding an **LSP Server**
-
-Adding an LSP server follows a declarative two-level approach.
-
-1. Server Declaration
-   Add the server name in `lua/core/lsp/servers.lua`
-   Example:
-
-   ```lua
-   return {
-     "lua_ls",
-     "pyright",
-     "rust_analyzer",
-   }
-   ```
-
-   👉 This file is the source of truth:
-   - Used by **Mason** for installation
-   - Used by the **LSP** orchestrator for activation
-
-2. Specific Configuration
-   Create a file named after the server: `lua/plugins/lsp/config/<server_name>.lua`.
-   File structure:
-   ```lua
-   return {
-     settings = {
-       -- specific LSP configuration
-     }
-   }
-   ```
-
-Key Principle:
-An LSP server works without specific configuration.
-A layer is only loaded if a dedicated file exists.
+For concrete examples, see <a href="/docs/architecture.md.">the architecture documentation</a>.
 
 ---
 
-## Plugin Management with Lazy.nvim
+## 🎨 Project Philosophy
 
-### `lua/plugins/init.lua`
+- 📦 One plugin = one file: no black box, everything is explicit.
+- 🧠 Readability: comments and documentation are in French (sorry to English speakers!).
+- 🧪 No magic: everything is configurable and understandable.
+- 🧩 Incremental extension: add features without breaking existing ones.
 
-This file is the **aggregation point for plugins**. It contains no direct configuration, only logical imports:
-
-- Scans the `lua/plugins/` directory to retrieve all subdirectories.
-- Transforms each subdirectory into an entry `{ import = "plugins.<name>" }`.
-- Returns a table directly usable by `require("lazy").setup()`.
-  Each subfolder represents a **functional domain**.
-
-👉 Key Principles:
-
-- No _plugin_ is manually declared in init.lua.
-- Each _plugin_ has its own file.
-- The philosophy is to only configure what differs from default values, to keep files short and explicit. For example: `autopairs.lua` only redefines **Tree-sitter** integration.
+This configuration is designed as a personal working base, but is structured enough to serve as a reference or starting point.
 
 ---
 
-## LSP and Tools Management
+## 🔮 Planned Evolutions
 
-The **LSP** support and tool installation are structured across four distinct levels.
+- Gradual addition of plugins (UI, DAP, testing, refactoring, etc.).
+- Improvements to LSP integrations (overlays) and snippet additions.
+- Any other idea that respects the project’s philosophy.
+- Enhancement and enrichment of the built‑in French documentation and onboarding tutorials.
 
-### 1. Declaration — `core/lsp/servers.lua`
-
-- Explicit list of active LSP servers
-- No logic, no plugin dependency
-
-### 2. Declaration — `core/lsp/tools.lua`
-
-- Explicit list of non-**LSP** **Mason** tools: formatters (`black`, `stylua`, `prettier`), _linters_ (`ruff`), and other binaries.
-- Same philosophy as `servers.lua`: a pure list, no logic.
-
-These two files are the _sources of truth_ for the environment. Everything that needs to be installed is declared here, and nowhere else.
-
-### 3. Installation — `plugins/lsp/mason.lua`
-
-Consumes both lists:
-
-- `mason-lspconfig` installs the servers from `servers.lua`
-- `mason-tool-installer` installs the tools from `tools.lua`
-- `mason.nvim` executes the installations
-
-No functional decisions are made here.
-
-### 4. Orchestration — `plugins/lsp/init.lua`
-
-For each server in `servers.lua`:
-
-- applies shared `on_attach` and `capabilities`
-- loads the optional overlay `lsp/config/<server>.lua` if it exists
-- registers the server via `vim.lsp.config()`
-
-A server works without an overlay.
-An overlay is only loaded if the corresponding file exists.
+💬 Have a suggestion or idea? Feel free to contribute!
 
 ---
 
-## Snippet Management
-
-### Structure
-
-Snippets are stored in `~/.config/nvim/snippets/` in JSON format (compatible with VSCode).
-
-### Configuration
-
-Snippets are dynamically loaded using `lazy_load`:
-
-````lua
--- plugins/editing/blink.lua
-require("luasnip.loaders.from_vscode").lazy_load({
-  paths = { vim.fn.stdpath("config") .. "/snippets" },
-})
-
-**blink.cmp** is configured to include **luasnip** as a completion source:
-```lua
-sources = { -- Priority completion sources
-    default = { "lsp", "buffer", "snippets", "path" },
-},
-````
-
----
-
-## Custom Dictionary Management
-
-**NvCrafted** integrates a spell-checking system adapted for code and comments.
-
-- Dictionaries used: English (en), French (fr), and a custom code dictionary.
-- Automatic creation: On first launch, the `code.utf-8.add` file is created with frequent technical words and compiled into `code.utf-8.spl`.
-- Targeted spell-check: Active only in comments and strings.
-- Automatic addition: Words validated with `zg` are added to `code.utf-8.add` and recompiled into `.spl`.
-- Compatibility: Works from the first launch, with **Neo-tree** and all _buffers_, without downloading external dictionaries.
-
----
-
-## Installation
-
-### Prerequisites
-
-- **Neovim ≥ 0.11**
-- [Git](https://git-scm.com/)
-
-### Steps
-
-```bash
-# Clone the repository
-git clone https://github.com/Krystof2so/NvCrafted.git ~/.config/nvim
-
-# Launch Neovim
-nvim
-```
-
-**Lazy.nvim** will automatically install the plugins on the first launch.
-
----
-
-## Project Philosophy
-
-- 📦 **One plugin = one file**
-- 🧠 **Readability**
-- 🧪 **No black boxes**
-- 🧩 **Incremental extension**
-
-This configuration is designed as a **personal workbase**, but structured enough to serve as a reference or starting point.
-
-My goal is to maintain an organization and configuration that is as simple and modular as possible. One specificity = one file... nothing more basic.
-
-The comments inserted in each file are entirely in French (sorry to English speakers), because I find that **Neovim** is generally poorly documented in French (or even esoteric configurations).
-
----
-
-## Planned Evolutions
-
-- Gradual addition of plugins (UI, DAP, tests, refactoring...)
-- Improvement of LSP integrations (layers)
-- And anything else that comes to mind, while staying true to the project philosophy
-
----
-
-## License
+## 📜 License
 
 Free to use, modify, and share.
 
----
-
-✨ _If you are looking for a modular and easily understandable Neovim configuration, this repository is for you._
+✨ If you are looking for a modular and easily understandable Neovim configuration, NvCrafted is for you.
