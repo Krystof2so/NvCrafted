@@ -65,11 +65,11 @@ Une fois la structure posée, la maintenance se résume essentiellement à **ajo
 │       └──  ux
 ├──  README.fr.md
 ├── 󰂺 README.md
-├──  snippets      
+├──  snippets
 └──  tutor_lessons     # Leçons du tutoriel intégré
 ```
 
-Pour plus de détails sur l’architecture, consultez <a href="/docs/architecture.md.">/docs/architecture.md</a>
+Pour plus de détails sur l’architecture, consultez [Documenation sur l'architecture](./docs/architecture.md)(./docs/architecture.md).
 
 ---
 
@@ -90,10 +90,11 @@ nvim
 **Lazy.nvim** installera automatiquement les plugins au premier lancement.
 
 ⚠️**Note** :
+
 - Assurez-vous que Neovim ≥ 0.12 est installé.
 - Les polices Nerd Fonts sont requises pour une expérience optimale.
 
---- 
+---
 
 ## 🔧 Fonctionnalités clés
 
@@ -102,6 +103,7 @@ nvim
 - Configuration minimaliste : Seules les options non par défaut sont configurées.
 
 Exemple :
+
 ```lua
 -- plugins/editing/autopairs.lua
 return {
@@ -113,44 +115,49 @@ return {
 }
 ```
 
-Pour les conventions d’extension (déclaration vs spécification, opts vs config), consultez <a href="/docs/architecture.md.">/docs/architecture.md</a>.
+Pour les conventions d’extension (déclaration vs spécification, opts vs config), consultez [Documentation sur l'architecture](./docs/architecture.md).
 
---- 
+---
 
 ## Support LSP et outils
 
 NvCrafted structure le support LSP en 4 niveaux :
+
 1. **Déclaration** :
-    - `core/lsp/servers.lua` → Liste des serveurs LSP actifs.
-    - `core/lsp/tools.lua` → Liste des outils Mason (formatters, linters).
+   - `core/lsp/servers.lua` → Liste des serveurs LSP actifs.
+   - `core/lsp/tools.lua` → Liste des outils Mason (formatters, linters).
 2. **Installation** :
-    - `plugins/lsp/mason.lua` → Installe les serveurs et outils via Mason.
+   - `plugins/lsp/mason.lua` → Installe les serveurs et outils via Mason.
 3. **Orchestration** :
-    - `plugins/lsp/init.lua` → Applique `on_attach` et `capabilities` communs, charge les surcouches spécifiques.
+   - `plugins/lsp/init.lua` → Applique `on_attach` et `capabilities` communs, charge les surcouches spécifiques.
 4. **Configuration spécifique** :
-    - `plugins/lsp/config/<server>.lua` → Configuration personnalisée par serveur.
+   - `plugins/lsp/config/<server>.lua` → Configuration personnalisée par serveur.
 
 **Exemple : Ajouter un serveur LSP**
+
 1. Ajoutez le nom du serveur dans `core/lsp/servers.lua` :
+
 ```lua
 return { "lua_ls", "pyright", "rust_analyzer" }
 ```
+
 2. (Optionnel) Créez un fichier de configuration dans `plugins/lsp/config/<server>.lua`.
 
-Pour une description complète de l’architecture LSP, consultez <a href="/docs/lsp-nvcrafted.md">/docs/lsp-nvcrafted</a>.
+Pour une description complète de l’architecture LSP, consultez [la documentation sur les LSP avec NvCrafted](./docs/lSP-NvCrafted.md).
 
---- 
+---
 
 ## Gestion des raccourcis clavier
 
 Les raccourcis sont organisés en 3 espaces selon leur portée :
+
 - `core/keymaps.lua` : Raccourcis globaux (ex: <leader>hm pour accéder aux fichiers de documentation)
 - Fichier du plugin : Raccourcis contextuels (ex: raccourcis dans un menu flottant).
 - `core/lsp/on_attach.lua` : Raccourcis spécifiques au LSP (ex: `gd` pour aller à la définition).
 
-Pour la liste complète des commandes, consultez <a href="/docs/commandes-Vim-Neovim.md">Commandes Vim et Neovim</a> et <a href="/docs/commandes-et-raccourcis-NvCrafted.md">Commandes et raccourcis propres à NvCrafted</a>.
+Pour la liste complète des commandes, consultez [Commandes Vim et Neovim](./docs/commandes-Vim-Neovim.md) et [Commandes et raccourcis propres à NvCrafted](./docs/commandes-et-raccourcis-NvCrafted.md).
 
---- 
+---
 
 ## Snippets et auto-complétion
 
@@ -159,6 +166,7 @@ Pour la liste complète des commandes, consultez <a href="/docs/commandes-Vim-Ne
 - Intégration avec [blink.cmp](https://cmp.saghen.dev/) : Les snippets sont inclus comme source de complétion.
 
 Exemple de configuration :
+
 ```lua
 -- plugins/editing/blink.lua
 require("luasnip.loaders.from_vscode").lazy_load({
@@ -166,22 +174,22 @@ require("luasnip.loaders.from_vscode").lazy_load({
 })
 ```
 
---- 
+---
 
 ## Dictionnaire personnalisé
 
 - Dictionnaires : Anglais (en), Français (fr), et un dictionnaire technique personnalisé (`code.utf-8.add`).
 - Fonctionnement :
-    - Création automatique de `code.utf-8.add` au premier lancement.
-    - Compilation en `code.utf-8.spl` pour une utilisation immédiate.
-    - Correction orthographique ciblée (commentaires et chaînes de caractères uniquement).
-    - Ajout automatique des mots validés avec `zg`.
+  - Création automatique de `code.utf-8.add` au premier lancement.
+  - Compilation en `code.utf-8.spl` pour une utilisation immédiate.
+  - Correction orthographique ciblée (commentaires et chaînes de caractères uniquement).
+  - Ajout automatique des mots validés avec `zg`.
 
 Aucun téléchargement de dictionnaire externe requis.
 
---- 
+---
 
-## Tutoriel et documentation française intégrée 
+## Tutoriel et documentation française intégrée
 
 - Leçons : Disponibles dans `tutor_lessons`/ (ex: `01-Les-modes.md`).
 - Module dédié : `lua/nvcrafted/tutor/` pour une expérience interactive.
@@ -189,9 +197,9 @@ Aucun téléchargement de dictionnaire externe requis.
 
 Pour plus d’informations, consultez le module <a href="/nvcrafted/tutor/">nvcrafted/tutor</a>.
 
-Dans `/doc` se trouvent des fichiers `.frx`. Il s'agit des fichiers de la documenetation officielle Vim/Neovim, traduits en français (intégralement ou partiellement). Consulter : <a href="/docs/documentation-aide-neovim.md">Documentation intégrée de Vim/Neovim</a>. 
+Dans `/doc` se trouvent des fichiers `.frx`. Il s'agit des fichiers de la documenetation officielle Vim/Neovim, traduits en français (intégralement ou partiellement). Consulter : [Documentation intégrée de Vim/Neovim](./docs/documentation-aide-neovim.md).
 
---- 
+---
 
 ## Personnalisation des couleurs
 
@@ -199,10 +207,10 @@ Dans `/doc` se trouvent des fichiers `.frx`. Il s'agit des fichiers de la docume
 - Fichiers dédiés : Dans `plugins/appearence/` (ex: `rose-pine.lua`).
 - Surcouches : Personnalisation des couleurs pour des plugins spécifiques (ex: [neo-tree](https://github.com/nvim-neo-tree/neo-tree.nvim), [which-key](https://github.com/folke/which-key.nvim/tree/main)).
 
-- Pour la gestion des thèmes, consultez <a href="/docs/themes.md">Les thèmes avec NvCrafted</a>.
-- Pour les personnalisations de couleurs, consultez <a href="/docs/highlights.md">Les higlights</a>.
+- Pour la gestion des thèmes, consultez [Les thèmes avec NvCrafted](./docs/themes.md).
+- Pour les personnalisations de couleurs, consultez [Les higlights](./docs/highlights.md).
 
---- 
+---
 
 ## 📌 Conventions d’extension
 
@@ -210,6 +218,7 @@ Dans `/doc` se trouvent des fichiers `.frx`. Il s'agit des fichiers de la docume
 
 1. Créez un fichier Lua dans le dossier correspondant (ex: `lua/plugins/editing/mon_plugin.lua`).
 2. Retournez une table compatible avec Lazy.nvim :
+
 ```lua
 return {
   "auteur/mon_plugin.nvim",
@@ -228,9 +237,9 @@ return {
 
 💡 Préférez `opts` pour les configurations simples : c’est plus court et plus lisible.
 
-Pour des exemples concrets, consultez <a href="/docs/architecture.md.">la documentation sur l'architecture</a>
+Pour des exemples concrets, consultez [la documentation sur l'architecture](./docs/architecture.md).
 
---- 
+---
 
 ## 🎨 Philosophie du projet
 
@@ -241,7 +250,7 @@ Pour des exemples concrets, consultez <a href="/docs/architecture.md.">la docume
 
 Cette configuration est conçue comme une base de travail personnelle, mais suffisamment structurée pour servir de référence ou de point de départ.
 
---- 
+---
 
 ## 🔮 Évolutions prévues
 
@@ -259,4 +268,3 @@ Cette configuration est conçue comme une base de travail personnelle, mais suff
 Libre d’utilisation, de modification et de partage.
 
 ✨ Si vous cherchez une configuration Neovim modulaire et aisément compréhensible, NvCrafted est fait pour vous.
-

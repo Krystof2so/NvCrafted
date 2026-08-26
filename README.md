@@ -69,7 +69,7 @@ Once the structure is in place, maintenance essentially boils down to **adding o
 └──  tutor_lessons     # Built‑in tutorial lessons
 ```
 
-For more details on the architecture, see <a href="/docs/architecture.md.">/docs/architecture.md</a>
+For more details on the architecture, see [Documentation sur l'architecture](./docs/architecture.md)
 
 ---
 
@@ -115,7 +115,7 @@ return {
 }
 ```
 
-For extension conventions (declaration vs specification, opts vs config), see <a href="/docs/architecture.md.">/docs/architecture.md</a>.
+For extension conventions (declaration vs specification, opts vs config), see [Documentation sur l'architecture](./docs/architecture.md).
 
 ---
 
@@ -143,7 +143,7 @@ return { "lua_ls", "pyright", "rust_analyzer" }
 
 2. (Optional) Create a configuration file in `plugins/lsp/config/<server>.lua`.
 
-For a complete description of the LSP architecture, see <a href="/docs/lsp-nvcrafted.md">/docs/lsp-nvcrafted</a>.
+For a complete description of the LSP architecture, see [Documentation LSP](./docs/lSP-NvCrafted.md)
 
 ---
 
@@ -155,7 +155,7 @@ Key mappings are organised into 3 scopes based on their reach:
 - Plugin file: Contextual mappings (e.g. mappings inside a floating menu).
 - `core/lsp/on_attach.lua`: LSP‑specific mappings (e.g. `gd` to go to definition).
 
-For the full list of commands, see <a href="/docs/commandes-Vim-Neovim.md">Vim and Neovim commands</a> and <a href="/docs/commandes-et-raccourcis-NvCrafted.md">NvCrafted‑specific commands and shortcuts</a>.
+For the full list of commands, see [Vim and Neovim commands](./docs/commandes-et-raccourcis-NvCrafted.md) et [NvCrafted‑specific commands and shortcuts](./docs/commandes-et-raccourcis-NvCrafted.md).
 
 ---
 
@@ -197,7 +197,7 @@ No external dictionary download is required.
 
 For more information, see the <a href="/nvcrafted/tutor/">nvcrafted/tutor</a> module.
 
-In `/doc` you will find `.frx` files. These are the official Vim/Neovim documentation files, translated (fully or partially) into French. See: <a href="/docs/documentation-aide-neovim.md">Built‑in Vim/Neovim help</a>.
+In `/doc` you will find `.frx` files. These are the official Vim/Neovim documentation files, translated (fully or partially) into French. See: [Built‑in Vim/Neovim](./docs/documentation-aide-neovim.md).
 
 ---
 
@@ -207,8 +207,8 @@ In `/doc` you will find `.frx` files. These are the official Vim/Neovim document
 - Dedicated files: In `plugins/appearance/` (e.g. `rose-pine.lua`).
 - Overlays: Customisation of colours for specific plugins (e.g. [neo-tree](https://github.com/nvim-neo-tree/neo-tree.nvim), [which-key](https://github.com/folke/which-key.nvim/tree/main)).
 
-- For theme management, see <a href="/docs/themes.md">Themes with NvCrafted</a>.
-- For colour customisations, see <a href="/docs/highlights.md">Highlights</a>.
+- For theme management, see [Themes with NvCrafted](./docs/themes.md).
+- For colour customisations, see [Highlights](./docs/highlights.md).
 
 ---
 
@@ -237,7 +237,7 @@ return {
 
 💡 Prefer opts for simple configurations: it is shorter and more readable.
 
-For concrete examples, see <a href="/docs/architecture.md.">the architecture documentation</a>.
+For concrete examples, see [The architecture documentation](./docs/architecture.md).
 
 ---
 
