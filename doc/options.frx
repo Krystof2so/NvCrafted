@@ -1391,18 +1391,19 @@ A jump table for the options with a short description can be found at |Q_op|.
 	info, see |quickfix-stack|.
 
 				*'cindent'* *'cin'* *'nocindent'* *'nocin'*
-'cindent' 'cin'		boolean	(default off)
-			local to buffer
-	Enables automatic C program indenting.  See 'cinkeys' to set the keys
-	that trigger reindenting in insert mode and 'cinoptions' to set your
-	preferred indent style.
-	If 'indentexpr' is not empty, it overrules 'cindent'.
-	If 'lisp' is not on and both 'indentexpr' and 'equalprg' are empty,
-	the "=" operator indents using this algorithm rather than calling an
-	external program.
-	See |C-indenting|.
-	When you don't like the way 'cindent' works, try the 'smartindent'
-	option or 'indentexpr'.
+'cindent' 'cin'		booléen	(défaut off)
+			local au buffer
+	Active l'indentation automatique pour les programmes en C. Voir	    
+	'cinkeys' pour définir les touches qui déclenchent la réindentation 
+	en mode Insertion, et 'cinoptions' pour définir votre style 
+	d'indentation préféré.
+	Si 'indentexpr' n'est pas vide, il remplace 'cindent'.
+	Si 'lisp' n'est pas activé et que 'indentexpr' et 'equalprg' sont 
+	tous deux vides, l'opérateur "=" indente en utilisant cet algorithme 
+	plutôt que d'appeler un programme externe.
+	Voir |C-indenting|.
+	Si vous n'aimez pas le fonctionnement de 'cindent', essayez l'option 
+	'smartindent' ou 'indentexpr'.
 
 						*'cinkeys'* *'cink'*
 'cinkeys' 'cink'	string	(default "0{,0},0),0],:,0#,!^F,o,O,e")
@@ -3023,13 +3024,14 @@ A jump table for the options with a short description can be found at |Q_op|.
 	The default "#" works well for C programs.  See |fold-indent|.
 
 						*'foldlevel'* *'fdl'*
-'foldlevel' 'fdl'	number	(default 0)
-			local to window
-	Sets the fold level: Folds with a higher level will be closed.
-	Setting this option to zero will close all folds.  Higher numbers will
-	close fewer folds.
-	This option is set by commands like |zm|, |zM| and |zR|.
-	See |fold-foldlevel|.
+'foldlevel' 'fdl'	nombre	(par defaut 0)
+			local à la fenêtre
+	Définit le niveau de repli : les replis dont le niveau est supérieur 
+	seront fermés.
+	Définir cette option à zéro fermera tous les replis. Des nombres plus 
+	élevés fermeront moins de replis.
+	Cette option est définie par des commandes comme |zm|, |zM| and |zR|.
+	Voir |fold-foldlevel|.
 
 					*'foldlevelstart'* *'fdls'*
 'foldlevelstart' 'fdls'	number	(default -1)
@@ -3693,48 +3695,55 @@ A jump table for the options with a short description can be found at |Q_op|.
 	match, excluding the characters that were already typed.
 
 						*'indentexpr'* *'inde'*
-'indentexpr' 'inde'	string	(default "")
-			local to buffer
-	Expression which is evaluated to obtain the proper indent for a line.
-	It is used when a new line is created, for the |=| operator and
-	in Insert mode as specified with the 'indentkeys' option.
-	When this option is not empty, it overrules the 'cindent' and
-	'smartindent' indenting.  When 'lisp' is set, this option is
-	only used when 'lispoptions' contains "expr:1".
-	The expression is evaluated with |v:lnum| set to the line number for
-	which the indent is to be computed.  The cursor is also in this line
-	when the expression is evaluated (but it may be moved around).
+'indentexpr' 'inde'	string	(défaut "")
+			local au buffer
+	Expression qui est évaluée pour obtenir l'indentation appropriée pour 
+	une ligne.
+	Elle est utilisée lorsqu'une nouvelle ligne est créée, pour 
+	l'opérateur =, et en mode Insertion comme spécifié par l'option 
+	'indentkeys'.
+	Lorsque cette option n'est pas vide, elle remplace l'indentation de 
+	'cindent' et de 'smartindent'. Lorsque 'lisp' est défini, cette 
+	option n'est utilisée que si 'lispoptions' contient "expr:1".
+	L'expression est évaluée avec |v:lnum| défini sur le numéro de ligne 
+	pour lequel l'indentation doit être calculée. Le curseur se trouve 
+	également sur cette ligne lors de l'évaluation (mais il peut être 
+	déplacé).
 
-	If the expression starts with s: or |<SID>|, then it is replaced with
-	the script ID (|local-function|).  Example: >vim
+	Si l'expression commence par s: ou |<SID>|, elle est remplacée par 
+	l'identifiant du script (|local-function|). Exemple : >vim
 		set indentexpr=s:MyIndentExpr()
 		set indentexpr=<SID>SomeIndentExpr()
-<	Otherwise, the expression is evaluated in the context of the script
-	where the option was set, thus script-local items are available.
+<	Sinon, l'expression est évaluée dans le contexte du script où 
+	l'option a été définie, donc les éléments locaux au script sont	    
+	disponibles.
 
-	The advantage of using a function call without arguments is that it is
-	faster, see |expr-option-function|.
+	L'avantage d'utiliser un appel de fonction sans arguments est que 
+	c'est plus rapide, voir |expr-option-function|.
 
-	The expression must return the number of spaces worth of indent.  It
-	can return "-1" to keep the current indent (this means 'autoindent' is
-	used for the indent).
-	Functions useful for computing the indent are |indent()|, |cindent()|
-	and |lispindent()|.
-	The evaluation of the expression must not have side effects!  It must
-	not change the text, jump to another window, etc.  Afterwards the
-	cursor position is always restored, thus the cursor may be moved.
-	Normally this option would be set to call a function: >vim
+	L'expression doit renvoyer le nombre d'espaces correspondant à 
+	l'indentation. Elle peut renvoyer -1 pour conserver l'indentation   
+	actuelle (cela signifie que 'autoindent' est utilisé pour 
+	l'indentation).
+	Les fonctions utiles pour calculer l'indentation sont |indent()|, 
+	|cindent()| et |lispindent()|.
+	L'évaluation de l'expression ne doit pas avoir d'effets secondaires ! 
+	Elle ne doit pas modifier le texte, sauter dans une autre fenêtre, 
+	etc. Ensuite, la position du curseur est toujours restaurée, donc le 
+	curseur peut être déplacé.
+	Normalement, cette option serait définie pour appeler une fonction : >vim
 		set indentexpr=GetMyIndent()
-<	Error messages will be suppressed, unless the 'debug' option contains
-	"msg".
-	See |indent-expression|.
+<	Les messages d'erreur seront supprimés, sauf si l'option 'debug' 
+	contient "msg".
+	Voir |indent-expression|.
 
-	The expression will be evaluated in the |sandbox| when set from a
-	modeline, see |sandbox-option|.
-	This option cannot be set in a modeline when 'modelineexpr' is off.
+	L'expression sera évaluée dans le |sandbox| lorsqu'elle est définie 
+	depuis une modeline, voir |sandbox-option|.
+	Cette option ne peut pas être définie dans une modeline lorsque	    
+	'modelineexpr' est désactivé.
 
-	It is not allowed to change text or jump to another window while
-	evaluating 'indentexpr' |textlock|.
+	Il n'est pas permis de modifier le texte ou de sauter dans une autre 
+	fenêtre pendant l'évaluation de 'indentexpr' |textlock|.
 
 						*'indentkeys'* *'indk'*
 'indentkeys' 'indk'	string	(default "0{,0},0),0],:,0#,!^F,o,O,e")

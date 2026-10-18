@@ -131,11 +131,3 @@ opt.wrap = true -- bool : Activer le retour automatique à la ligne à l'afficha
 -- * 14. Correction orthographique *
 -- *********************************
 opt.spell = false -- bool : Activation uniquement selon contexte via auto-commandes
-
--- ***************
--- * 15. Folding *
--- ***************
--- Désactiver uniquement le repliement automatique :
-opt.foldenable = false -- Désactive le repliement
-opt.foldmethod = "manual" -- Mode manuel
-opt.foldcolumn = "0" -- Masque la colonne de repliement

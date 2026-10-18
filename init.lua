@@ -39,6 +39,7 @@ require("core.options")
 require("core.theme")
 require("core.keymaps")
 require("core.autocmds")
+require("core.folding").setup()
 
 -- ========================================================
 -- 4. setup de lazy.nvim avec la configuration des plugins

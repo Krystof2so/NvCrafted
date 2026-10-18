@@ -57,27 +57,6 @@ api.nvim_create_autocmd("TextYankPost", {
 })
 
 -- ================================================================
--- = GROUPE : Folding
--- ================================================================
-local fold_group = api.nvim_create_augroup("NvCraftedFolding", { clear = true })
-
--- Ouvre tous les folds à l’entrée d’un buffer dans une fenêtre
--- Garantit une lecture initiale non repliée
--- Le folding reste ensuite entièrement manuel
-api.nvim_create_autocmd("BufWinEnter", {
-	group = fold_group,
-	pattern = "*",
-	callback = function()
-		if vim.bo.buftype ~= "" then -- guard clause
-			-- buffers spéciaux qui n'ont pas de folder (Trouble, Alpha...)
-			return
-		end
-		-- normal! : ignore les mappings utilisateur
-		vim.cmd("normal! zR")
-	end,
-})
-
--- ================================================================
 -- = GROUPE : Orthographe (activation contextuelle minimale)
 -- ================================================================
 local spell_group = api.nvim_create_augroup("NvCraftedSpell", { clear = true })

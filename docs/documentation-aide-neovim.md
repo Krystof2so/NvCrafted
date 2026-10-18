@@ -2,7 +2,7 @@
 
 ## Introduction
 
-**Neovim** embarque son propre système de documentation, consultable sans jamais quitter l'éditeur ni ouvrir un navigateur. C'est un des piliers de la philosophie pédagogique de **NvCrafted** : comprendre un outil passe par la capacité à interroger sa documentation *depuis* l'outil lui-même.
+**Neovim** embarque son propre système de documentation, consultable sans jamais quitter l'éditeur ni ouvrir un navigateur. C'est un des piliers de la philosophie pédagogique de **NvCrafted** : comprendre un outil passe par la capacité à interroger sa documentation _depuis_ l'outil lui-même.
 
 Ce document explique :
 
@@ -18,7 +18,7 @@ Ce document explique :
 **NvCrafted** applique à l'aide intégrée les mêmes principes qu'au reste de la configuration :
 
 - **Aucune dépendance externe** : pas de plugin pour lire la documentation, uniquement le système natif `:help`.
-- **Explicite plutôt qu'implicite** : la francisation n'écrase rien, elle *ajoute* une couche consultée en priorité, avec repli automatique vers l'anglais.
+- **Explicite plutôt qu'implicite** : la francisation n'écrase rien, elle _ajoute_ une couche consultée en priorité, avec repli automatique vers l'anglais.
 - **Réversible** : à tout moment, la documentation anglaise originelle reste accessible telle quelle.
 
 ---
@@ -31,7 +31,7 @@ Ce document explique :
 :help mot
 ```
 
-En tapant `:help` suivi du début d'un mot puis `<Tab>`, **Neovim** propose une complétion sur l'ensemble des balises (*tags*) disponibles dans tous les fichiers d'aide chargés (natifs + plugins) :
+En tapant `:help` suivi du début d'un mot puis `<Tab>`, **Neovim** propose une complétion sur l'ensemble des balises (_tags_) disponibles dans tous les fichiers d'aide chargés (natifs + plugins) :
 
 ```vim
 :help mot<Tab>
@@ -43,19 +43,19 @@ En tapant `:help` suivi du début d'un mot puis `<Tab>`, **Neovim** propose une 
 :help!
 ```
 
-Cette variante devine une balise d'aide à partir du mot (`WORD`) sous le curseur, en retirant la ponctuation environnante jusqu'à trouver une correspondance valide (approche *"Do What I Mean"*).
+Cette variante devine une balise d'aide à partir du mot (`WORD`) sous le curseur, en retirant la ponctuation environnante jusqu'à trouver une correspondance valide (approche _"Do What I Mean"_).
 
 ### Naviguer dans une page d'aide
 
-| Commande        | Action                                                              |
-| --------------- | -------------------------------------------------------------------- |
-| `gO`             | Affiche le sommaire de la page d'aide courante (table des matières) |
-| `CTRL-]`         | Saute vers la balise sous le curseur                                |
-| `K`              | Aide contextuelle sur le mot sous le curseur (natif ou LSP selon le *buffer*) |
-| `CTRL-O` / `CTRL-I` | Retour / avance dans l'historique de navigation (*jumplist*)     |
-| `:helpc` ou `:helpclose` | Ferme la fenêtre d'aide                                     |
+| Commande                 | Action                                                                        |
+| ------------------------ | ----------------------------------------------------------------------------- |
+| `gO`                     | Affiche le sommaire de la page d'aide courante (table des matières)           |
+| `CTRL-]`                 | Saute vers la balise sous le curseur                                          |
+| `K`                      | Aide contextuelle sur le mot sous le curseur (natif ou LSP selon le _buffer_) |
+| `CTRL-O` / `CTRL-I`      | Retour / avance dans l'historique de navigation (_jumplist_)                  |
+| `:helpc` ou `:helpclose` | Ferme la fenêtre d'aide                                                       |
 
-> Dans **NvCrafted**, les *buffers* d'aide s'ouvrent automatiquement en split vertical à droite (largeur fixe de 85 colonnes) — cf. le groupe d'auto-commandes `NvCraftedGeneral` dans `core/autocmds.lua`. La touche `q` y est également mappée pour fermer rapidement le *buffer* (groupe `NvCraftedUI`).
+> Dans **NvCrafted**, les _buffers_ d'aide s'ouvrent automatiquement en split vertical à droite (largeur fixe de 85 colonnes) — cf. le groupe d'auto-commandes `NvCraftedGeneral` dans `core/autocmds.lua`. La touche `q` y est également mappée pour fermer rapidement le _buffer_ (groupe `NvCraftedUI`).
 
 ### Rechercher dans l'ensemble des fichiers d'aide
 
@@ -63,7 +63,7 @@ Cette variante devine une balise d'aide à partir du mot (`WORD`) sous le curseu
 :helpgrep motif
 ```
 
-Recherche `motif` (une expression régulière **Vim**) dans **tous** les fichiers d'aide disponibles et remplit la liste *quickfix* avec les correspondances. Navigation ensuite via `:cnext` / `:cprev`, ou `:cwindow` pour lister les résultats dans un panneau dédié.
+Recherche `motif` (une expression régulière **Vim**) dans **tous** les fichiers d'aide disponibles et remplit la liste _quickfix_ avec les correspondances. Navigation ensuite via `:cnext` / `:cprev`, ou `:cwindow` pour lister les résultats dans un panneau dédié.
 
 ```vim
 :helpgrep uganda\c   " recherche insensible à la casse (\c)
@@ -166,16 +166,6 @@ C'est une commande à connaître en particulier lorsqu'une traduction existe mai
 
 ## 4. La francisation dans NvCrafted
 
-### Fichiers actuellement traduits
-
-| Fichier `doc/`   | Contenu                          | Balise d'en-tête   |
-| ----------------- | --------------------------------- | ------------------- |
-| `help.frx`        | Sommaire général de l'aide Neovim | `*help.txt*`         |
-| `helphelp.frx`     | Utilisation du système d'aide lui-même | `*helphelp.txt*` |
-| `motion.frx`       | Référence complète des mouvements du curseur | `*motion.txt*` |
-
-Ces trois fichiers ont été traduits selon la convention `help-translated` décrite ci-dessus, chacun conservant scrupuleusement la même balise d'en-tête que son homologue anglais.
-
 ### Le fichier `tags-fr`
 
 Le dossier `doc/` de **NvCrafted** contient un fichier `tags-fr`, généré via :
@@ -252,20 +242,20 @@ opt.helplang = "fr,es,en"
 
 ## 6. Récapitulatif des commandes essentielles
 
-| Commande                       | Description                                                        |
-| -------------------------------- | --------------------------------------------------------------------- |
-| `:help mot`                      | Ouvre l'aide sur `mot`                                               |
-| `:help mot<Tab>`                 | Propose une complétion des balises disponibles                       |
-| `:help!`                         | Devine une balise à partir du mot sous le curseur                    |
-| `:help sujet@en`                 | Force la consultation de la version anglaise d'un sujet               |
-| `gO`                              | Affiche le sommaire de la page d'aide courante                       |
-| `CTRL-]`                          | Saute vers la balise sous le curseur                                 |
-| `K`                               | Aide contextuelle (mot sous le curseur)                              |
-| `CTRL-O` / `CTRL-I`               | Navigue dans l'historique des sauts d'aide                           |
-| `:helpc` / `:helpclose`          | Ferme la fenêtre d'aide                                              |
-| `:helpgrep motif`                | Recherche `motif` dans tous les fichiers d'aide (résultats en *quickfix*) |
-| `:helptags chemin/vers/doc`      | (Re)génère le fichier `tags` d'un dossier `doc/` donné               |
-| `:helptags ALL`                  | (Re)génère les `tags` de tous les dossiers `doc/` du `runtimepath`   |
+| Commande                    | Description                                                               |
+| --------------------------- | ------------------------------------------------------------------------- |
+| `:help mot`                 | Ouvre l'aide sur `mot`                                                    |
+| `:help mot<Tab>`            | Propose une complétion des balises disponibles                            |
+| `:help!`                    | Devine une balise à partir du mot sous le curseur                         |
+| `:help sujet@en`            | Force la consultation de la version anglaise d'un sujet                   |
+| `gO`                        | Affiche le sommaire de la page d'aide courante                            |
+| `CTRL-]`                    | Saute vers la balise sous le curseur                                      |
+| `K`                         | Aide contextuelle (mot sous le curseur)                                   |
+| `CTRL-O` / `CTRL-I`         | Navigue dans l'historique des sauts d'aide                                |
+| `:helpc` / `:helpclose`     | Ferme la fenêtre d'aide                                                   |
+| `:helpgrep motif`           | Recherche `motif` dans tous les fichiers d'aide (résultats en _quickfix_) |
+| `:helptags chemin/vers/doc` | (Re)génère le fichier `tags` d'un dossier `doc/` donné                    |
+| `:helptags ALL`             | (Re)génère les `tags` de tous les dossiers `doc/` du `runtimepath`        |
 
 ---
 

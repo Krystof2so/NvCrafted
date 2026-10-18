@@ -74,6 +74,62 @@
 | `zt`      | Déplacer la ligne courante vers le haut (_top_)    |
 | `zb`      | Déplacer la ligne courante vers le bas (_bottown_) |
 
+## Replier et déplier le code (_folding_)
+
+### Un pli précis (sous le curseur)
+
+| Commande | Description                                                     |
+| -------- | --------------------------------------------------------------- |
+| `zc`     | Referme le plis sous le curseur (_close_)                       |
+| `zo`     | Ouvre le pli sous le curseur (_open_)                           |
+| `za`     | Bascule : ouvre le pli ou le ferme (_toggle_)                   |
+| `zC`     | Referme tous les plis imbriqués sous le curseur                 |
+| `zO`     | Ouvre tous les plis imbriqués sous le curseur                   |
+| `zA`     | Bascule récursivement tous les plis imbriqués sous le curseur   |
+| `zv`     | Ouvre juste assez de plis pour rendre la ligne courante visible |
+
+### Tous les plis du fichier
+
+| Commande | Description                                                  |
+| -------- | ------------------------------------------------------------ |
+| `zM`     | Referme tous les plis (`foldlevel` à `0`)                    |
+| `zR`     | Ouvre tous les plis (`foldlevel` au niveau maximal)          |
+| `zm`     | Replie un niveau de plus (`foldlevel` diminue de 1)          |
+| `zr`     | Déplie un niveau de plus (`foldlevel` augmente de 1)         |
+| `zx`     | Réapplique `foldlevel` : annule les plis ouverts ou fermés à |
+|          | la main, puis fait un `zv`                                   |
+| `zn`     | Désactive le _folding_ (tout apparaît déplié, sans perdre    |
+|          | les plis)                                                    |
+| `zN`     | Réactive le _folding_                                        |
+| `zi`     | Inverse l'état du *folding (`zn`/`zN`)                       |
+
+`zm` et `zr` sont pratiques pour explorer un gros fichier niveau par niveau.
+
+### Se déplacer entre les plis
+
+| Commande | Description                          |
+| -------- | ------------------------------------ |
+| `zj`     | Aller au début du pli suivant        |
+| `zk`     | Aller à la fin du pli précédent      |
+| `[z`     | Aller au début du pli ouvert courant |
+| `]z`     | Aller à la fin du pli ouvert courant |
+
+### Commandes `Ex`
+
+| Commande            | Description                                          |
+| ------------------- | ---------------------------------------------------- |
+| `:{n}foldclose`     | Ferme un niveau de pli à la ligne `{n}` (comme `zc`) |
+| `:{n}foldopen`      | Ouvre un niveau de pli à la ligne `{n}` (comme `zo`) |
+| `:{a},{b}foldclose` | Ferme les plis sur la plage de lignes `{a}` à `{b}`  |
+| `:{a},{b}foldopen`  | Ouvre les plis sur la plage de lignes `{a}` à `{b}`  |
+
+### A savoir
+
+- Sur un pli fermé, les opérateurs agissent sur le pli entier : `dd` supprime tout le pli, `yy` le copie, `>>` l'indente.
+- `foldmethod=expr` étant utilisé, les commandes de création manuelle (`zf`, `zd`, `zE`) ne sont pas disponibles : les plis viennent du _LSP_ ou de **Tree-sitter**.
+- Une colonne à gauche des numéros de ligne signale les plis (`-` pli ouvert, `+` pli fermé).
+- `zx` est utile si des plis ont été ouverts ou fermés à la main et que l'on souhaite revenir à l'état par défaut.
+
 ## Edition
 
 ### Passer en mode `insert`
