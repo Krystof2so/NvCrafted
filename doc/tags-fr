@@ -1157,6 +1157,14 @@ $XDG_STATE_HOME	starting.frx	/*$XDG_STATE_HOME*
 04.7	usr_04.frx	/*04.7*
 04.8	usr_04.frx	/*04.8*
 04.9	usr_04.frx	/*04.9*
+05.1	usr_05.frx	/*05.1*
+05.2	usr_05.frx	/*05.2*
+05.3	usr_05.frx	/*05.3*
+05.4	usr_05.frx	/*05.4*
+05.5	usr_05.frx	/*05.5*
+05.6	usr_05.frx	/*05.6*
+05.7	usr_05.frx	/*05.7*
+05.8	usr_05.frx	/*05.8*
 07.1	usr_07.frx	/*07.1*
 07.2	usr_07.frx	/*07.2*
 07.3	usr_07.frx	/*07.3*
@@ -2039,7 +2047,12 @@ ab	motion.frx	/*ab*
 abs()	vimfn.frx	/*abs()*
 acos()	vimfn.frx	/*acos()*
 add()	vimfn.frx	/*add()*
+add-filetype-plugin	usr_05.frx	/*add-filetype-plugin*
+add-global-plugin	usr_05.frx	/*add-global-plugin*
+add-local-help	usr_05.frx	/*add-local-help*
 add-option-flags	options.frx	/*add-option-flags*
+add-package	usr_05.frx	/*add-package*
+add-plugin	usr_05.frx	/*add-plugin*
 after-directory	options.frx	/*after-directory*
 altfont	syntax.frx	/*altfont*
 and()	vimfn.frx	/*and()*
@@ -2595,7 +2608,9 @@ ft-zimbu-plugin	filetype.frx	/*ft-zimbu-plugin*
 ft-zsh-syntax	syntax.frx	/*ft-zsh-syntax*
 ftdetect	filetype.frx	/*ftdetect*
 ftplugin-docs	filetype.frx	/*ftplugin-docs*
+ftplugin-name	usr_05.frx	/*ftplugin-name*
 ftplugin-overrule	filetype.frx	/*ftplugin-overrule*
+ftplugins	usr_05.frx	/*ftplugins*
 fullcommand()	vimfn.frx	/*fullcommand()*
 funcref()	vimfn.frx	/*funcref()*
 function()	vimfn.frx	/*function()*
@@ -3011,6 +3026,7 @@ keytrans()	vimfn.frx	/*keytrans()*
 kwargs	lua.frx	/*kwargs*
 l	motion.frx	/*l*
 last-pattern	pattern.frx	/*last-pattern*
+last-position-jump	usr_05.frx	/*last-position-jump*
 latex-syntax	syntax.frx	/*latex-syntax*
 lcs-conceal	options.frx	/*lcs-conceal*
 lcs-eol	options.frx	/*lcs-eol*
@@ -3505,6 +3521,7 @@ no_mail_maps	filetype.frx	/*no_mail_maps*
 no_plugin_maps	filetype.frx	/*no_plugin_maps*
 nocombine	syntax.frx	/*nocombine*
 nohlsearch-auto	pattern.frx	/*nohlsearch-auto*
+nohlsearch-install	usr_05.frx	/*nohlsearch-install*
 non-greedy	pattern.frx	/*non-greedy*
 notation	helphelp.frx	/*notation*
 nr2char()	vimfn.frx	/*nr2char()*
@@ -3718,6 +3735,7 @@ os.setlocale()	luaref.frx	/*os.setlocale()*
 os.time()	luaref.frx	/*os.time()*
 os.tmpname()	luaref.frx	/*os.tmpname()*
 overline	syntax.frx	/*overline*
+package-nohlsearch	usr_05.frx	/*package-nohlsearch*
 package.cpath	luaref.frx	/*package.cpath*
 package.loaded	luaref.frx	/*package.loaded*
 package.loadlib()	luaref.frx	/*package.loadlib()*
@@ -3743,6 +3761,7 @@ pcall()	luaref.frx	/*pcall()*
 perl-patterns	pattern.frx	/*perl-patterns*
 perleval()	vimfn.frx	/*perleval()*
 pi_tutor.txt	pi_tutor.frx	/*pi_tutor.txt*
+plugin	usr_05.frx	/*plugin*
 plugin-details	filetype.frx	/*plugin-details*
 plugin_exec	filetype.frx	/*plugin_exec*
 pow()	vimfn.frx	/*pow()*
@@ -3829,6 +3848,7 @@ repeat.txt	repeat.frx	/*repeat.txt*
 repeating	repeat.frx	/*repeating*
 require()	luaref.frx	/*require()*
 resolve()	vimfn.frx	/*resolve()*
+restore-cursor	usr_05.frx	/*restore-cursor*
 restore-position	tips.frx	/*restore-position*
 reverse()	vimfn.frx	/*reverse()*
 round()	vimfn.frx	/*round()*
@@ -4193,6 +4213,7 @@ usr_01.txt	usr_01.frx	/*usr_01.txt*
 usr_02.txt	usr_02.frx	/*usr_02.txt*
 usr_03.txt	usr_03.frx	/*usr_03.txt*
 usr_04.txt	usr_04.frx	/*usr_04.txt*
+usr_05.txt	usr_05.frx	/*usr_05.txt*
 usr_07.txt	usr_07.frx	/*usr_07.txt*
 usr_32.txt	usr_32.frx	/*usr_32.txt*
 usr_toc.txt	usr_toc.frx	/*usr_toc.txt*
@@ -4652,7 +4673,10 @@ vim_starting	vimfn.frx	/*vim_starting*
 vimfiles	options.frx	/*vimfiles*
 vimfn.txt	vimfn.frx	/*vimfn.txt*
 vimrc	starting.frx	/*vimrc*
+vimrc-filetype	usr_05.frx	/*vimrc-filetype*
+vimrc-intro	usr_05.frx	/*vimrc-intro*
 vimrc-option-example	starting.frx	/*vimrc-option-example*
+vimrc_example.vim	usr_05.frx	/*vimrc_example.vim*
 vimscript-functions	vimfn.frx	/*vimscript-functions*
 vimscript-functions-details	vimfn.frx	/*vimscript-functions-details*
 vimtutor	usr_01.frx	/*vimtutor*

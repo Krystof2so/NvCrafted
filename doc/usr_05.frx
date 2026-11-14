@@ -1,0 +1,644 @@
+*usr_05.txt*	Nvim (v.0.12.5) - Traduction française
+
+
+		     VIM USER MANUAL	par Bram Moolenaar
+
+
+			      Définir vos paramètres
+
+
+Vim peut être configuré pour fonctionner comme vous le souhaitez. Ce chapitre 
+vous montre comment faire démarrer Vim avec des options définies à différentes 
+valeurs. Ajoutez des plugins pour étendre les capacités de Vim. Ou définissez 
+vos propres macros.
+
+|05.1|	Le fichier vimrc
+|05.2|	Exemple de contenu du fichier vimrc
+|05.3|	Mappings simples
+|05.4|	Ajout d'un package
+|05.5|	Ajout d'un plugin
+|05.6|	Ajout d'un fichier d'aide
+|05.7|	La fenêtre des options
+|05.8|	Options fréquemment utilisées
+
+    Prochain chapitre: |usr_06.txt|  Utiliser la coloration syntaxique
+    Précédent chapitre |usr_04.txt|  Effectuer de petites modifications
+   Table des matières: |usr_toc.txt|
+
+==============================================================================
+*05.1*	Le fichier vimrc			*vimrc-intro*
+
+Vous en avez probablement assez de taper des commandes que vous utilisez très 
+souvent. Pour démarrer Vim avec tous vos réglages d'options et vos mappings 
+préférés, vous les écrivez dans ce qu'on appelle le fichier init.vim. Vim 
+exécute les commandes de ce fichier lors de son démarrage.
+
+Si vous avez déjà un fichier init.vim (par exemple, si votre administrateur 
+système en a configuré un pour vous), vous pouvez l'éditer ainsi : >
+
+	:edit $MYVIMRC
+
+Si vous n'avez pas encore de fichier vimrc, consultez |init.vim| pour savoir où 
+vous pouvez créer un fichier vimrc.
+
+Ce fichier est toujours utilisé et est recommandé :
+
+	~/.config/nvim/init.vim         (Unix and OSX) ~
+	~/AppData/Local/nvim/init.vim   (Windows) ~
+
+Le fichier vimrc peut contenir toutes les commandes que vous tapez après les 
+deux-points. Les plus simples sont celles qui définissent des options. Par 
+exemple, si vous voulez que Vim démarre toujours avec l'option 'ignorecase' 
+activée, ajoutez cette ligne à votre fichier vimrc : >
+
+	set ignorecase
+
+Pour que cette nouvelle ligne soit prise en compte, vous devez quitter Vim et 
+le relancer. Plus tard, vous apprendrez comment faire cela sans quitter Vim.
+
+Ce chapitre n'explique que les éléments les plus basiques. Pour plus 
+d'informations sur la façon d'écrire un script Vim : |usr_41.txt|.
+
+==============================================================================
+*05.2*	Exemple de contenu du fichier vimrc        *vimrc_example.vim*
+
+Dans le premier chapitre, il a été expliqué comment créer un fichier vimrc. >
+
+	:exe 'edit' stdpath('config').'/init.vim'
+
+Dans cette section, nous allons expliquer les différentes commandes qui 
+peuvent être spécifiées dans ce fichier. Cela vous donnera des indications sur 
+la façon de configurer vos propres préférences. Cependant, tout ne sera pas 
+expliqué. Utilisez la commande :help pour en savoir plus.
+>
+	set backup
+
+Ceci indique à Vim de conserver une copie de sauvegarde d'un fichier lors de 
+son écrasement. Le fichier de sauvegarde aura le même nom que le fichier 
+original avec "~" ajouté. Voir |07.4|
+>
+	set history=50
+<
+Conserve 50 commandes et 50 motifs de recherche dans l'historique. Utilisez 
+un autre nombre si vous voulez mémoriser moins ou plus de lignes.
+>
+	map Q gq
+
+Ceci définit un mappage de touches. Plus d'informations à ce sujet dans la 
+section suivante. Cela définit la commande "Q" pour effectuer un formatage 
+avec l'opérateur "gq". Sinon, la commande "Q" répète le dernier registre 
+enregistré.
+>
+	vnoremap _g y:exe "grep /" .. escape(@", '\\/') .. "/ *.c *.h"<CR>
+
+Ce mappage copie (yank) le texte sélectionné visuellement et le recherche 
+dans les fichiers C. C'est un mappage complexe. Vous pouvez voir que les 
+mappages peuvent être utilisés pour faire des choses assez compliquées. 
+Néanmoins, ce n'est qu'une séquence de commandes qui sont exécutées comme si 
+vous les aviez tapées.
+
+							*vimrc-filetype*
+    >
+	filetype plugin indent on
+<
+Ceci active trois mécanismes très ingénieux :
+1. La détection de type de fichier (filetype).
+   Chaque fois que vous commencez à éditer un fichier, Vim essaie de 
+   déterminer de quel type de fichier il s'agit. Lorsque vous éditez 
+   "main.c", Vim voit l'extension ".c" et le reconnaît comme un type de 
+   fichier "c". Lorsque vous éditez un fichier commençant par "#!/bin/sh", 
+   Vim le reconnaît comme un type de fichier "sh".
+   La détection de type de fichier est utilisée pour la coloration syntaxique 
+   et les deux autres points ci-dessous.
+   Voir |filetypes|.
+
+2. Utilisation des plugins de type de fichier
+   De nombreux types de fichiers différents sont édités avec des options 
+   différentes. Par exemple, lorsque vous éditez un fichier "c", il est très 
+   utile de définir l'option 'cindent' pour indenter automatiquement les 
+   lignes. Ces réglages d'options couramment utiles sont inclus avec Vim dans 
+   les plugins de type de fichier. Vous pouvez également ajouter les vôtres, 
+   voir |write-filetype-plugin|. 
+
+3. Utilisation des fichiers d'indentation
+   Lors de l'édition de programmes, l'indentation d'une ligne peut souvent 
+   être calculée automatiquement. Vim est livré avec ces règles d'indentation 
+   pour un certain nombre de types de fichiers. Voir |:filetype-indent-on| et 
+   'indentexpr'. 
+
+
+				*restore-cursor* *last-position-jump*  >vim
+    augroup RestoreCursor
+      autocmd!
+      autocmd BufReadPre * autocmd FileType <buffer> ++once
+        \ let s:line = line("'\"")
+        \ | if s:line >= 1 && s:line <= line("$") && &filetype !~# 'commit'
+        \      && index(['xxd', 'gitrebase'], &filetype) == -1
+        \      && !&diff
+        \ |   execute "normal! g`\""
+        \ | endif
+    augroup END
+
+Une autre autocommande. Cette fois, elle est utilisée après la lecture d'un 
+fichier. Le bloc compliqué qui suit vérifie si la marque '"' est définie, et 
+saute vers elle si c'est le cas. Il ne fait pas cela lorsque :
+ - vous éditez un message de commit ou de rebase, qui est probablement 
+   différent du précédent,
+ - vous utilisez xxd(1) pour filtrer et éditer des fichiers binaires, ce qui 
+   transforme les fichiers d'entrée dans les deux sens, leur donnant en 
+   quelque sorte une double nature (voir aussi |using-xxd|), et
+ - Vim est en mode diff 
+
+L'antislash en début de ligne est utilisé pour continuer la commande depuis la 
+ligne précédente. Cela évite qu'une ligne ne devienne trop longue. Voir 
+|line-continuation|.
+Cela ne fonctionne que dans un fichier de script Vim, pas lorsque vous tapez 
+des commandes en ligne de commande.
+>
+	command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_
+		  \ | diffthis | wincmd p | diffthis
+
+Ceci ajoute la commande :DiffOrig. Utilisez-la dans un tampon modifié pour voir 
+les différences avec le fichier à partir duquel il a été chargé. Voir |diff| et 
+|:DiffOrig|.
+
+>
+	set nolangremap
+
+Empêche l'option 'langmap' de s'appliquer aux caractères résultant d'un 
+mapping. Si elle est définie (valeur par défaut), cela peut casser des 
+plugins (mais c'est rétrocompatible). Voir 'langremap'.
+
+==============================================================================
+*05.3*    Mappages simples
+
+Un mappage vous permet d’associer un ensemble de commandes Vim à une seule 
+touche. Supposons, par exemple, que vous ayez besoin d’encadrer certains mots 
+par des accolades. En d’autres termes, vous devez transformer un mot tel que 
+« amount » en « {amount} ». Grâce à la commande :map, vous pouvez indiquer à 
+Vim que la touche F5 effectue cette opération.  La commande est la suivante : >
+
+    :map <F5> i{<Esc>ea}<Esc>
+<
+    Note:
+    Lorsque vous saisissez cette commande, vous devez entrer <F5> en tapant 
+    quatre caractères.  De même, <Esc> ne s'entre pas en appuyant sur la 
+    touche <Esc>, mais en tapant cinq caractères.  Faites attention à cette 
+    différence lorsque vous lisez le manuel !
+
+Analysons cela :
+    <F5>	La touche de fonction F5.  Il s'agit de la touche 
+		déclencheuse qui provoque l'exécution de la commande dès 
+		qu'on appuie dessus.
+
+    i{<Esc>     Insère le caractère {.  La touche <Esc> met fin au mode 
+		Insertion.
+
+    e		Se place à la fin du mot.
+
+    a}<Esc>     Ajoute le caractère } à la fin du mot.
+
+Une fois la commande « :map » exécutée, il vous suffit, pour placer des 
+accolades {} autour d’un mot, de positionner le curseur sur le premier 
+caractère et d’appuyer sur F5.
+
+Dans cet exemple, le déclencheur est une seule touche ; il peut s’agir de 
+n’importe quelle chaîne de caractères. Cependant, si vous utilisez une 
+commande Vim existante, celle-ci ne sera plus disponible. Mieux vaut éviter 
+cela.
+   Une touche pouvant être utilisée avec les mappages est la barre oblique 
+inversée. Comme vous souhaiterez probablement définir plusieurs mappages, 
+ajoutez un autre caractère. Vous pourriez par exemple associer « \p » à 
+l’ajout de parenthèses autour d’un mot, et « \c » à l’ajout d’accolades : >
+
+	:map \p i(<Esc>ea)<Esc>
+	:map \c i{<Esc>ea}<Esc>
+
+Vous devez taper rapidement le \ et le p l'un après l'autre, afin que Vim 
+comprenne qu'ils vont ensemble.
+
+La commande « :map » (sans argument) affiche la liste de vos raccourcis 
+actuels. Du moins ceux du mode Normal. Pour en savoir plus sur les raccourcis, 
+consultez la section |40.1|.
+
+==============================================================================
+*05.4*	Adding a package					*add-package*
+
+Vous pouvez utiliser |:packadd| pour activer des paquets à la demande. Cela 
+s'avère utile pour les plugins que vous ne souhaitez activer que de temps en 
+temps. Pour activer `example_package`, utilisez la commande suivante : >
+       packadd example_package
+
+C'est tout ! Vous pouvez désormais consulter l'aide relative à ce plugin : >
+       :help example_package
+
+Cela fonctionne car, lorsque `:packadd` a chargé le plugin, il a également 
+ajouté le répertoire du paquet dans « runtimepath », ce qui permet de trouver 
+le fichier d'aide.
+
+Un paquet est un ensemble de fichiers que vous pouvez ajouter à Vim. Il existe deux types de paquets : les paquets optionnels et ceux chargés automatiquement au démarrage.
+
+Vous pouvez trouver des paquets sur Internet à divers endroits. Ils se 
+présentent généralement sous la forme d’une archive ou d’un dépôt. Pour une 
+archive, vous pouvez suivre les étapes suivantes :
+        1. Créez le répertoire du paquet : >
+	        mkdir -p ~/.local/share/nvim/site/pack/fancy
+<          « fancy » peut être n'importe quel nom de votre choix.  
+	  Choisissez-en un qui décrit le  paquet.
+	2. Décompressez l'archive dans ce répertoire.  Cela suppose que le 
+	   répertoire racine  de l'archive soit « start » : >
+	        cd ~/.local/share/nvim/site/pack/fancy
+		unzip /tmp/fancy.zip
+<	   Si la structure de l'archive est différente, assurez-vous d'obtenir 
+	   un chemin d'accès similaire à celui-ci :
+		~/.local/share/nvim/site/pack/fancy/start/fancytext/plugin/fancy.vim ~
+	   Ici, « fancytext » est le nom du paquet ; il peut s'agir de	    
+	   n'importe quel autre nom.
+
+
+------------------------------------------------------------------------------
+Ajout du paquet nohlsearch	     *nohlsearch-install* *package-nohlsearch*
+------------------------------------------------------------------------------
+
+Chargez le plugin à l'aide de cette commande : >
+    packadd nohlsearch
+<
+Exécute automatiquement |:nohlsearch| après « updatetime » ou lors du passage en mode |Insert|.
+Ainsi, en supposant une valeur par défaut pour « updatetime », hlsearch serait suspendu/désactivé après 4 secondes d'inactivité.
+
+Pour désactiver l'effet du plugin après son chargement : >
+    au! nohlsearch
+<
+
+
+Vous trouverez plus d'informations sur les paquets ici : |packages|.
+
+==============================================================================
+*05.5*	Ajouter un plugin				*add-plugin* *plugin*
+
+Les fonctionnalités de Vim peuvent être étendues grâce à l'ajout de plugins. 
+Un plugin n'est rien d'autre qu'un fichier de script Vim qui est chargé 
+automatiquement au démarrage de Vim. Vous pouvez ajouter un plugin très 
+facilement en le plaçant dans votre répertoire de plugins.
+
+Il existe deux types de plugins :
+
+  plugin global : utilisé pour tous les types de fichiers
+  plugin de type de fichier : utilisé uniquement pour un type de fichier 
+			      spécifique
+
+Nous aborderons d'abord les plugins globaux, puis ceux de type de fichier 
+|add-filetype-plugin|.
+
+
+PLUGINS GLOBAUX
+
+Lorsque vous lancez Vim, celui-ci charge automatiquement un certain nombre de 
+plugins globaux. Vous n'avez rien à faire pour cela. Ils ajoutent des 
+fonctionnalités que la plupart des utilisateurs souhaiteront utiliser, mais 
+qui ont été implémentées sous forme de script Vim plutôt que d'être compilées 
+directement dans Vim. Vous trouverez la liste de ces plugins dans l'index 
+d'aide |standard-plugin-list|. Voir également |load-plugins|.
+
+							*add-global-plugin*
+Vous pouvez ajouter un plugin global pour ajouter des fonctionnalités qui 
+seront toujours présentes lorsque vous utilisez Vim. Il n'y a que deux 
+étapes pour ajouter un plugin global :
+1. Obtenir une copie du plugin.
+2. Le placer dans le bon répertoire.
+
+
+OBTENIR UN PLUGIN GLOBAL
+
+Où pouvez-vous trouver des plugins ?
+- Certains sont toujours chargés, vous pouvez les voir dans le répertoire
+  $VIMRUNTIME/plugin.
+- Certains sont fournis avec Vim. Vous pouvez les trouver dans le répertoire  
+  VIMRUNTIME/scripts et ses sous−répertoires ainsi que sous 
+  VIM/vimfiles/pack/dist/opt/.
+- Téléchargez-les depuis Internet. Il existe une grande collection sur 
+  https://www.vim.org.
+- Ils sont parfois publiés sur une liste de diffusion Vim.
+- Vous pourriez en écrire un vous-même, voir |write-plugin|.
+
+
+UTILISATION D'UN PLUGIN GLOBAL
+
+Lisez d'abord le texte dans le plugin lui-même pour vérifier s'il y a des 
+conditions particulières. Copiez ensuite le fichier dans votre répertoire de 
+plugins :
+
+	system		plugin directory ~
+	Unix		~/.local/share/nvim/site/plugin
+
+Exemple pour Unix (en supposant que vous n'avez pas encore de répertoire de 
+plugins) : >
+
+	mkdir -p ~/.local/share/nvim/site/plugin
+	cp /tmp/yourplugin.vim ~/.local/share/nvim/site/plugin
+
+C'est tout ! Vous pouvez maintenant utiliser les commandes définies dans ce 
+plugin.
+
+Au lieu de placer les plugins directement dans le répertoire plugin/, vous 
+pouvez mieux les organiser en les plaçant dans des sous-répertoires sous 
+plugin/.
+Par exemple, envisagez d'utiliser 
+« ~/.local/share/nvim/site/plugin/perl/*.vim » pour tous vos plugins Perl.
+
+
+PLUGINS DE TYPE DE FICHIERS		*add-filetype-plugin* *ftplugins*
+
+La distribution Vim est fournie avec un ensemble de plugins pour différents 
+types de fichiers que vous pouvez commencer à utiliser avec cette commande : >
+
+	:filetype plugin on
+
+C'est tout ! Voir |vimrc-filetype|.
+
+Si un plugin vous manque pour un type de fichier que vous utilisez, ou si 
+vous en avez trouvé un meilleur, vous pouvez l'ajouter. Il y a deux étapes 
+pour ajouter un plugin de type de fichier :
+1. Obtenir une copie du plugin.
+2. Le placer dans le bon répertoire.
+
+
+OBTENIR UN PLUGIN DE TYPE DE FICHIER
+
+Vous pouvez les trouver aux mêmes endroits que les plugins globaux. Faites 
+attention si le type de fichier est mentionné, vous saurez alors si le plugin 
+est global ou de type de fichier. Les scripts dans VIMRUNTIME/scripts sont des 
+plugins globaux,les plugins de type de fichier se trouvent dans 
+VIMRUNTIME/ftplugin.
+
+
+UTILISATION D'UN PLUGIN DE TYPE DE FICHIER      	*ftplugin-name*
+
+Vous pouvez ajouter un plugin de type de fichier en le plaçant dans le bon 
+répertoire. Le nom de ce répertoire se trouve dans le même répertoire 
+mentionné ci-dessus pour les plugins globaux, mais la dernière partie est 
+« ftplugin ». Supposons que vous ayez trouvé un plugin pour le type de fichier 
+« stuff », et que vous soyez sous Unix. Vous pouvez alors déplacer ce fichier 
+vers le répertoire ftplugin : >
+
+	mkdir -p ~/.local/share/nvim/site/ftplugin
+	mv thefile ~/.local/share/nvim/site/ftplugin/stuff.vim
+
+Si ce fichier existe déjà, vous avez déjà un plugin pour « stuff ». Vous 
+voudrez peut-être vérifier que le plugin existant n'entre pas en conflit avec 
+celui que vous ajoutez. Si tout va bien, vous pouvez donner un autre nom au 
+nouveau : >
+
+	mv thefile ~/.local/share/nvim/site/ftplugin/stuff_too.vim
+
+Le trait de soulignement est utilisé pour séparer le nom du type de fichier du 
+reste, qui peut être n'importe quoi. Si vous utilisez « otherstuff.vim », cela 
+ne fonctionnerait pas, il serait chargé pour le type de fichier « otherstuff ».
+
+Les noms génériques pour les plugins de type de fichier sont : >
+
+	ftplugin/<filetype>.vim
+	ftplugin/<filetype>_<name>.vim
+	ftplugin/<filetype>/<name>.vim
+
+Ici, « <name> » peut être n'importe quel nom que vous préférez.
+Exemples pour le type de fichier « stuff » sous Unix : >
+
+	~/.local/share/nvim/site/ftplugin/stuff.vim
+	~/.local/share/nvim/site/ftplugin/stuff_def.vim
+	~/.local/share/nvim/site/ftplugin/stuff/header.vim
+
+La partie <filetype> est le nom du type de fichier pour lequel le plugin doit 
+être utilisé. Seuls les fichiers de ce type de fichier utiliseront les 
+paramètres du plugin. La partie <name> du nom du fichier plugin n'a pas 
+d'importance, vous pouvez l'utiliser pour avoir plusieurs plugins pour le même 
+type de fichier. Notez qu'il doit se terminer par « .vim » ou « .lua ».
+
+
+Pour en savoir plus :
+|filetype-plugins|	Documentation sur les plugins de type de fichier et 
+			informations sur la manière d'éviter que les mappages 
+			ne causent des problèmes.
+|load-plugins|		Quand les plugins globaux sont chargés au démarrage.
+|ftplugin-overrule|	Remplacer les paramètres d'un plugin global.
+|write-plugin|		Comment écrire un script de plugin.
+|plugin-details|	Pour plus d'informations sur l'utilisation des plugins 
+			ou lorsque votre plugin ne fonctionne pas.
+|new-filetype|		Comment détecter un nouveau type de fichier.
+
+==============================================================================
+*05.6*	Ajout d'un fichier d'aide			      *add-local-help*
+
+Si vous avez de la chance, le plugin que vous avez installé est également 
+fourni avec un fichier d'aide. Nous allons expliquer comment installer le 
+fichier d'aide, afin que vous puissiez facilement trouver de l'aide pour votre 
+nouveau plugin.
+
+Supposons un plugin (« my-plugin »), qui est fourni avec un fichier d'aide 
+dans un emplacement non standard (il se trouve généralement dans un 
+sous-dossier appelé doc/).
+
+Tout d'abord, créez un répertoire « doc » dans l'un des répertoires de 
+'runtimepath' : >
+
+	:!mkdir -p ~/.local/share/nvim/site/doc
+
+Maintenant, copiez le fichier d'aide dans le répertoire « doc » : >
+
+	:!cp my-plugin/my-plugin-doc.txt ~/.local/share/nvim/site/doc
+
+Voici l'astuce qui vous permet d'accéder directement aux sujets du nouveau fichier d'aide. Générez le fichier de tags local avec la commande |:helptags| : >
+	:helptags ~/.local/share/nvim/site/doc
+
+Vous pouvez voir une entrée pour le fichier d'aide local lorsque vous 
+exécutez : >
+
+	:help local-additions
+
+Les lignes de titre des fichiers d'aide locaux sont ajoutées automatiquement à 
+cette section. Vous pouvez y voir quels fichiers d'aide locaux ont été ajoutés 
+et y accéder directement via le tag.
+
+Pour écrire un fichier d'aide local, voir |write-local-help|.
+
+==============================================================================
+*05.7*	The option window
+
+Si vous cherchez une option qui fait ce que vous voulez, vous pouvez effectuer 
+une recherche dans les fichiers d'aide ici : |options|. Une autre méthode 
+consiste à utiliser cette commande : >
+
+	:options
+
+Cela ouvre une nouvelle fenêtre, avec une liste d'options accompagnées d'une 
+explication sur une ligne. Les options sont regroupées par sujet. Déplacez le 
+curseur sur un sujet et appuyez sur <Enter> pour y accéder. Appuyez à nouveau sur <Enter> pour revenir en arrière. Ou utilisez CTRL-O.
+
+Vous pouvez modifier la valeur d'une option. Par exemple, allez au sujet 
+« affichage du texte ». Déplacez ensuite le curseur vers le bas jusqu'à cette 
+ligne :
+
+	set wrap	nowrap ~
+
+Lorsque vous appuyez sur <Enter>, la ligne devient :
+
+	set nowrap	wrap ~
+
+L'option est maintenant désactivée.
+
+Juste au-dessus de cette ligne se trouve une brève description de l'option 
+'wrap'. Déplacez le curseur d'une ligne vers le haut pour le placer sur cette 
+ligne. Appuyez maintenant sur <Enter> et vous accédez à l'aide complète sur 
+l'option 'wrap'.
+
+Pour les options qui prennent un argument numérique ou de type chaîne, vous 
+pouvez modifier la valeur. Appuyez ensuite sur <Enter> pour appliquer la 
+nouvelle valeur. Par exemple, déplacez le curseur quelques lignes vers le haut 
+jusqu'à cette ligne :
+
+	set so=0 ~
+
+Placez le curseur sur le zéro avec « $ ». Remplacez-le par un cinq avec « r5 ». 
+Appuyez ensuite sur <Enter> pour appliquer la nouvelle valeur. Lorsque vous 
+déplacez maintenant le curseur, vous remarquerez que le texte commence à 
+défiler avant que vous n'atteigniez le bord. C'est ce que fait l'option 
+'scrolloff' : elle spécifie un décalage par rapport au bord de la fenêtre à 
+partir duquel le défilement commence.
+
+==============================================================================
+*05.8*		Options fréquemment utilisées
+
+Il existe un très grand nombre d'options. La plupart d'entre elles ne vous 
+serviront presque jamais. Certaines des plus utiles seront mentionnées ici. 
+N'oubliez pas que vous pouvez trouver plus d'aide sur ces options avec la 
+commande « :help », en plaçant une apostrophe avant et après le nom de
+l'option. Par exemple : >
+
+	:help 'wrap'
+
+Si vous avez modifié par erreur la valeur d'une option, vous pouvez la 
+rétablir à sa valeur par défaut en plaçant un esperluette (&) après le nom de 
+l'option. Exemple : >	
+
+	:set iskeyword&
+
+
+NE PAS RETOURNER A LA LIGNE
+
+Vim retourne normalement les lignes longues à la ligne, afin que vous puissiez 
+voir tout le texte. Il est parfois préférable de laisser le texte se poursuivre 
+à droite de la fenêtre. Vous devez alors faire défiler le texte horizontalement 
+pour voir toute une ligne longue. Désactivez le retour à la ligne avec cette 
+commande : >
+
+	:set nowrap
+
+Vim fera automatiquement défiler le texte lorsque vous vous déplacez vers du 
+texte qui n'est pas affiché. Pour voir un contexte de dix caractères, faites 
+ceci : >
+
+	:set sidescroll=10
+
+Cela ne modifie pas le texte dans le fichier, seulement la façon dont il est 
+affiché.
+
+
+COMMANDES DE DEPLACEMENT AVEC RETOUR A LA LIGNE
+
+La plupart des commandes de déplacement s'arrêtent au début et à la fin d'une 
+ligne. Vous pouvez modifier ce comportement avec l'option 'whichwrap'. Voici 
+comment la rétablir à sa valeur par défaut : >
+
+	:set whichwrap=b,s
+
+Cela permet à la touche <BS>, lorsqu'elle est utilisée en première position 
+d'une ligne, de déplacer le curseur à la fin de la ligne précédente. Et la 
+touche <Espace> fait passer de la fin d'une ligne au début de la suivante.
+
+Pour permettre également aux touches fléchées <Gauche> et <Droite> de passer 
+d'une ligne à l'autre, utilisez cette commande : >
+
+	:set whichwrap=b,s,<,>
+
+Cela ne concerne encore que le mode Normal. Pour permettre à <Gauche> et 
+<Droite> de faire de même en mode Insertion : >
+
+	:set whichwrap=b,s,<,>,[,]
+
+Il existe quelques autres indicateurs qui peuvent être ajoutés, voir 
+'whichwrap'.
+
+
+AFFICHAGE DES TABULATIONS
+
+Lorsqu'un fichier contient des tabulations, vous ne pouvez pas voir où elles se trouvent. Pour les rendre visibles : >
+
+	:set list
+
+Désormais, chaque tabulation est affichée comme ^I. Et un $ est affiché à la 
+fin de chaque ligne, ce qui vous permet de repérer les espaces en fin de ligne 
+qui passeraient autrement inaperçus.
+   Un inconvénient est que cela rend l'affichage peu esthétique lorsqu'il y a 
+beaucoup de tabulations dans un fichier. Si vous disposez d'un terminal couleur 
+ou utilisez l'interface graphique, Vim peut afficher les espaces et les 
+tabulations sous forme de caractères mis en évidence. Utilisez l'option 
+'listchars' : >
+
+	:set listchars=tab:>-,trail:-
+
+Désormais, chaque tabulation sera affichée comme « >--- » (avec plus ou moins 
+de « - ») et les espaces blancs en fin de ligne comme « - ». C'est bien plus 
+joli, non ?
+
+
+MOTS-CLES
+
+L'option 'iskeyword' spécifie quels caractères peuvent apparaître dans un mot : >
+
+	:set iskeyword
+<	  iskeyword=@,48-57,_,192-255 ~
+
+Le « @ » représente toutes les lettres alphabétiques. « 48-57 » représente les 
+caractères ASCII 48 à 57, c'est-à-dire les chiffres 0 à 9. « 192-255 » sont 
+les caractères latins imprimables.
+   Parfois, vous voudrez inclure un tiret dans les mots-clés, afin que des 
+commandes comme « w » considèrent « upper-case » comme un seul mot. Vous 
+pouvez le faire ainsi : >
+
+	:set iskeyword+=-
+	:set iskeyword
+<	  iskeyword=@,48-57,_,192-255,- ~
+
+Si vous regardez la nouvelle valeur, vous verrez que Vim a ajouté une virgule 
+pour vous.
+   Pour supprimer un caractère, utilisez « -= ». Par exemple, pour supprimer le 
+tiret bas : >
+
+	:set iskeyword-=_
+	:set iskeyword
+<	  iskeyword=@,48-57,192-255,- ~
+
+Cette fois, une virgule est automatiquement supprimée.
+
+
+ESPACE POUR LES MESSAGES
+
+Au démarrage de Vim, il y a une ligne en bas qui est utilisée pour les 
+messages. Lorsqu'un message est long, il est soit tronqué, de sorte que vous 
+ne pouvez en voir qu'une partie, soit le texte défile et vous devez appuyer 
+sur <Enter> pour continuer.
+   Vous pouvez définir l'option 'cmdheight' au nombre de lignes utilisées pour 
+les messages. Exemple : >
+
+	:set cmdheight=3
+
+Cela signifie qu'il y a moins de place pour éditer le texte, c'est donc un 
+compromis.
+
+==============================================================================
+
+Chapitre suivant: |usr_06.txt|  Utiliser la coloration syntaxique
+
+Copyright: voir |manual-copyright|
+
+vim:tw=78:ts=8:noet:ft=help:norl:
