@@ -174,6 +174,22 @@ Gère les fenêtres flottantes de prévisualisation de **neo-tree**.
 | `NeoTreeFloatTitle`  | Titre du popup                    | `overlay` + `text` |
 | `NeoTreeTitleBar`    | Barre de titre                    | `overlay` + `info` |
 
+### `multicursor_hl.lua` — _Highlights_ `multicursor.nvim`
+
+Distingue visuellement le curseur principal des curseurs secondaires lorsqu'il y a plusieurs curseurs.
+
+- **Curseur principal** : c'est le curseur natif de **Neovim** (groupe `Cursor`), colorié avec la couleur `error` de la palette par `core/highlights/init.lua`.
+- **Curseurs secondaires** : dessinés par le plugin avec le groupe `MultiCursorCursor`, colorié ici avec la couleur `hint`. Les deux couleurs étant différentes, le curseur principal se repère immédiatement.
+
+| Groupe                      | Usage                              | Couleur palette / lien            |
+| --------------------------- | ---------------------------------- | --------------------------------- |
+| `MultiCursorCursor`         | Curseurs secondaires actifs        | `hint` (fond), `surface` (texte)  |
+| `MultiCursorVisual`         | Sélection des curseurs secondaires | lien vers `Visual`                |
+| `MultiCursorSign`           | Signes des curseurs secondaires    | lien vers `SignColumn`            |
+| `MultiCursorDisabledCursor` | Curseurs désactivés (discrets)     | `muted` (fond), `surface` (texte) |
+| `MultiCursorDisabledVisual` | Sélection des curseurs désactivés  | lien vers `Visual`                |
+| `MultiCursorDisabledSign`   | Signes des curseurs désactivés     | lien vers `SignColumn`            |
+
 ---
 
 ## Ajouter un nouveau module de highlights
@@ -209,17 +225,17 @@ return M
 
 ```lua
 -- core/highlights/init.lua
-pcall(function() require("core.highlights.mon_plugin").setup() end)
+pcall(function() require("core.highlights.mon_plugin_hl").setup() end)
 ```
 
 ---
 
 ## Séparation des responsabilités
 
-| Fichier                          | Rôle                                       |
-| -------------------------------- | ------------------------------------------ |
-| `core/highlights/themes/<nom_thems>.lua`   | Données pures — aucune logique             |
-| `core/highlights/init.lua`       | Orchestration — aucune couleur             |
-| `core/highlights/<plugin>.lua`   | Application des highlights d'un plugin     |
-| `plugins/<domaine>/<plugin>.lua` | Déclaration Lazy — aucune couleur codée    |
-| `core/theme.lua`                 | Déclenchement à chaque changement de thème |
+| Fichier                                  | Rôle                                       |
+| ---------------------------------------- | ------------------------------------------ |
+| `core/highlights/themes/<nom_thems>.lua` | Données pures — aucune logique             |
+| `core/highlights/init.lua`               | Orchestration — aucune couleur             |
+| `core/highlights/<plugin>.lua`           | Application des highlights d'un plugin     |
+| `plugins/<domaine>/<plugin>.lua`         | Déclaration Lazy — aucune couleur codée    |
+| `core/theme.lua`                         | Déclenchement à chaque changement de thème |

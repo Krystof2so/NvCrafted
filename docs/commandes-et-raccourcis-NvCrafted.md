@@ -12,7 +12,7 @@ Organisation par fonctionnalité, avec groupes `<leader>` et descriptions.
 - `<leader>n` — Navigation
 - `<leader>d` — Diagnostics
 - `<leader>x` — UI
-- `<leader>m` — Messages (Noice)
+- `<leader>m` — Multi-curseurs
 - `<leader>p` — Lazy
 - Raccourcis pour des fonctionnalités spécifiques (hors `which-key`)
 - `lua/core/map_keymaps` - Fonctions pour mappings spécifiques
@@ -129,20 +129,44 @@ Modification de l'apparence ou du comportement de l'éditeur.
 
 ---
 
-## `<leader>m` — Messages (Noice)
+## `<leader>m` — Multi-curseurs
 
-Accès à l'historique et aux outils de notification.
+Édition multi-curseurs avec **multicursor.nvim**. Il y a un curseur _principal_ (celui que l'on contrôle) et des curseurs _secondaires_ : toute édition faite au curseur principal est répétée, une fois validée, au niveau de chaque curseur.
 
-| Raccourci    | Description               | Commande/Plugin   |
-| ------------ | ------------------------- | ----------------- |
-| `<leader>mh` | Historique des messages   | `:NoiceHistory`   |
-| `<leader>ml` | Dernier message           | `:NoiceLast`      |
-| `<leader>me` | Messages d'erreur         | `:NoiceErrors`    |
-| `<leader>ms` | Statistiques de débogage  | `:NoiceStats`     |
-| `<leader>mt` | Historique dans Telescope | `:NoiceTelescope` |
-| `<leader>mc` | Fermer les notifications  | `:NoiceDismiss`   |
-| `<leader>md` | Désactiver Noice          | `:NoiceDisable`   |
-| `<leader>ma` | Réactiver Noice           | `:NoiceEnable`    |
+| Raccourci    | Mode | Description                                         | Fonction               |
+| ------------ | ---- | --------------------------------------------------- | ---------------------- |
+| `<leader>ma` | n, x | Curseurs sur toutes les occurrences du mot (Normal) | `matchAllAddCursors()` |
+|              |      | ou de la sélection (Visual) dans le _buffer_        |                        |
+| `<leader>mj` | n, x | Ajouter un curseur sur la ligne du dessous          | `lineAddCursor(1)`     |
+|              |      | (répéter pour en empiler plusieurs)                 |                        |
+
+### Raccourci contextuel
+
+Défini dans `lua/plugins/editing/multicursor.lua` (couche de _mappings_), il n'existe que lorsqu'il y a plusieurs curseurs :
+
+| Raccourci | Mode | Description                        | Fonction         |
+| --------- | ---- | ---------------------------------- | ---------------- |
+| `<Esc>`   | n    | Supprimer les curseurs secondaires | `clearCursors()` |
+
+Avec un seul curseur, `<Esc>` garde son comportement habituel.
+
+### Utilisation
+
+**Remplacer un mot partout**
+
+1. Placer le curseur sur le mot (mode Normal), puis `<leader>ma`.
+2. Taper `ciw`, puis le nouveau mot.
+3. `<Esc>` : retour en mode Normal, les curseurs restent actifs.
+4. `<Esc>` de nouveau : retour à un seul curseur.
+
+**Écrire la même ligne plusieurs fois**
+
+1. Créer les lignes vides nécessaires (ex. `2o<Esc>`), puis remonter sur la première (`2k`).
+2. `<leader>mj` autant de fois que de lignes supplémentaires.
+3. Passer en Insert (`i`) et écrire la ligne une seule fois : elle est répétée à chaque curseur.
+4. `<Esc>` deux fois pour revenir à un seul curseur.
+
+> Le plugin ne crée pas de lignes : les lignes du dessous doivent déjà exister.
 
 ---
 

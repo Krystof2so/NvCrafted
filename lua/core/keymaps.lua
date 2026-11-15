@@ -14,6 +14,7 @@
 -- *   <leader>x  →  UI/UX       (thème, zen, hints global, hlsearch)   *
 -- *   <leader>p  →  Profil      (Lazy, Mason, Options)                 *
 -- *   <leader>g  →  Git         (Tout ce qui concerne Git/Github)      *
+-- *   <leader>m  →  Multicursor (Utilisation des multicurseurs)        *
 -- *                                                                    *
 -- * Mappings buffer-local LSP : core/lsp/on_attach.lua                 *
 -- * (nécessitent bufnr, définis à l'attachement LSP)                   *
@@ -296,6 +297,23 @@ end, {
 })
 
 -- ======================================================================
+-- <leader>m — Multi-curseurs
+-- ======================================================================
+map({ "n", "x" }, "<leader>ma", function()
+	require("multicursor-nvim").matchAllAddCursors()
+end, {
+	desc = "Curseurs sur toutes les occurrences | Mot sous le curseur (Normal) ou sélection (Visual), dans tout le buffer. Ensuite, toute édition est répétée à chaque curseur.",
+	silent = true,
+})
+
+map({ "n", "x" }, "<leader>mj", function()
+	require("multicursor-nvim").lineAddCursor(1)
+end, {
+	desc = "Ajouter un curseur en dessous | Ajoute un curseur sur la ligne du dessous. Répéter pour en empiler plusieurs.",
+	silent = true,
+})
+
+-- ======================================================================
 -- Which-key — Déclaration des groupes et descriptions
 -- ======================================================================
 vim.api.nvim_create_autocmd("User", {
@@ -319,7 +337,7 @@ vim.api.nvim_create_autocmd("User", {
 			{ "<leader>n", group = "Navigation", icon = "󰋜 " },
 			{ "<leader>d", group = "Diagnostics", icon = "󰋼 " },
 			{ "<leader>x", group = "UI/UX", icon = "󰏘 " },
-			{ "<leader>m", group = "Messages", icon = "󰍩 " },
+			{ "<leader>m", group = "Curseurs", icon = "󰳽 " },
 			{ "<leader>p", group = "Profil", icon = "󰒓 " },
 			{ "<leader>g", group = "Git/Github", icon = "󰊢 " },
 
@@ -389,7 +407,12 @@ vim.api.nvim_create_autocmd("User", {
 			{ "<leader>xt", desc = "Changer de thème", icon = "󰏘 " },
 			{ "<leader>xz", desc = "Toggle Zen Mode", icon = "󰰶 " },
 			{ "<leader>xh", desc = "Effacer la surbrillance", icon = "󰹊 " },
-
+			-- ----------------------------------------------------------------
+			-- <leader>m - Multi-curseurs
+			-- ----------------------------------------------------------------
+			{ "<leader>m", group = "Multi-curseurs", icon = "󰬸 " },
+			{ "<leader>ma", desc = "Curseurs sur toutes les occurrences", icon = "󰆏 " },
+			{ "<leader>mj", desc = "Ajouter un curseur en dessous", icon = "󰁅 " },
 			-- ----------------------------------------------------------------
 			-- <leader>p — Profil
 			-- ----------------------------------------------------------------
