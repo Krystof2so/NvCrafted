@@ -1165,6 +1165,11 @@ $XDG_STATE_HOME	starting.frx	/*$XDG_STATE_HOME*
 05.6	usr_05.frx	/*05.6*
 05.7	usr_05.frx	/*05.7*
 05.8	usr_05.frx	/*05.8*
+06.1	usr_06.frx	/*06.1*
+06.2	usr_06.frx	/*06.2*
+06.3	usr_06.frx	/*06.3*
+06.4	usr_06.frx	/*06.4*
+06.5	usr_06.frx	/*06.5*
 07.1	usr_07.frx	/*07.1*
 07.2	usr_07.frx	/*07.2*
 07.3	usr_07.frx	/*07.3*
@@ -1354,6 +1359,7 @@ $XDG_STATE_HOME	starting.frx	/*$XDG_STATE_HOME*
 :syn-containedin	syntax.frx	/*:syn-containedin*
 :syn-contains	syntax.frx	/*:syn-contains*
 :syn-context	syntax.frx	/*:syn-context*
+:syn-default-override	usr_06.frx	/*:syn-default-override*
 :syn-define	syntax.frx	/*:syn-define*
 :syn-display	syntax.frx	/*:syn-display*
 :syn-enable	syntax.frx	/*:syn-enable*
@@ -1372,6 +1378,7 @@ $XDG_STATE_HOME	starting.frx	/*$XDG_STATE_HOME*
 :syn-lc	syntax.frx	/*:syn-lc*
 :syn-leading	syntax.frx	/*:syn-leading*
 :syn-list	syntax.frx	/*:syn-list*
+:syn-manual	usr_06.frx	/*:syn-manual*
 :syn-match	syntax.frx	/*:syn-match*
 :syn-matchgroup	syntax.frx	/*:syn-matchgroup*
 :syn-multi-line	syntax.frx	/*:syn-multi-line*
@@ -4333,6 +4340,7 @@ usr_02.txt	usr_02.frx	/*usr_02.txt*
 usr_03.txt	usr_03.frx	/*usr_03.txt*
 usr_04.txt	usr_04.frx	/*usr_04.txt*
 usr_05.txt	usr_05.frx	/*usr_05.txt*
+usr_06.txt	usr_06.frx	/*usr_06.txt*
 usr_07.txt	usr_07.frx	/*usr_07.txt*
 usr_32.txt	usr_32.frx	/*usr_32.txt*
 usr_toc.txt	usr_toc.frx	/*usr_toc.txt*

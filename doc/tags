@@ -1,8 +1,3 @@
-06.1	usr_06.txt	/*06.1*
-06.2	usr_06.txt	/*06.2*
-06.3	usr_06.txt	/*06.3*
-06.4	usr_06.txt	/*06.4*
-06.5	usr_06.txt	/*06.5*
 :DiffOrig	diff.txt	/*:DiffOrig*
 :dif	diff.txt	/*:dif*
 :diff	diff.txt	/*:diff*
@@ -19,8 +14,6 @@
 :difft	diff.txt	/*:difft*
 :diffthis	diff.txt	/*:diffthis*
 :diffupdate	diff.txt	/*:diffupdate*
-:syn-default-override	usr_06.txt	/*:syn-default-override*
-:syn-manual	usr_06.txt	/*:syn-manual*
 E100	diff.txt	/*E100*
 E101	diff.txt	/*E101*
 E102	diff.txt	/*E102*
@@ -52,5 +45,4 @@ dp	diff.txt	/*dp*
 jumpto-diffs	diff.txt	/*jumpto-diffs*
 merge	diff.txt	/*merge*
 start-vimdiff	diff.txt	/*start-vimdiff*
-usr_06.txt	usr_06.txt	/*usr_06.txt*
 view-diffs	diff.txt	/*view-diffs*

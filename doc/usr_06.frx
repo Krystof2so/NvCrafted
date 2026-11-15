@@ -1,0 +1,217 @@
+*usr_06.txt*	Nvim
+
+		     VIM USER MANUAL	par Bram Moolenaar
+
+
+			  Utiliser la coloration syntaxique 
+
+
+Un texte en noir et blanc, c'est ennuyeux. Avec des couleurs, votre fichier 
+prend vie. Non seulement cela est agréable à regarder, mais cela accélère aussi 
+votre travail. Modifiez les couleurs utilisées pour les différents types de 
+texte. Imprimez votre texte avec les couleurs que vous voyez à l'écran.
+
+|06.1| Activer la coloration
+|06.2| Pas de couleurs ou des couleurs erronées ?
+|06.3| Différentes couleurs
+|06.4| Avec ou sans couleurs
+|06.5| Pour en savoir plus
+
+    Chapitre suivant : |usr_07.txt| Éditer plusieurs fichiers
+  Chapitre précédent : |usr_05.txt| Définir vos paramètres
+  Table des matières : |usr_toc.txt|
+
+==============================================================================
+*06.1*	Activer la coloration
+
+La coloration syntaxique est activée par défaut. Nvim détecte automatiquement 
+le type de fichier et charge la coloration syntaxique appropriée.
+
+==============================================================================
+*06.2*	Pas de couleurs ou des couleurs erronées ?
+
+Il peut y avoir un certain nombre de raisons pour lesquelles vous ne voyez pas 
+de couleurs :
+
+- Votre terminal ne prend pas en charge les couleurs.
+        Vim utilisera du texte en gras, en italique et souligné, mais cela 
+        n'est pas très joli. Vous voudrez probablement essayer d'obtenir un 
+        terminal avec couleurs.
+
+- Votre terminal prend en charge les couleurs, mais Vim ne le sait pas.
+        Assurez-vous que votre paramètre $TERM est correct. Par exemple, lors 
+        de l'utilisation d'un xterm qui prend en charge les couleurs : >
+
+		setenv TERM xterm-color
+<
+	ou (selon votre shell) : >
+
+		TERM=xterm-color; export TERM
+<
+	Le nom du terminal doit correspondre au terminal que vous utilisez.
+
+- Le type de fichier n'est pas reconnu.
+        Vim ne connaît pas tous les types de fichiers, et il est parfois 
+	presque impossible de dire quel langage utilise un fichier. 
+	Essayez	cette commande : >
+
+		:set filetype
+<
+	Si le résultat est « filetype= », alors le problème est bien que Vim 
+	ne sait pas de quel type de fichier il s'agit. Vous pouvez définir le 
+	type manuellement : >
+
+		:set filetype=fortran
+<
+	Pour voir quels types sont disponibles, consultez le répertoire 
+	$VIMRUNTIME/syntax. Pour l'interface graphique, vous pouvez utiliser 
+	le menu Syntaxe. La définition du type de fichier peut aussi se faire 
+	avec un |modeline|, afin que le fichier soit coloré à chaque fois que 
+	vous l'éditez. Par exemple, cette ligne peut être utilisée dans un 
+	Makefile (placez-la près du début ou de la fin du fichier) : >
+
+		# vim: syntax=make
+<
+	Vous savez peut-être comment détecter vous-même le type de fichier. 
+	Souvent, l'extension du nom de fichier (après le point) peut être 
+	utilisée. Voir |new-filetype| pour savoir comment indiquer à Vim de 
+	détecter ce type de fichier.
+
+- Il n'y a pas de coloration pour votre type de fichier.
+        Vous pourriez essayer d'utiliser un type de fichier similaire en le 
+	définissant manuellement comme mentionné ci-dessus. Si cela ne suffit 
+	pas, vous pouvez écrire votre propre fichier de syntaxe, voir 
+	|mysyntaxfile|.
+
+
+Ou les couleurs pourraient être erronées :
+
+- Le texte coloré est très difficile à lire.
+	Vim devine la couleur d'arrière-plan que vous utilisez. Si elle est 
+	noire (ou d'une autre couleur sombre), il utilisera des couleurs 
+	claires pour le texte. Si elle est blanche (ou d'une autre couleur 
+	claire), il utilisera des couleurs sombres pour le texte. Si Vim a 
+	deviné de travers, le texte sera difficile à lire. Pour résoudre cela, 
+	définissez l'option 'background'. Pour un arrière-plan sombre : >
+
+		:set background=dark
+<
+	Et pour un arrière-plan clair : >
+
+		:set background=light
+
+<	Assurez-vous de placer ceci avant la commande « :syntax enable », 
+	sinon les couleurs auront déjà été définies. Vous pourriez faire 
+	« :syntax reset » après avoir défini 'background' pour que Vim 
+	redéfinisse les couleurs par défaut.
+
+- Les couleurs sont erronées lors du défilement de bas en haut.
+	Vim ne lit pas tout le fichier pour analyser le texte. Il commence 
+	l'analyse là où vous visualisez le fichier. Cela permet d'économiser 
+	beaucoup de temps, mais parfois les couleurs sont erronées. Une 
+	solution simple consiste à appuyer sur CTRL-L. Ou bien remontez un 
+	peu puis redescendez.
+	Pour une véritable solution, voir |:syn-sync|. Certains fichiers de 
+	syntaxe offrent un moyen de remonter plus loin, consultez l'aide du 
+	fichier de syntaxe spécifique. Par exemple, |ft-tex-syntax| pour la 
+	syntaxe TeX.
+
+==============================================================================
+*06.3*	Differéntes couleurs				*:syn-default-override*
+
+Si vous n'aimez pas les couleurs par défaut, vous pouvez sélectionner un autre 
+thème de couleurs. Dans l'interface graphique, utilisez le menu Édition/Thème 
+de couleurs. Vous pouvez aussi taper la commande : >
+
+	:colorscheme evening
+
+« evening » est le nom du thème de couleurs. Il en existe plusieurs autres que 
+vous pourriez vouloir essayer. Regardez dans le répertoire $VIMRUNTIME/colors.
+
+Lorsque vous avez trouvé le thème de couleurs qui vous plaît, ajoutez la 
+commande « :colorscheme » à votre fichier |init.vim|.
+
+Vous pourriez aussi écrire votre propre thème de couleurs. Voici comment 
+procéder :
+
+1. Sélectionnez un thème de couleurs qui s'en rapproche. Copiez ce fichier 
+   dans votre propre répertoire Vim. Sous Unix, cela devrait fonctionner : >
+
+	!mkdir -p ~/.config/nvim/colors
+	!cp $VIMRUNTIME/colors/morning.vim ~/.config/nvim/colors/mine.vim
+<
+   Cela se fait depuis Vim, car il connaît la valeur de $VIMRUNTIME.
+
+2. Modifiez le fichier du thème de couleurs. Ces entrées sont utiles :
+
+	cterm		attributs dans un terminal couleur
+	ctermfg		couleur de premier plan dans un terminal couleur
+	ctermbg		couleur d'arrière-plan dans un terminal couleur
+	gui		attributs dans l'interface graphique
+	guifg		couleur de premier plan dans l'interface graphique
+	guibg		couleur d'arrière-plan dans l'interface graphique
+
+   Par exemple, pour rendre les commentaires verts : >
+
+	:highlight Comment ctermfg=green guifg=green
+<
+   Les attributs que vous pouvez utiliser pour « cterm » et « gui » sont 
+   « bold » et « underline ». Si vous voulez les deux, utilisez 
+   « bold,underline ». Pour plus de détails, voir la commande |:highlight|.
+
+3. Indiquez à Vim d'utiliser toujours votre thème de couleurs. Placez cette 
+   ligne dans votre |vimrc| : >
+
+	colorscheme mine
+
+Si vous voulez voir à quoi ressemblent les combinaisons de couleurs les plus 
+souvent utilisées, utilisez cette commande : >
+
+	:runtime syntax/colortest.vim
+
+Vous verrez du texte dans diverses combinaisons de couleurs. Vous pouvez 
+vérifier lesquelles sont lisibles et agréables à regarder.
+
+==============================================================================
+*06.4*	Avec ou sans couleur
+
+Afficher du texte en couleur demande beaucoup d'efforts. Si vous trouvez 
+l'affichage trop lent, vous pourriez vouloir désactiver temporairement la 
+coloration syntaxique : >
+
+	:syntax clear
+
+Lors de l'édition d'un autre fichier (ou du même), les couleurs 
+réapparaîtront.
+
+Si vous voulez arrêter complètement la coloration, utilisez : >
+
+	:syntax off
+
+Cela désactivera complètement la coloration syntaxique et la supprimera immédiatement pour tous les tampons. Voir |:syntax-off| pour plus de détails.
+
+							*:syn-manual*
+Si vous voulez la coloration syntaxique uniquement pour des fichiers 
+spécifiques, utilisez ceci : >
+
+	:syntax manual
+
+Cela activera la coloration syntaxique, mais ne l'activera pas automatiquement 
+au début de l'édition d'un tampon. Pour activer la coloration pour le tampon 
+courant, définissez l'option 'syntax' : >
+
+	:set syntax=ON
+<
+==============================================================================
+*06.5*	Pour en savoir plus
+
+|usr_44.txt|  Votre propre coloration syntaxique.
+|syntax|      Tous les détails.
+
+==============================================================================
+
+Chapitre suivant : |usr_07.txt| Éditer plusieurs fichiers
+
+Copyright : voir |manual-copyright|
+
+vim:tw=78:ts=8:noet:ft=help:norl:
