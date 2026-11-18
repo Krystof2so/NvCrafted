@@ -1,4 +1,4 @@
-*usr_07.txt*	Nvim (v0.12.4) - Traduction française partielle
+*usr_07.txt*	Nvim (v0.12.4) - Traduction française 
 
 
 		     VIM USER MANUAL	par Bram Moolenaar
@@ -11,262 +11,280 @@ Peu importe le nombre de fichiers que vous avez, vous pouvez les éditer sans
 quitter Vim. Définissez une liste de fichiers sur lesquels travailler et passez 
 de l'un à l'autre. Copiez du texte depuis un fichier et collez-le dans un autre.
 
-|07.1|	Edit another file
-|07.2|	A list of files
-|07.3|	Jumping from file to file
-|07.4|	Fichiers de sauvegarde
-|07.5|	Copy text between files
-|07.6|	Viewing a file
-|07.7|	Changing the file name
+|07.1|  Éditer un autre fichier
+|07.2|  Une liste de fichiers
+|07.3|  Sauter d'un fichier à l'autre
+|07.4|  Fichiers de sauvegarde
+|07.5|  Copier du texte entre fichiers
+|07.6|  Visualiser un fichier
+|07.7|  Changer le nom du fichier
 
-     Next chapter: |usr_08.txt|  Splitting windows
- Previous chapter: |usr_06.txt|  Using syntax highlighting
-Table of contents: |usr_toc.txt|
+    Chapitre suivant : |usr_08.txt| Fractionner des fenêtres
+  Chapitre précédent : |usr_06.txt| Utiliser la coloration syntaxique
+  Table des matières : |usr_toc.txt|
 
 ==============================================================================
-*07.1*	Edit another file
+*07.1*	Editer un autre fichier
 
-So far you had to start Vim for every file you wanted to edit.  There is a
-simpler way.  To start editing another file, use this command: >
+Jusqu'à présent, vous deviez démarrer Vim pour chaque fichier que vous vouliez 
+éditer. Il existe une manière plus simple. Pour commencer à éditer un autre 
+fichier, utilisez cette commande : >
 
 	:edit foo.txt
 
-You can use any file name instead of "foo.txt".  Vim will close the current
-file and open the new one.  If the current file has unsaved changes, however,
-Vim displays an error message and does not open the new file:
+Vous pouvez utiliser n'importe quel nom de fichier à la place de « foo.txt ». 
+Vim fermera le fichier courant et ouvrira le nouveau. Si le fichier courant 
+contient des modifications non enregistrées, toutefois, Vim affiche un message 
+d'erreur et n'ouvre pas le nouveau fichier :
 
 	E37: No write since last change (use ! to override) ~
 
 	Note:
-	Vim puts an error ID at the start of each error message.  If you do
-	not understand the message or what caused it, look in the help system
-	for this ID.  In this case: >
+	Vim place un identifiant d'erreur au début de chaque message d'erreur. 
+	Si vous ne comprenez pas le message ou ce qui l'a provoqué, cherchez cet 
+	identifiant dans le système d'aide. Dans ce cas : >
 
 		:help E37
 
-At this point, you have a number of alternatives.  You can write the file
-using this command: >
+À ce stade, vous avez plusieurs alternatives. Vous pouvez enregistrer le fichier 
+avec cette commande : >
 
 	:write
 
-Or you can force Vim to discard your changes and edit the new file, using the
-force (!) character: >
+Ou vous pouvez forcer Vim à abandonner vos modifications et éditer le nouveau 
+fichier, en utilisant le caractère de forçage (!) : >
 
 	:edit! foo.txt
 
-If you want to edit another file, but not write the changes in the current
-file yet, you can make it hidden: >
+Si vous voulez éditer un autre fichier, mais sans encore enregistrer les 
+modifications du fichier courant, vous pouvez le rendre masqué : >
 
 	:hide edit foo.txt
 
-The text with changes is still there, but you can't see it.  This is further
-explained in section |22.4|: The buffer list.
+Le texte avec les modifications est toujours là, mais vous ne pouvez pas le 
+voir. Ceci est expliqué plus en détail dans la section |22.4| : La liste des 
+tampons.
 
 ==============================================================================
-*07.2*	A list of files
+*07.2*	Une liste de fichiers
 
-You can start Vim to edit a sequence of files.  For example: >
+Vous pouvez démarrer Vim pour éditer une séquence de fichiers. Par exemple : >
 
 	vim one.c two.c three.c
 
-This command starts Vim and tells it that you will be editing three files.
-Vim displays just the first file.  After you have done your thing in this
-file, to edit the next file you use this command: >
+Cette commande démarre Vim et lui indique que vous allez éditer trois fichiers. 
+Vim n'affiche que le premier fichier. Une fois que vous avez terminé ce que 
+vous aviez à faire dans ce fichier, pour éditer le fichier suivant, utilisez 
+cette commande : >
 
 	:next
 
-If you have unsaved changes in the current file, you will get an error
-message and the ":next" will not work.  This is the same problem as with
-":edit" mentioned in the previous section.  To abandon the changes: >
+Si vous avez des modifications non enregistrées dans le fichier courant, vous 
+obtiendrez un message d'erreur et « :next » ne fonctionnera pas. C'est le même 
+problème qu'avec « :edit » mentionné dans la section précédente. Pour abandonner 
+les modifications : >
 
 	:next!
 
-But mostly you want to save the changes and move on to the next file.  There
-is a special command for this: >
+Mais le plus souvent, vous voulez enregistrer les modifications et passer au 
+fichier suivant. Il existe une commande spéciale pour cela : >
 
 	:wnext
 
-This does the same as using two separate commands: >
+Cela fait la même chose que d'utiliser deux commandes séparées : >
 
 	:write
 	:next
 
 
-WHERE AM I?
+OÙ SUIS-JE ?
 
-To see which file in the argument list you are editing, look in the window
-title.  It should show something like "(2 of 3)".  This means you are editing
-the second file out of three files.
-   If you want to see the list of files, use this command: >
+Pour voir quel fichier de la liste d'arguments vous êtes en train d'éditer, 
+regardez le titre de la fenêtre. Il devrait afficher quelque chose comme 
+« (2 sur 3) ». Cela signifie que vous éditez le deuxième fichier sur trois.
+    Si vous voulez voir la liste des fichiers, utilisez cette commande : >
 
 	:args
 
-This is short for "arguments".  The output might look like this:
+C'est l'abréviation de « arguments ». La sortie pourrait ressembler à ceci :
 
 	one.c [two.c] three.c ~
 
-These are the files you started Vim with.  The one you are currently editing,
-"two.c", is in square brackets.
+Ce sont les fichiers avec lesquels vous avez démarré Vim. Celui que vous êtes 
+actuellement en train d'éditer, « two.c », est entre crochets.
 
 
-MOVING TO OTHER ARGUMENTS
+SE DEPLACER VERS LES AUTRES ARGUMENTS
 
-To go back one file: >
+Pour revenir d'un fichier en arrière : >
 
 	:previous
 
-This is just like the ":next" command, except that it moves in the other
-direction.  Again, there is a shortcut command for when you want to write the
-file first: >
+C'est exactement comme la commande « :next », sauf qu'elle se déplace dans 
+l'autre direction. Là encore, il existe une commande raccourcie pour lorsque 
+vous voulez d'abord enregistrer le fichier : >
 
 	:wprevious
 
-To move to the very last file in the list: >
+Pour aller au tout dernier fichier de la liste : >
 
 	:last
 
-And to move back to the first one again: >
+Et pour revenir au premier : >
 
 	:first
 
-There is no ":wlast" or ":wfirst" command though!
+Il n'existe cependant pas de commande « :wlast » ni « :wfirst » !
 
-You can use a count for ":next" and ":previous".  To skip two files forward: >
+Vous pouvez utiliser un compte pour « :next » et « :previous ». Pour sauter 
+deux fichiers en avant : >
 
 	:2next
 
 
-AUTOMATIC WRITING
+ECRITURE AUTOMATIQUE
 
-When moving around the files and making changes, you have to remember to use
-":write".  Otherwise you will get an error message.  If you are sure you
-always want to write modified files, you can tell Vim to automatically write
-them: >
+Lorsque vous vous déplacez entre les fichiers et effectuez des modifications, 
+vous devez penser à utiliser « :write ». Sinon, vous obtiendrez un message 
+d'erreur. Si vous êtes sûr de toujours vouloir enregistrer les fichiers 
+modifiés, vous pouvez dire à Vim de les écrire automatiquement : >
 
 	:set autowrite
 
-When you are editing a file which you may not want to write, switch it off
-again: >
+Lorsque vous éditez un fichier que vous ne voulez peut-être pas enregistrer, 
+désactivez-la à nouveau : >
 
 	:set noautowrite
 
 
-EDITING ANOTHER LIST OF FILES
+EDITER UNE AUTRE LISTE DE FICHIERS
 
-You can redefine the list of files without the need to exit Vim and start it
-again.  Use this command to edit three other files: >
+Vous pouvez redéfinir la liste des fichiers sans avoir besoin de quitter Vim 
+et de le redémarrer. Utilisez cette commande pour éditer trois autres 
+fichiers : >
 
 	:args five.c six.c seven.h
 
-Or use a wildcard, like it's used in the shell: >
+Ou utilisez un caractère générique, comme on l'utilise dans le shell : >
 
 	:args *.txt
 
-Vim will take you to the first file in the list.  Again, if the current file
-has changes, you can either write the file first, or use ":args!" (with !
-added) to abandon the changes.
+Vim vous emmènera au premier fichier de la liste. Là encore, si le fichier 
+courant a des modifications, vous pouvez soit d'abord enregistrer le fichier, 
+soit utiliser « :args! » (avec ! ajouté) pour abandonner les modifications.
 
 
-DID YOU EDIT THE LAST FILE?
+AVEZ-VOUS EDITE LE DERNIER FICHIER ?
 							*arglist-quit*
-When you use a list of files, Vim assumes you want to edit them all.  To
-protect you from exiting too early, you will get this error when you didn't
-edit the last file in the list yet:
+Lorsque vous utilisez une liste de fichiers, Vim suppose que vous voulez les 
+éditer tous. Pour vous protéger d'une sortie trop prématurée, vous obtiendrez 
+cette erreur lorsque vous n'avez pas encore édité le dernier fichier de la 
+liste :
 
 	E173: 46 more files to edit ~
 
-If you really want to exit, just do it again.  Then it will work (but not when
-you did other commands in between).
+Si vous voulez vraiment quitter, faites-le simplement à nouveau. Cela 
+fonctionnera alors (mais pas si vous avez exécuté d'autres commandes 
+entre-temps).
 
 ==============================================================================
-*07.3*	Jumping from file to file
+*07.3*	Sauter d'un fichier à l'autre
 
-To quickly jump between two files, press CTRL-^ (on English-US keyboards the ^
-is above the 6 key).  Example: >
+Pour passer rapidement d'un fichier à l'autre, appuyez sur CTRL-^ (sur les 
+claviers anglais-américains, le ^ se trouve au-dessus de la touche 6). 
+Exemple : >
 
 	:args one.c two.c three.c
 
-You are now in one.c. >
+Vous êtes maintenant dans one.c. >
 
 	:next
 
-Now you are in two.c.  Now use CTRL-^ to go back to one.c.  Another CTRL-^ and
-you are back in two.c.  Another CTRL-^ and you are in one.c again.  If you now
-do: >
+Vous êtes maintenant dans two.c. Utilisez maintenant CTRL-^ pour revenir à 
+one.c. Un autre CTRL-^ et vous êtes de retour dans two.c. Un autre CTRL-^ et 
+vous êtes de nouveau dans one.c. Si vous faites maintenant : >
 
 	:next
 
-You are in three.c.  Notice that the CTRL-^ command does not change the idea
-of where you are in the list of files.  Only commands like ":next" and
-":previous" do that.
+Vous êtes dans three.c. Remarquez que la commande CTRL-^ ne change pas la 
+notion de l'endroit où vous vous trouvez dans la liste des fichiers. Seules des 
+commandes comme « :next » et « :previous » le font.
 
-The file you were previously editing is called the "alternate" file.  When you
-just started Vim CTRL-^ will not work, since there isn't a previous file.
+Le fichier que vous éditiez précédemment est appelé le fichier « alternatif ». 
+Lorsque vous venez de démarrer Vim, CTRL-^ ne fonctionnera pas, car il n'y a 
+pas de fichier précédent.
 
 
-PREDEFINED MARKS
+MARQUES PREDEFINIES
 
-After jumping to another file, you can use two predefined marks which are very
-useful: >
+Après avoir sauté vers un autre fichier, vous pouvez utiliser deux marques 
+prédéfinies qui sont très utiles : >
 
 	`"
 
-This takes you to the position where the cursor was when you left the file.
-Another mark that is remembered is the position where you made the last
-change: >
+Celle-ci vous emmène à la position où se trouvait le curseur lorsque vous avez 
+quitté le fichier. Une autre marque qui est mémorisée est la position où vous 
+avez effectué la dernière modification : >
 
 	`.
 
-Suppose you are editing the file "one.txt".  Somewhere halfway through the
-file you use "x" to delete a character.  Then you go to the last line with "G"
-and write the file with ":w".  You edit several other files, and then use
-":edit one.txt" to come back to "one.txt".  If you now use `" Vim jumps to the
-last line of the file.  Using `. takes you to the position where you deleted
-the character.  Even when you move around in the file `" and `. will take you
-to the remembered position.  At least until you make another change or leave
-the file.
+Supposons que vous éditiez le fichier « one.txt ». Quelque part à mi-chemin du 
+fichier, vous utilisez « x » pour supprimer un caractère. Ensuite, vous allez 
+à la dernière ligne avec « G » et vous enregistrez le fichier avec « :w ». 
+Vous éditez plusieurs autres fichiers, puis vous utilisez « :edit one.txt » 
+pour revenir à « one.txt ». Si vous utilisez maintenant " Vim saute à la 
+dernière ligne du fichier. Utiliser . vous emmène à la position où vous avez 
+supprimé le caractère. Même lorsque vous vous déplacez dans le fichier, " 
+et . vous emmèneront à la position mémorisée. Du moins jusqu'à ce que vous 
+effectuiez une autre modification ou quittiez le fichier.
 
 
-FILE MARKS
+MARQUES DE FICHIER
 
-In section |03.10| was explained how you can place a mark in a file with "mx"
-and jump to that position with "`x".  That works within one file.  If you edit
-another file and place marks there, these are specific for that file.  Thus
-each file has its own set of marks, they are local to the file.
-   So far we were using marks with a lowercase letter.  There are also marks
-with an uppercase letter.  These are global, they can be used from any file.
-For example suppose that we are editing the file "foo.txt".  Go to halfway
-down the file ("50%") and place the F mark there (F for foo): >
+Dans la section |03.10|, il a été expliqué comment placer une marque dans un 
+fichier avec « mx » et sauter à cette position avec "`x". Cela fonctionne au 
+sein d'un seul fichier. Si vous éditez un autre fichier et y placez des 
+marques, celles-ci sont spécifiques à ce fichier. Ainsi, chaque fichier possède 
+son propre ensemble de marques ; elles sont locales au fichier.
+   Jusqu'à présent, nous avons utilisé des marques avec une lettre minuscule. 
+Il existe aussi des marques avec une lettre majuscule. Celles-ci sont 
+globales ; elles peuvent être utilisées depuis n'importe quel fichier. Par 
+exemple, supposons que nous éditons le fichier « foo.txt ». Allez à mi-chemin 
+du fichier (« 50% ») et placez-y la marque F (F pour foo) : >
 
 	50%mF
 
-Now edit the file "bar.txt" and place the B mark (B for bar) at its last line:
->
+Éditez maintenant le fichier « bar.txt » et placez la marque B (B pour bar) à 
+sa dernière ligne : >
+
 	GmB
 
-Now you can use the "'F" command to jump back to halfway of foo.txt.  Or edit
-yet another file, type "'B" and you jump to the end of bar.txt.
+Vous pouvez maintenant utiliser la commande « 'F » pour revenir à mi-chemin de 
+foo.txt. Ou éditez encore un autre fichier, tapez « 'B » et vous sautez à la 
+fin de bar.txt.
 
-The file marks are remembered until they are placed somewhere else.  Thus you
-can place the mark, do hours of editing and still be able to jump back to that
-mark.
-   It's often useful to think of a simple connection between the mark letter
-and where it is placed.  For example, use the H mark in a header file, M in
-a Makefile and C in a C code file.
+Les marques de fichier sont mémorisées jusqu'à ce qu'elles soient placées 
+ailleurs. Ainsi, vous pouvez placer la marque, effectuer des heures d'édition 
+et être toujours capable de revenir à cette marque.
+   Il est souvent utile de penser à une correspondance simple entre la lettre 
+de la marque et l'endroit où elle est placée. Par exemple, utilisez la marque 
+H dans un fichier d'en-tête, M dans un Makefile et C dans un fichier de code 
+C.
 
-To see where a specific mark is, give an argument to the ":marks" command: >
+Pour voir où se trouve une marque spécifique, donnez un argument à la commande 
+« :marks » : >
 
 	:marks M
 
-You can also give several arguments: >
+Vous pouvez aussi donner plusieurs arguments : >
 
 	:marks MCP
 
-Don't forget that you can use CTRL-O and CTRL-I to jump to older and newer
-positions without placing marks there.
+N'oubliez pas que vous pouvez utiliser CTRL-O et CTRL-I pour sauter à des 
+positions plus anciennes et plus récentes sans y placer de marques.
 
 ==============================================================================
-*07.4*	Backup files
+*07.4*	Fichiers de sauvegarde
 
 En général, Vim ne crée pas de fichier de sauvegarde. Si vous souhaitez en 
 avoir un, il vous suffit d'exécuter la commande suivante : >
@@ -323,168 +341,183 @@ Si vous laissez 'patchmode' vide (c'est la valeur par défaut), le fichier
 original ne sera pas conservé.
 
 ==============================================================================
-*07.5*	Copy text between files
+*07.5*	Coper du texte entre fichiers
 
-This explains how to copy text from one file to another.  Let's start with a
-simple example.  Edit the file that contains the text you want to copy.  Move
-the cursor to the start of the text and press "v".  This starts Visual mode.
-Now move the cursor to the end of the text and press "y".  This yanks (copies)
-the selected text.
-   To copy the above paragraph, you would do: >
+Ceci explique comment copier du texte d'un fichier à un autre. Commençons par 
+un exemple simple. Éditez le fichier qui contient le texte que vous voulez 
+copier. Déplacez le curseur au début du texte et appuyez sur « v ». Cela 
+démarre le mode Visuel. Déplacez maintenant le curseur à la fin du texte et 
+appuyez sur « y ». Cela yank (copie) le texte sélectionné.
+   Pour copier le paragraphe ci-dessus, vous feriez : >
 
 	:edit thisfile
 	/This
 	vjjjj$y
 
-Now edit the file you want to put the text in.  Move the cursor to the
-character where you want the text to appear after.  Use "p" to put the text
-there. >
+Éditez maintenant le fichier dans lequel vous voulez insérer le texte. 
+Déplacez le curseur sur le caractère après lequel vous voulez que le texte 
+apparaisse. Utilisez « p » pour y placer le texte. >
+
 	:edit otherfile
 	/There
 	p
 
-Of course you can use many other commands to yank the text.  For example, to
-select whole lines start Visual mode with "V".  Or use CTRL-V to select a
-rectangular block.  Or use "yy" to yank a single line, "yaw" to yank-a-word,
-etc.
-   The "p" command puts the text after the cursor.  Use "P" to put the text
-before the cursor.  Notice that Vim remembers if you yanked a whole line or a
-block, and puts it back that way.
+Bien sûr, vous pouvez utiliser beaucoup d'autres commandes pour yanker le 
+texte. Par exemple, pour sélectionner des lignes entières, démarrez le mode 
+Visuel avec « V ». Ou utilisez CTRL-V pour sélectionner un bloc rectangulaire. 
+Ou utilisez « yy » pour yanker une seule ligne, « yaw » pour yanker un mot 
+(yank-a-word), etc.
+   La commande « p » place le texte après le curseur. Utilisez « P » pour 
+placer le texte avant le curseur. Remarquez que Vim se souvient si vous avez 
+yanké une ligne entière ou un bloc, et le replace de cette manière.
 
 
-USING REGISTERS
+UTILISER DES REGISTRES
 
-When you want to copy several pieces of text from one file to another, having
-to switch between the files and writing the target file takes a lot of time.
-To avoid this, copy each piece of text to its own register.
-   A register is a place where Vim stores text.  Here we will use the
-registers named a to z (later you will find out there are others).  Let's copy
-a sentence to the f register (f for First): >
+Lorsque vous voulez copier plusieurs morceaux de texte d'un fichier à un 
+autre, devoir basculer entre les fichiers et enregistrer le fichier cible prend 
+beaucoup de temps. Pour éviter cela, copiez chaque morceau de texte dans son 
+propre registre.
+   Un registre est un endroit où Vim stocke du texte. Ici, nous utiliserons 
+les registres nommés a à z (vous découvrirez plus tard qu'il en existe 
+d'autres). Copions une phrase dans le registre f (f pour First, premier) : >
 
 	"fyas
 
-The "yas" command yanks a sentence like before.  It's the "f that tells Vim
-the text should be placed in the f register.  This must come just before the
-yank command.
-   Now yank three whole lines to the l register (l for line): >
+La commande « yas » yanke une phrase comme précédemment. C'est le « f » qui 
+indique à Vim que le texte doit être placé dans le registre f. Cela doit venir 
+juste avant la commande de yank.
+   Yankez maintenant trois lignes entières dans le registre l (l pour line, ligne) : >
 
 	"l3yy
 
-The count could be before the "l just as well.  To yank a block of text to the
-b (for block) register: >
+Le compte pourrait tout aussi bien être placé avant le « l. Pour yanker un 
+bloc de texte dans le registre b (pour block, bloc) : >
 
 	CTRL-Vjjww"by
 
-Notice that the register specification "b is just before the "y" command.
-This is required.  If you would have put it before the "w" command, it would
-not have worked.
-   Now you have three pieces of text in the f, l and b registers.  Edit
-another file, move around and place the text where you want it: >
+Remarquez que la spécification de registre « b se trouve juste avant la 
+commande « y ». C'est obligatoire. Si vous l'aviez placée avant la commande 
+« w », cela n'aurait pas fonctionné.
+   Vous avez maintenant trois morceaux de texte dans les registres f, l et b. 
+Éditez un autre fichier, déplacez-vous et placez le texte où vous voulez : >
 
 	"fp
 
-Again, the register specification "f comes before the "p" command.
-   You can put the registers in any order.  And the text stays in the register
-until you yank something else into it.  Thus you can put it as many times as
-you like.
+Là encore, la spécification de registre « f vient avant la commande « p ».
+   Vous pouvez placer les registres dans n'importe quel ordre. Et le texte 
+reste dans le registre jusqu'à ce que vous y yankiez autre chose. Ainsi, vous 
+pouvez le placer autant de fois que vous le souhaitez.
 
-When you delete text, you can also specify a register.  Use this to move
-several pieces of text around.  For example, to delete-a-word and write it in
-the w register: >
+Lorsque vous supprimez du texte, vous pouvez aussi spécifier un registre. 
+Utilisez cela pour déplacer plusieurs morceaux de texte. Par exemple, pour 
+supprimer un mot (delete-a-word) et l'écrire dans le registre w : >
 
 	"wdaw
 
-Again, the register specification comes before the delete command "d".
+Là encore, la spécification de registre vient avant la commande de suppression 
+« d ».
 
 
-APPENDING TO A FILE
+AJOUTER A LA FIN DU FICHIER
 
-When collecting lines of text into one file, you can use this command: >
+Lorsque vous rassemblez des lignes de texte dans un seul fichier, vous pouvez 
+utiliser cette commande : >
 
 	:write >> logfile
 
-This will write the text of the current file to the end of "logfile".  Thus it
-is appended.  This avoids that you have to copy the lines, edit the log file
-and put them there.  Thus you save two steps.  But you can only append to the
-end of a file.
-   To append only a few lines, select them in Visual mode before typing
-":write".  In chapter 10 you will learn other ways to select a range of lines.
+Cela écrira le texte du fichier courant à la fin de « logfile ». Il est ainsi 
+ajouté à la suite. Cela évite d'avoir à copier les lignes, éditer le fichier 
+journal et les y placer. Vous économisez donc deux étapes. Mais vous ne pouvez 
+ajouter qu'à la fin d'un fichier.
+   Pour n'ajouter que quelques lignes, sélectionnez-les en mode Visuel avant 
+de taper « :write ». Au chapitre 10, vous apprendrez d'autres façons de 
+sélectionner une plage de lignes.
 
 ==============================================================================
-*07.6*	Viewing a file
+*07.6*	Visualiser un fichier
 
-Sometimes you only want to see what a file contains, without the intention to
-ever write it back.  There is the risk that you type ":w" without thinking and
-overwrite the original file anyway.  To avoid this, edit the file read-only.
-   To start Vim in readonly mode, use this command: >
+Parfois, vous voulez seulement voir ce que contient un fichier, sans jamais 
+avoir l'intention de l'enregistrer. Il existe un risque que vous tapiez 
+« :w » sans réfléchir et écrasiez le fichier d'origine malgré tout. Pour 
+éviter cela, éditez le fichier en lecture seule.
+   Pour démarrer Vim en mode lecture seule, utilisez cette commande : >
 
 	vim -R file
 
-On Unix this command should do the same thing: >
+Sous Unix, cette commande devrait faire la même chose : >
 
 	view file
 
-You are now editing "file" in read-only mode.  When you try using ":w" you
-will get an error message and the file won't be written.
-   When you try to make a change to the file Vim will give you a warning:
+Vous éditez maintenant « file » en mode lecture seule. Lorsque vous essayez 
+d'utiliser « :w », vous obtiendrez un message d'erreur et le fichier ne sera 
+pas écrit.
+   Lorsque vous essayez d'apporter une modification au fichier, Vim vous 
+donnera un avertissement :
 
 	W10: Warning: Changing a readonly file ~
 
-The change will be done though.  This allows for formatting the file, for
-example, to be able to read it easily.
-   If you make changes to a file and forgot that it was read-only, you can
-still write it.  Add the ! to the write command to force writing.
+La modification sera toutefois effectuée. Cela permet par exemple de 
+reformater le fichier pour pouvoir le lire facilement.
+   Si vous apportez des modifications à un fichier et oubliez qu'il était en 
+lecture seule, vous pouvez toujours l'enregistrer. Ajoutez le ! à la commande 
+d'écriture pour forcer l'écriture.
 
-If you really want to forbid making changes in a file, do this: >
+Si vous voulez vraiment interdire toute modification d'un fichier, faites 
+ceci : >
 
 	vim -M file
 
-Now every attempt to change the text will fail.  The help files are like this,
-for example.  If you try to make a change you get this error message:
+Désormais, toute tentative de modification du texte échouera. Les fichiers 
+d'aide sont comme cela, par exemple. Si vous essayez d'apporter une 
+modification, vous obtenez ce message d'erreur :
 
 	E21: Cannot make changes, 'modifiable' is off ~
 
-You could use the -M argument to setup Vim to work in a viewer mode.  This is
-only voluntary though, since these commands will remove the protection: >
+Vous pourriez utiliser l'argument -M pour configurer Vim afin de fonctionner 
+en mode visionneuse. Cela reste toutefois volontaire, puisque ces commandes 
+supprimeront la protection : >
 
 	:set modifiable
 	:set write
 
 ==============================================================================
-*07.7*	Changing the file name
+*07.7*	Changer le nom du fichier
 
-A clever way to start editing a new file is by using an existing file that
-contains most of what you need.  For example, you start writing a new program
-to move a file.  You know that you already have a program that copies a file,
-thus you start with: >
+Une façon astucieuse de commencer à éditer un nouveau fichier consiste à 
+utiliser un fichier existant qui contient la majeure partie de ce dont vous 
+avez besoin. Par exemple, vous commencez à écrire un nouveau programme pour 
+déplacer un fichier. Vous savez que vous avez déjà un programme qui copie un 
+fichier, vous commencez donc par : >
 
 	:edit copy.c
 
-You can delete the stuff you don't need.  Now you need to save the file under
-a new name.  The ":saveas" command can be used for this: >
+Vous pouvez supprimer ce dont vous n'avez pas besoin. Maintenant, vous devez 
+enregistrer le fichier sous un nouveau nom. La commande « :saveas » peut être 
+utilisée pour cela : >
 
 	:saveas move.c
 
-Vim will write the file under the given name, and edit that file.  Thus the
-next time you do ":write", it will write "move.c".  "copy.c" remains
-unmodified.
-   When you want to change the name of the file you are editing, but don't
-want to write the file, you can use this command: >
+Vim écrira le fichier sous le nom donné et éditera ce fichier. Ainsi, la 
+prochaine fois que vous ferez « :write », il écrira « move.c ». « copy.c » 
+reste inchangé.
+   Lorsque vous voulez changer le nom du fichier que vous êtes en train 
+d'éditer, mais sans écrire le fichier, vous pouvez utiliser cette commande : >
 
 	:file move.c
 
-Vim will mark the file as "not edited".  This means that Vim knows this is not
-the file you started editing.  When you try to write the file, you might get
-this message:
+Vim marquera le fichier comme « non édité ». Cela signifie que Vim sait que ce 
+n'est pas le fichier avec lequel vous avez commencé à éditer. Lorsque vous 
+essayez d'écrire le fichier, vous pourriez obtenir ce message :
 
 	E13: File exists (use ! to override) ~
 
-This protects you from accidentally overwriting another file.
+Cela vous protège d'écraser accidentellement un autre fichier.
 
 ==============================================================================
 
-Next chapter: |usr_08.txt|  Splitting windows
+Chapitre suivant : |usr_08.txt| Fractionner des fenêtres
 
-Copyright: see |manual-copyright|
+Copyright : voir |manual-copyright|
 
 vim:tw=78:ts=8:noet:ft=help:norl:
