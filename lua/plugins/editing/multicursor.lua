@@ -20,7 +20,13 @@ return {
 
 		-- Ces mappings n'existent que lorsqu'il y a plusieurs curseurs
 		mc.addKeymapLayer(function(set)
-			set("n", "<Esc>", mc.clearCursors, { desc = "Supprimer les curseurs secondaires" })
+			set("n", "<Esc>", function()
+				if not mc.cursorsEnabled() then
+					mc.enableCursors() -- 1er <Esc> : active les curseurs posés
+				else
+					mc.clearCursors() -- <Esc> suivant : supprime les curseurs secondaires
+				end
+			end, { desc = "Activer les curseurs, puis les supprimer" })
 		end)
 	end,
 }

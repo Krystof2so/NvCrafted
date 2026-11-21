@@ -313,6 +313,13 @@ end, {
 	silent = true,
 })
 
+map({ "n", "x" }, "<leader>mp", function()
+	require("multicursor-nvim").toggleCursor()
+end, {
+	desc = "Poser/retirer un curseur ici | Dépose un curseur désactivé à la position du curseur principal (ou le retire s'il y en a déjà un). Les curseurs posés restent immobiles ; <Esc> les active.",
+	silent = true,
+})
+
 -- ======================================================================
 -- Which-key — Déclaration des groupes et descriptions
 -- ======================================================================
@@ -413,6 +420,8 @@ vim.api.nvim_create_autocmd("User", {
 			{ "<leader>m", group = "Multi-curseurs", icon = "󰬸 " },
 			{ "<leader>ma", desc = "Curseurs sur toutes les occurrences", icon = "󰆏 " },
 			{ "<leader>mj", desc = "Ajouter un curseur en dessous", icon = "󰁅 " },
+			{ "<leader>mp", desc = "Poser/retirer un curseur ici", icon = "󰐃 " },
+
 			-- ----------------------------------------------------------------
 			-- <leader>p — Profil
 			-- ----------------------------------------------------------------

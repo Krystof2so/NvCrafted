@@ -139,14 +139,17 @@ Modification de l'apparence ou du comportement de l'éditeur.
 |              |      | ou de la sélection (Visual) dans le _buffer_        |                        |
 | `<leader>mj` | n, x | Ajouter un curseur sur la ligne du dessous          | `lineAddCursor(1)`     |
 |              |      | (répéter pour en empiler plusieurs)                 |                        |
+| `<leader>mp` | n, x | Poser/retirer un curseur désactivé à la position du | `toggleCursor()`       |
+|              |      | curseur principal                                   |                        |
 
 ### Raccourci contextuel
 
 Défini dans `lua/plugins/editing/multicursor.lua` (couche de _mappings_), il n'existe que lorsqu'il y a plusieurs curseurs :
 
-| Raccourci | Mode | Description                        | Fonction         |
-| --------- | ---- | ---------------------------------- | ---------------- |
-| `<Esc>`   | n    | Supprimer les curseurs secondaires | `clearCursors()` |
+| Raccourci | Mode | Description                                      | Fonction         |
+| --------- | ---- | ------------------------------------------------ | ---------------- |
+| `<Esc>`   | n    | Active les curseurs posés s'ils sont désactivés, | `clearCursors()` |
+|           |      | sinon supprime les curseurs secondaires          | `clearCursors()` |
 
 Avec un seul curseur, `<Esc>` garde son comportement habituel.
 
