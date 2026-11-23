@@ -1177,6 +1177,15 @@ $XDG_STATE_HOME	starting.frx	/*$XDG_STATE_HOME*
 07.5	usr_07.frx	/*07.5*
 07.6	usr_07.frx	/*07.6*
 07.7	usr_07.frx	/*07.7*
+08.1	usr_08.frx	/*08.1*
+08.2	usr_08.frx	/*08.2*
+08.3	usr_08.frx	/*08.3*
+08.4	usr_08.frx	/*08.4*
+08.5	usr_08.frx	/*08.5*
+08.6	usr_08.frx	/*08.6*
+08.7	usr_08.frx	/*08.7*
+08.8	usr_08.frx	/*08.8*
+08.9	usr_08.frx	/*08.9*
 1gD	pattern.frx	/*1gD*
 1gd	pattern.frx	/*1gd*
 2html.vim	syntax.frx	/*2html.vim*
@@ -4342,6 +4351,7 @@ usr_04.txt	usr_04.frx	/*usr_04.txt*
 usr_05.txt	usr_05.frx	/*usr_05.txt*
 usr_06.txt	usr_06.frx	/*usr_06.txt*
 usr_07.txt	usr_07.frx	/*usr_07.txt*
+usr_08.txt	usr_08.frx	/*usr_08.txt*
 usr_32.txt	usr_32.frx	/*usr_32.txt*
 usr_toc.txt	usr_toc.frx	/*usr_toc.txt*
 utf16idx()	vimfn.frx	/*utf16idx()*
