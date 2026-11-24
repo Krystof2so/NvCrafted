@@ -13,7 +13,6 @@
 -- *   <leader>d  →  Diagnostics (Trouble, flottant, saut)              *
 -- *   <leader>x  →  UI/UX       (thème, zen, hints global, hlsearch)   *
 -- *   <leader>p  →  Profil      (Lazy, Mason, Options)                 *
--- *   <leader>g  →  Git         (Tout ce qui concerne Git/Github)      *
 -- *   <leader>m  →  Multicursor (Utilisation des multicurseurs)        *
 -- *                                                                    *
 -- * Mappings buffer-local LSP : core/lsp/on_attach.lua                 *
@@ -262,41 +261,6 @@ map("n", "<leader>ps", ":Lazy sync<CR>", {
 })
 
 -- ======================================================================
--- <leader>g — Git
--- ======================================================================
-map("n", "<leader>ge", ":NeogitCommit<CR>", {
-	desc = " Visualiser le dernier commit | Permet de visualiser dans un buffer séparé toutes les informations relatives au dernier commit",
-	silent = true,
-})
-map("n", "<leader>gf", function()
-	pcall(function()
-		vim.cmd("DiffviewClose")
-	end)
-	pcall(function()
-		vim.cmd("tabclose")
-	end)
-end, {
-	desc = " Fermer Diffview | Ferme la vue de diff (Diffview) ainsi que l'onglet dans lequel elle s'est ouverte.",
-	silent = true,
-})
-map("n", "<leader>gh", ":DiffviewFileHistory<CR>", {
-	desc = " Historique Diffview | Ouvre un historique Diffview avec tous les commits et les fichiers affectés par des modifications.",
-	silent = true,
-})
-map("n", "<leader>go", ":DiffviewOpen<CR>", {
-	desc = " Ouvre une diffview | Pour ouvrir une vue Diffview qui compare par rapport à l'index.",
-	silent = true,
-})
-map("n", "<leader>gs", function()
-	require("telescope.builtin").git_status({
-		preview_title = "Aperçu des diffs",
-	})
-end, {
-	desc = " Recherche fichiers modifiés | Ouvre telescope et permet de visualisr les fichiers modifiées avec les différences.",
-	silent = true,
-})
-
--- ======================================================================
 -- <leader>m — Multi-curseurs
 -- ======================================================================
 map({ "n", "x" }, "<leader>ma", function()
@@ -431,14 +395,6 @@ vim.api.nvim_create_autocmd("User", {
 			{ "<leader>ps", desc = "Synchroniser", icon = "󰓦 " },
 			{ "<leader>po", desc = "Options Neovim", icon = "󰒓 " },
 
-			-- ----------------------------------------------------------------
-			-- <leader>g - Git/Github
-			-- ----------------------------------------------------------------
-			{ "<leader>ge", desc = "Visualiser le dernier commit", icon = " " },
-			{ "<leader>gf", desc = "Fermer Diffview", icon = " " },
-			{ "<leader>gh", desc = "Historique Diffview", icon = " " },
-			{ "<leader>go", desc = "Ouvrir une diffview", icon = " " },
-			{ "<leader>gs", desc = "Recherche les fichiers modifiés", icon = " " },
 		}, { prefix = "<leader>", mode = "n" })
 	end,
 })
