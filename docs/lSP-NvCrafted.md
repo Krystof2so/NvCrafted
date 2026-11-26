@@ -107,6 +107,7 @@ return {
 | `core/lsp/tools.lua`   | Outils non-LSP (formateurs, linters…) | `mason-tool-installer`        |
 
 Ces deux fichiers sont les seuls endroits où déclarer ce qui doit être installé. Aucune autre partie de la configuration n'effectue d'installation implicite.
+`mason-lspconfig` n'active aucun serveur automatiquement (`automatic_enable = false`) : seuls les serveurs de `servers.lua` sont activés.
 
 ### Schéma du flux complet
 
@@ -232,11 +233,9 @@ return {
 
 Pour l'installation (étapes 1 et 2), voir _Flux d'installation et d'activation_ ci-dessus.
 
-3. construction des options :
-   - `on_attach`
-   - `capabilities`
-4. fusion avec une surcouche éventuelle
-5. initialisation via `vim.lsp.config()`
+3. définition du socle commun via `vim.lsp.config("*")` (`on_attach` + `capabilities`)
+4. enregistrement des surcouches éventuelles via `vim.lsp.config(<serveur>)`
+5. activation via vim.lsp.enable()
 
 ---
 

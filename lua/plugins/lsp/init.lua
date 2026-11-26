@@ -21,39 +21,26 @@ return {
 		},
 		config = function()
 			local servers = require("core.lsp.servers")
-			-- Récupération des capabilities propres à NvCrafted
-			local capabilities = require("core.lsp.capabilities").get()
-            local on_attach = require("core.lsp.on_attach").on_attach
 
-            -- Configuration globale appliquée à tous les serveurs LSP
-            vim.lsp.config("*", {
-                capabilities = capabilities,
-                on_attach = on_attach,
-            })
+			-- 1. Socle commune : Configuration définie une seule fois pour tous les serveurs LSP
+			vim.lsp.config("*", {
+				capabilities = require("core.lsp.capabilities").get(),
+				on_attach = require("core.lsp.on_attach").on_attach,
+			})
 
-			-- Parcours de chaque serveur déclaré pour qu'il reconnaisse les mappings (on_attach) et les capabilities
+			-- 2. Surcouches optionnelles : uniquement ce qui diffère du socle commun
 			for _, server in pairs(servers) do
-				local opts = {
-					on_attach = on_attach,
-					capabilities = capabilities,
-				}
-
-				-- Tentative de chargement d'une configuration spécifique
-				-- située dans : lua/plugins/lsp/config/<server_name>.lua
-				local ok, server_opts_overlay = pcall(require, "plugins.lsp.config." .. server)
-
-				-- Si une surcouche existe, on fusionne ses options
-				-- avec les options par défaut
-				if ok and type(server_opts_overlay) == "table" then
-					opts = vim.tbl_deep_extend("force", opts, server_opts_overlay)
+				local ok, overlay = pcall(require, "plugins.lsp.config." .. server)
+				if ok and type(overlay) == "table" then
+					vim.lsp.config(server, overlay)
 				end
-
-				-- Initialisation du serveur LSP
-				vim.lsp.config(server, opts)
-				vim.lsp.enable(server)
-				-- Limiter les logs LSP uniquement aux erreurs (évite des fichiers de log volumineux)
-				vim.lsp.log.set_level("error")
 			end
+
+			-- 3. Activation (accepte directement une liste)
+			vim.lsp.enable(servers)
+
+			-- 4. Réglage global, hors de la boucle
+			vim.lsp.log.set_level("error")
 		end,
 	},
 }

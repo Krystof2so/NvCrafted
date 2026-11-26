@@ -32,6 +32,7 @@ return {
 			-- Liste des serveurs LSP à installer automatiquement.
 			-- Elle est dérivée directement de la source de vérité
 			ensure_installed = require("core.lsp.servers"),
+            automatic_enable = false, -- l'activation reste explicite, dans plugins/lsp/init.lua
 		},
 	},
 
