@@ -1,17 +1,29 @@
 -- ********************************************************************************
--- * Spellcheck pour NvCrafted :                                                  *
+-- * core/spell.lua                                                               *
+-- *                                                                              *
+-- * Spellcheck pour NvCrafted : COMMENT fonctionne l'orthographe.                *
+-- * Le QUAND (quels filetypes) est décidé dans core/autocmds.lua (groupe         *
+-- * NvCraftedSpell), qui appelle require("core.spell").enable_buffer().          *
+-- *                                                                              *
 -- * - dictionnaires : en, fr, code                                               *
 -- * - dictionnaire code créé et compilé automatiquement dès le premier démarrage *
 -- * - ajout automatique des mots validés                                         *
--- * - activé uniquement dans commentaires et strings                             *
--- * - Neo-tree compatible                                                        *
+-- * - portée locale (vim.opt_local) : jamais de contamination globale            *
+-- * - dans les fichiers de code, Tree-sitter (capture @spell) limite la          *
+-- *   vérification aux commentaires et aux strings                               *
 -- *                                                                              *
 -- * Cf. //neovim.io/doc/user/spell.html                                          *
 -- ********************************************************************************
 
+local M = {}
+
 local spell_dir = vim.fn.stdpath("data") .. "/spell"
 local code_add = spell_dir .. "/code.utf-8.add"
 local code_spl = spell_dir .. "/code.utf-8.spl"
+
+-- ================================================================
+-- = 1. Préparation des dictionnaires (exécutée au chargement)    =
+-- ================================================================
 
 -- Crée le dossier spell s'il n'existe pas
 if vim.fn.isdirectory(spell_dir) == 0 then
@@ -25,32 +37,31 @@ if vim.fn.filereadable(code_add) == 0 then
 	vim.cmd(string.format("silent! mkspell! %s", code_add))
 end
 
--- Active le spellcheck par buffer
-vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
-	pattern = "*",
-	callback = function()
-		local langs = { "en", "fr" }
-		if vim.fn.filereadable(code_spl) == 1 then
-			table.insert(langs, "code")
-		end
+-- ================================================================
+-- = 2. Activation pour le buffer courant                         =
+-- ================================================================
 
-		vim.opt.spell = true
-		vim.opt.spelllang = langs
-		vim.opt.spellfile = code_add -- indique explicitement le fichier .add pour 'code'
+--- Active et configure la correction orthographique pour le buffer courant.
+--- Appelée depuis core/autocmds.lua (qui décide QUAND l'appeler).
+--- vim.opt_local = :setlocal → n'affecte ni la valeur globale,
+--- ni les autres buffers/fenêtres.
+function M.enable_buffer()
+	local langs = { "en", "fr" }
+	if vim.fn.filereadable(code_spl) == 1 then
+		table.insert(langs, "code")
+	end
 
-		-- Différer les commandes syntax pour éviter le conflit Tree-sitter
-		vim.schedule(function()
-			pcall(function()
-				vim.cmd("syntax spell toplevel NONE")
-				vim.cmd("syntax spell default")
-				vim.cmd("syn spell Comment")
-				vim.cmd("syn spell String")
-			end)
-		end)
-	end,
-})
+	vim.opt_local.spell = true
+	vim.opt_local.spelllang = langs
+	vim.opt_local.spellfile = code_add -- indique explicitement le fichier .add pour 'code'
+end
+
+-- ================================================================
+-- = 3. Ajout automatique des mots validés                        =
+-- ================================================================
 -- FIX : Gestion de l'évènement SpellGood
--- 5️⃣ Autocommand pour ajouter automatiquement les mots validés au dictionnaire code
+-- (à ma connaissance, 'zg' ne déclenche pas d'évènement User SpellGood :
+--  cet autocmd ne s'exécute probablement jamais — à vérifier, cf. :h zg)
 vim.api.nvim_create_autocmd("User", {
 	pattern = "SpellGood",
 	callback = function()
@@ -71,3 +82,5 @@ vim.api.nvim_create_autocmd("User", {
 		end
 	end,
 })
+
+return M

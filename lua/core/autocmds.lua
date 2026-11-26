@@ -66,9 +66,21 @@ local spell_group = api.nvim_create_augroup("NvCraftedSpell", { clear = true })
 -- est volontairement déléguée à core.spell.lua
 api.nvim_create_autocmd("FileType", {
 	group = spell_group,
-	pattern = { "markdown", "text", "rst" },
+	pattern = {
+		-- Prose : tout le texte est vérifié
+		"markdown",
+		"text",
+		"rst",
+		-- Code : Tree-sitter limite la vérification aux commentaires et strings
+		"lua",
+		"python",
+		"rust",
+		"html",
+		"css",
+		"tex",
+	},
 	callback = function()
-		vim.opt_local.spell = true
+		require("core.spell").enable_buffer()
 	end,
 })
 
