@@ -56,7 +56,7 @@ Une fois la structure posée, la maintenance se résume essentiellement à **ajo
 │   ├──  nvcrafted
 │   │   └──  tutor         # Tutoriel intégré (🇫🇷)
 │   └──  plugins           # Plugins intégrés/classés par domaines fonctionnels
-│       ├──  appearence
+│       ├──  appearance
 │       ├──  editing
 │       ├──  git
 │       ├──  lsp
@@ -204,7 +204,7 @@ Dans `/doc` se trouvent des fichiers `.frx`. Il s'agit des fichiers de la docume
 ## Personnalisation des couleurs
 
 - Thèmes disponibles : `everviolet`, `nordic`, `rose-pine` (par défaut).
-- Fichiers dédiés : Dans `plugins/appearence/` (ex: `rose-pine.lua`).
+- Fichiers dédiés : Dans `plugins/appearance/` (ex: `rose-pine.lua`).
 - Surcouches : Personnalisation des couleurs pour des plugins spécifiques (ex: [neo-tree](https://github.com/nvim-neo-tree/neo-tree.nvim), [which-key](https://github.com/folke/which-key.nvim/tree/main)).
 
 - Pour la gestion des thèmes, consultez [Les thèmes avec NvCrafted](./docs/themes.md).
